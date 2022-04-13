@@ -1,0 +1,171 @@
+plugins {
+    id("fabric-loom") version "0.12-SNAPSHOT"
+    id("com.matthewprenger.cursegradle") version "1.4.0"
+    id("com.diffplug.spotless") version "6.4.1"
+}
+
+group = "me.ramidzkh"
+version = System.getenv("APPBOT_VERSION") ?: "0.0.0"
+
+repositories {
+    maven {
+        name = "Modmaven"
+        url = uri("https://modmaven.dev/")
+
+        content {
+            includeGroup("appeng")
+        }
+    }
+
+    maven {
+        name = "Jared"
+        url = uri("https://maven.blamejared.com/")
+
+        content {
+            includeGroup("vazkii.botania")
+            includeGroup("vazkii.patchouli")
+        }
+    }
+
+    maven {
+        name = "Ladysnake Libs"
+        url = uri("https://ladysnake.jfrog.io/artifactory/mods/")
+
+        content {
+            includeGroup("dev.onyxstudios.cardinal-components-api")
+            includeGroup("io.github.onyxstudios.Cardinal-Components-API")
+        }
+    }
+
+    maven {
+        name = "TerraformersMC"
+        url = uri("https://maven.terraformersmc.com/")
+
+        content {
+            includeGroup("com.terraformersmc")
+            includeGroup("dev.emi")
+        }
+    }
+
+    maven {
+        name = "JamiesWhiteShirt"
+        url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
+
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
+
+    maven {
+        name = "shedaniel"
+        url = uri("https://maven.shedaniel.me/")
+
+        content {
+            includeGroup("dev.architectury")
+            includeGroup("me.shedaniel")
+            includeGroup("me.shedaniel.cloth")
+        }
+    }
+
+    maven {
+        name = "Jitpack"
+        url = uri("https://jitpack.io/")
+
+        content {
+            includeGroup("com.github.emilyploszaj")
+        }
+    }
+
+    maven {
+        name = "Walia"
+        url = uri("https://maven.bai.lol/")
+
+        content {
+            includeGroup("mcp.mobius.waila")
+        }
+    }
+}
+
+dependencies {
+    minecraft("net.minecraft:minecraft:${minecraft_version}")
+    mappings(loom.officialMojangMappings())
+    modImplementation("net.fabricmc:fabric-loader:${loader_version}")
+
+    modImplementation("appeng:appliedenergistics2-fabric:${ae2_version}")
+    modImplementation("vazkii.botania:Botania:${minecraft_version}-${botania_version}")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+processResources {
+    inputs.property("version", project.version)
+
+    from("LICENSE")
+    exclude(".cache")
+
+    filesMatching("fabric.mod.json") {
+        expand("version": project.version)
+    }
+}
+
+/////////////
+// Spotless
+spotless {
+    java {
+        target("src/main/java/**/*.java")
+
+        endWithNewline()
+        indentWithSpaces()
+        removeUnusedImports()
+        toggleOffOn()
+        eclipse().configFile("codeformat/codeformat.xml")
+        importOrderFile("codeformat/ae2.importorder")
+    }
+
+    format("json") {
+        target("src/main/resources/**/*.json")
+        prettier().config(parser: "json")
+    }
+}
+
+////////////////
+// CurseForge
+System.getenv("CURSEFORGE")?.with { String key ->
+    curseforge {
+        apiKey = key
+
+        project {
+            id = ""
+            changelogType = "markdown"
+            changelog = "View changelog at [the release page](https://github.com///releases/tag/${version})"
+
+            if (version.contains("alpha")) {
+                releaseType = "alpha"
+            } else if (version.contains("beta")) {
+                releaseType = "beta"
+            } else {
+                releaseType = "release"
+            }
+
+            addGameVersion("${minecraft_version}")
+            addGameVersion("Fabric")
+
+            mainArtifact(jar) {
+                displayName = "${project.version}"
+
+                relations {
+                    requiredDependency("applied-energistics-2")
+                    requiredDependency("botania")
+                }
+            }
+        }
+    }
+}
