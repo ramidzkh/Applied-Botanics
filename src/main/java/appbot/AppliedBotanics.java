@@ -6,8 +6,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 import appbot.ae2.ManaP2PTunnelPart;
+import appbot.botania.MECorporeaNode;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.BotaniaFabricCapabilities;
+import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 
 import appeng.api.features.P2PTunnelAttunement;
 import appeng.api.inventories.PartApiLookup;
@@ -36,6 +38,7 @@ public interface AppliedBotanics {
                 ManaP2PTunnelPart.class);
         PartApiLookup.register(BotaniaFabricCapabilities.SPARK_ATTACHABLE, (part, context) -> part.getSparkAttachable(),
                 ManaP2PTunnelPart.class);
+        CorporeaNodeDetectors.register(MECorporeaNode::getNode);
         P2PTunnelAttunement.addItemByMod(BotaniaAPI.MODID, MANA_P2P_TUNNEL);
     }
 }
