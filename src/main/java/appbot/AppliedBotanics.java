@@ -34,6 +34,8 @@ public interface AppliedBotanics {
     static void initialize() {
         PartApiLookup.register(BotaniaFabricCapabilities.MANA_RECEIVER, (part, context) -> part.getExposedApi(),
                 ManaP2PTunnelPart.class);
+        PartApiLookup.register(BotaniaFabricCapabilities.SPARK_ATTACHABLE, (part, context) -> part.getSparkAttachable(),
+                ManaP2PTunnelPart.class);
         P2PTunnelAttunement.addItemByMod(BotaniaAPI.MODID, MANA_P2P_TUNNEL);
     }
 }
