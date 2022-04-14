@@ -145,7 +145,7 @@ System.getenv("CURSEFORGE")?.with { String key ->
         project {
             id = ""
             changelogType = "markdown"
-            changelog = "View changelog at [the release page](https://github.com///releases/tag/${version})"
+            changelog = "View changelog at [the release page](https://github.com/ramidzkh/Applied-Botanics/releases/tag/${version})"
 
             if (version.contains("alpha")) {
                 releaseType = "alpha"
@@ -158,7 +158,7 @@ System.getenv("CURSEFORGE")?.with { String key ->
             addGameVersion("${minecraft_version}")
             addGameVersion("Fabric")
 
-            mainArtifact(jar) {
+            mainArtifact(remapJar) {
                 displayName = "${project.version}"
 
                 relations {
