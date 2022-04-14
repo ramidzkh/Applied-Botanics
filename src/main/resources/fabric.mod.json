@@ -10,6 +10,7 @@
   },
   "name": "Applied Botanics",
   "description": "mana through ae2, what could go wrong",
+  "icon": "logo.png",
   "authors": ["ramidzkh"],
   "license": ["LGPL-3.0-or-later"]
 }
