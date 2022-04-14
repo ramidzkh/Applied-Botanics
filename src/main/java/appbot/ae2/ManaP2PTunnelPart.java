@@ -2,7 +2,9 @@ package appbot.ae2;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Predicates;
 
@@ -141,11 +143,21 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
 
         @Override
         public void receiveMana(int mana) {
-            var outputs = getOutputs();
+            var outputs = getOutputStream()
+                    .filter(part -> {
+                        try (var guard = part.getAdjacentCapability()) {
+                            var receiver = get(guard);
+
+                            return receiver.canReceiveManaFromBursts() && !receiver.isFull();
+                        }
+                    })
+                    .collect(Collectors.toList());
 
             if (outputs.isEmpty()) {
                 return;
             }
+
+            Collections.shuffle(outputs);
 
             queueTunnelDrain(PowerUnits.AE, mana / 100D);
             var manaForEach = mana / outputs.size();
