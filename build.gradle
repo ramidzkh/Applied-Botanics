@@ -142,7 +142,7 @@ System.getenv("CURSEFORGE")?.with { String key ->
         apiKey = key
 
         project {
-            id = ""
+            id = "610632"
             changelogType = "markdown"
             changelog = "View changelog at [the release page](https://github.com/ramidzkh/Applied-Botanics/releases/tag/${version})"
 
@@ -158,11 +158,11 @@ System.getenv("CURSEFORGE")?.with { String key ->
             addGameVersion("Fabric")
 
             mainArtifact(remapJar) {
-                displayName = "${project.version}"
+                displayName = "${project.version} [FABRIC]"
 
                 relations {
                     requiredDependency("applied-energistics-2")
-                    requiredDependency("botania")
+                    requiredDependency("botania-fabric")
                 }
             }
         }

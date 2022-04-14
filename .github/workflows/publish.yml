@@ -31,7 +31,6 @@ jobs:
           asset_name: appbot-${{ github.event.release.tag_name }}.jar
           asset_content_type: application/zip
       - name: Upload to CurseForge
-        if: "false"
         run: ./gradlew curseforge
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
