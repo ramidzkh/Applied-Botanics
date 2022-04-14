@@ -109,7 +109,6 @@ processResources {
     inputs.property("version", project.version)
 
     from("LICENSE")
-    exclude(".cache")
 
     filesMatching("fabric.mod.json") {
         expand("version": project.version)

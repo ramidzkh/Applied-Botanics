@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "applied-botanics",
+  "id": "appbot",
   "version": "${version}",
   "mixins": ["appbot.mixins.json"],
   "depends": {
@@ -12,5 +12,9 @@
   "description": "mana through ae2, what could go wrong",
   "icon": "logo.png",
   "authors": ["ramidzkh"],
-  "license": ["LGPL-3.0-or-later"]
+  "license": ["LGPL-3.0-or-later"],
+  "contact": {
+    "homepage": "https://github.com/ramidzkh/Applied-Botanics#readme",
+    "issues": "https://github.com/ramidzkh/Applied-Botanics/issues"
+  }
 }

@@ -20,7 +20,7 @@ import appeng.items.parts.PartModelsHelper;
 
 public interface AppliedBotanics {
 
-    String MOD_ID = "applied-botanics";
+    String MOD_ID = "appbot";
 
     PartItem<?> MANA_P2P_TUNNEL = Util.make(() -> {
         PartModels.registerModels(PartModelsHelper.createModels(ManaP2PTunnelPart.class));
