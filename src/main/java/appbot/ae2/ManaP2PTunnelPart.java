@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-import vazkii.botania.api.BotaniaFabricCapabilities;
+import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.IManaCollector;
 import vazkii.botania.api.mana.IManaPool;
 import vazkii.botania.api.mana.IManaReceiver;
@@ -92,7 +92,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
     };
 
     public ManaP2PTunnelPart(IPartItem<?> partItem) {
-        super(partItem, BotaniaFabricCapabilities.MANA_RECEIVER);
+        super(partItem, BotaniaForgeCapabilities.MANA_RECEIVER);
         inputHandler = new InputHandler();
         outputHandler = emptyHandler = new EmptyHandler();
     }

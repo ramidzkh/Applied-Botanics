@@ -19,8 +19,8 @@ import vazkii.botania.common.impl.corporea.AbstractCorporeaNode;
 
 import appeng.api.config.Actionable;
 import appeng.api.stacks.AEItemKey;
-import appeng.api.storage.IStorageMonitorableAccessor;
 import appeng.api.storage.MEStorage;
+import appeng.capabilities.Capabilities;
 import appeng.me.helpers.BaseActionSource;
 
 public class MECorporeaNode extends AbstractCorporeaNode {
@@ -36,7 +36,13 @@ public class MECorporeaNode extends AbstractCorporeaNode {
 
     @Nullable
     public static ICorporeaNode getNode(Level level, ICorporeaSpark spark) {
-        var accessor = IStorageMonitorableAccessor.SIDED.find(level, spark.getAttachPos(), Direction.UP);
+        var blockEntity = level.getBlockEntity(spark.getAttachPos());
+
+        if (blockEntity == null) {
+            return null;
+        }
+
+        var accessor = blockEntity.getCapability(Capabilities.STORAGE_MONITORABLE_ACCESSOR, Direction.UP).orElse(null);
 
         if (accessor != null) {
             var source = new BaseActionSource();
