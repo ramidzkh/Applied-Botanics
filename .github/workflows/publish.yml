@@ -18,21 +18,25 @@ jobs:
         with:
           java-version: 17
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
+      - name: Get version
+        id: get-version
+        run: |
+          version=$(echo ${{ github.event.release.tag_name }} | cut -c7-)
+          echo "::set-output name=version::$version"
       - name: Upload Release Artifact
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./build/libs/Applied-Botanics-${{ github.event.release.tag_name }}.jar
+          asset_path: ./build/libs/Applied-Botanics-${{ steps.get-version.outputs.version }}.jar
           asset_name: appbot-${{ github.event.release.tag_name }}.jar
           asset_content_type: application/zip
       - name: Upload to CurseForge
-        if: "false"
-        run: ./gradlew curseforge
+        run: ./gradlew curseforge --no-daemon
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
           CURSEFORGE: ${{ secrets.CURSEFORGE }}
