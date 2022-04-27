@@ -59,9 +59,8 @@ public class AppliedBotanics {
 
         bus.addListener((FMLCommonSetupEvent event) -> event.enqueueWork(() -> {
             P2PTunnelAttunement.addItemByMod(BotaniaAPI.MODID, MANA_P2P_TUNNEL::get);
+            CorporeaNodeDetectors.register(MECorporeaNode::getNode);
         }));
-
-        CorporeaNodeDetectors.register(MECorporeaNode::getNode);
 
         MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, (AttachCapabilitiesEvent<BlockEntity> event) -> {
             if (event.getObject()instanceof IPartHost host) {
