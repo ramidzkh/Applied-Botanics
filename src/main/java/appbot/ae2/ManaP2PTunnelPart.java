@@ -1,7 +1,5 @@
 package appbot.ae2;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,7 +8,6 @@ import com.google.common.base.Predicates;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
@@ -18,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
+import appbot.AppliedBotanics;
 import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.api.mana.IManaCollector;
 import vazkii.botania.api.mana.IManaPool;
@@ -30,10 +28,11 @@ import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
 import appeng.items.parts.PartModels;
 import appeng.parts.p2p.CapabilityP2PTunnelPart;
+import appeng.parts.p2p.P2PModels;
 
 public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart, IManaReceiver> {
 
-    private static final P2PModels MODELS = new P2PModels("part/mana_p2p_tunnel");
+    private static final P2PModels MODELS = new P2PModels(AppliedBotanics.id("part/mana_p2p_tunnel"));
     private final ISparkAttachable sparkAttachable = new ISparkAttachable() {
         @Override
         public boolean canAttachSpark(ItemStack stack) {
@@ -46,7 +45,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
 
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
-                    var receiver = get(guard);
+                    var receiver = guard.get();
 
                     if (receiver instanceof ISparkAttachable sparkAttachable) {
                         space += sparkAttachable.getAvailableSpaceForMana();
@@ -79,7 +78,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         public boolean areIncomingTranfersDone() {
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
-                    var receiver = get(guard);
+                    var receiver = guard.get();
 
                     if (receiver.canReceiveManaFromBursts() && !receiver.isFull()) {
                         return true;
@@ -132,7 +131,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         public boolean isFull() {
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
-                    if (!get(guard).isFull()) {
+                    if (!guard.get().isFull()) {
                         return false;
                     }
                 }
@@ -146,7 +145,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
             var outputs = getOutputStream()
                     .filter(part -> {
                         try (var guard = part.getAdjacentCapability()) {
-                            var receiver = get(guard);
+                            var receiver = guard.get();
 
                             return receiver.canReceiveManaFromBursts() && !receiver.isFull();
                         }
@@ -165,7 +164,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
 
             for (var output : outputs) {
                 try (var guard = output.getAdjacentCapability()) {
-                    get(guard).receiveMana(manaForEach + (spill-- > 0 ? 1 : 0));
+                    guard.get().receiveMana(manaForEach + (spill-- > 0 ? 1 : 0));
                 }
             }
         }
@@ -174,7 +173,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         public boolean canReceiveManaFromBursts() {
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
-                    if (get(guard).canReceiveManaFromBursts()) {
+                    if (guard.get().canReceiveManaFromBursts()) {
                         return true;
                     }
                 }
@@ -226,24 +225,6 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         @Override
         public boolean canReceiveManaFromBursts() {
             return false;
-        }
-    }
-
-    private static final MethodHandle GET = Util.make(() -> {
-        try {
-            var get = CapabilityGuard.class.getDeclaredMethod("get");
-            get.setAccessible(true);
-            return MethodHandles.lookup().unreflect(get);
-        } catch (NoSuchMethodException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    });
-
-    private IManaReceiver get(CapabilityGuard guard) {
-        try {
-            return (IManaReceiver) (Object) GET.invokeExact(guard);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
         }
     }
 }
