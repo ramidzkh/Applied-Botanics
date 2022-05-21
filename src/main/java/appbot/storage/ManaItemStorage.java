@@ -4,35 +4,54 @@ import java.util.Iterator;
 
 import com.google.common.collect.Iterators;
 
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.minecraft.util.Unit;
 
-import vazkii.botania.api.mana.IManaItem;
+import vazkii.botania.api.BotaniaFabricCapabilities;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ManaItemStorage extends SnapshotParticipant<Integer> implements Storage<ManaVariant> {
+public class ManaItemStorage extends SnapshotParticipant<ItemVariant> implements Storage<ManaVariant> {
 
-    private final IManaItem item;
-    private int amount;
+    private final ContainerItemContext context;
+    private ItemVariant item;
 
-    public ManaItemStorage(IManaItem item) {
+    public ManaItemStorage(ContainerItemContext context, ItemVariant item) {
+        this.context = context;
         this.item = item;
-        this.amount = item.getMana();
     }
 
     @Override
     public long insert(ManaVariant resource, long maxAmount, TransactionContext transaction) {
         StoragePreconditions.notNegative(maxAmount);
 
-        long inserted = Math.min(maxAmount, item.getMaxMana() - amount);
+        updateSnapshots(transaction);
 
-        if (inserted > 0) {
-            updateSnapshots(transaction);
-            amount += inserted;
-            return inserted;
+        try (var inner = transaction.openNested()) {
+            if (context.extract(item, 1, transaction) != 0) {
+                var stack = item.toStack(1);
+                var item = BotaniaFabricCapabilities.MANA_ITEM.find(stack, Unit.INSTANCE);
+
+                if (item == null) {
+                    return 0;
+                }
+
+                var inserted = (int) Math.min(maxAmount, item.getMaxMana() - item.getMana());
+
+                if (inserted > 0) {
+                    item.addMana(inserted);
+                    var variant = ItemVariant.of(stack);
+                    context.insert(variant, 1, transaction);
+                    this.item = variant;
+                    inner.commit();
+                    return inserted;
+                }
+            }
         }
 
         return 0;
@@ -42,16 +61,28 @@ public class ManaItemStorage extends SnapshotParticipant<Integer> implements Sto
     public long extract(ManaVariant resource, long maxAmount, TransactionContext transaction) {
         StoragePreconditions.notNegative(maxAmount);
 
-        if (item.isNoExport()) {
-            return 0;
-        }
+        updateSnapshots(transaction);
 
-        long extracted = Math.min(maxAmount, amount);
+        try (var inner = transaction.openNested()) {
+            if (context.extract(item, 1, transaction) != 0) {
+                var stack = item.toStack(1);
+                var item = BotaniaFabricCapabilities.MANA_ITEM.find(stack, Unit.INSTANCE);
 
-        if (extracted > 0) {
-            updateSnapshots(transaction);
-            amount -= extracted;
-            return extracted;
+                if (item == null || item.isNoExport()) {
+                    return 0;
+                }
+
+                var extracted = (int) Math.min(maxAmount, item.getMaxMana());
+
+                if (extracted > 0) {
+                    item.addMana(-extracted);
+                    var variant = ItemVariant.of(stack);
+                    context.insert(variant, 1, transaction);
+                    this.item = variant;
+                    inner.commit();
+                    return extracted;
+                }
+            }
         }
 
         return 0;
@@ -77,28 +108,25 @@ public class ManaItemStorage extends SnapshotParticipant<Integer> implements Sto
 
             @Override
             public long getAmount() {
-                return amount;
+                var item = BotaniaFabricCapabilities.MANA_ITEM.find(context.getItemVariant().toStack(), Unit.INSTANCE);
+                return item == null ? 0 : item.getMana();
             }
 
             @Override
             public long getCapacity() {
-                return item.getMaxMana();
+                var item = BotaniaFabricCapabilities.MANA_ITEM.find(context.getItemVariant().toStack(), Unit.INSTANCE);
+                return item == null ? 0 : item.getMaxMana();
             }
         });
     }
 
     @Override
-    protected Integer createSnapshot() {
-        return amount;
+    protected ItemVariant createSnapshot() {
+        return item;
     }
 
     @Override
-    protected void readSnapshot(Integer snapshot) {
-        amount = snapshot;
-    }
-
-    @Override
-    protected void onFinalCommit() {
-        item.addMana(amount - item.getMana());
+    protected void readSnapshot(ItemVariant snapshot) {
+        item = snapshot;
     }
 }
