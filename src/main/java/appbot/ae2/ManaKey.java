@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -47,20 +48,20 @@ public class ManaKey extends AEKey {
 
     @Override
     public void addDrops(long amount, List<ItemStack> drops, Level level, BlockPos pos) {
-        float r = (float) amount / (amount + 1);
-        float g = 0.5F;
-        float b = 0.2F;
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
 
-        float w = 0.15F;
-        float h = 0.05F;
-        double x = pos.getX() + 0.5 + (Math.random() - 0.5) * w;
-        double y = pos.getY() + 0.25 + (Math.random() - 0.5) * h;
-        double z = pos.getZ() + 0.5 + (Math.random() - 0.5) * w;
+        var times = Math.min((amount + 999) / 1000, 10);
 
-        float s = 0.2F + (float) Math.random() * 0.1F;
-        float m = 0.03F + (float) Math.random() * 0.015F;
+        for (int i = 0; i < times; i++) {
+            float red = (float) i / times;
+            float green = 0.5F;
+            float blue = 0.2F;
 
-        WispParticleData data = WispParticleData.wisp(s, r, g, b, 1);
-        level.addParticle(data, x, y, z, 0, m, 0);
+            WispParticleData data = WispParticleData.wisp((float) Math.random() / 3F, red, green, blue, 2F);
+            serverLevel.sendParticles(data, pos.getX() + 0.3 + Math.random() * 0.5,
+                    pos.getY() + 0.6 + Math.random() * 0.25, pos.getZ() + Math.random(), 8, 0.1, 0.1, 0.1, 0.04);
+        }
     }
 }

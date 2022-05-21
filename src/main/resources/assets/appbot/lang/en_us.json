@@ -1,5 +1,15 @@
 {
   "gui.appbot.mana": "Mana",
 
+  "itemGroup.appbot.tab": "Applied Botanics",
+
+  "item.appbot.creative_mana_cell": "Creative ME Mana Cell",
+
+  "item.appbot.mana_storage_cell_1k": "1k ME Mana Storage Cell",
+  "item.appbot.mana_storage_cell_4k": "4k ME Mana Storage Cell",
+  "item.appbot.mana_storage_cell_16k": "16k ME Mana Storage Cell",
+  "item.appbot.mana_storage_cell_64k": "64k ME Mana Storage Cell",
+  "item.appbot.mana_storage_cell_256k": "256k ME Mana Storage Cell",
+
   "item.appbot.mana_p2p_tunnel": "Mana P2P Tunnel"
 }

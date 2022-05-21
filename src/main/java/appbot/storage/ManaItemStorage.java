@@ -10,38 +10,24 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 
-import vazkii.botania.api.mana.IManaCollector;
-import vazkii.botania.api.mana.IManaReceiver;
-import vazkii.botania.api.mana.spark.ISparkAttachable;
+import vazkii.botania.api.mana.IManaItem;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ManaStorage extends SnapshotParticipant<Integer> implements Storage<ManaVariant> {
+public class ManaItemStorage extends SnapshotParticipant<Integer> implements Storage<ManaVariant> {
 
-    private final IManaReceiver receiver;
+    private final IManaItem item;
     private int amount;
 
-    public ManaStorage(IManaReceiver receiver) {
-        this.receiver = receiver;
-        this.amount = receiver.getCurrentMana();
-    }
-
-    private int getCapacity() {
-        if (receiver instanceof IManaCollector collector) {
-            return collector.getMaxMana();
-        } else if (receiver instanceof ISparkAttachable sparkAttachable) {
-            return receiver.getCurrentMana() + sparkAttachable.getAvailableSpaceForMana();
-        } else if (!receiver.isFull()) {
-            return 1000;
-        }
-
-        return 0;
+    public ManaItemStorage(IManaItem item) {
+        this.item = item;
+        this.amount = item.getMana();
     }
 
     @Override
     public long insert(ManaVariant resource, long maxAmount, TransactionContext transaction) {
         StoragePreconditions.notNegative(maxAmount);
 
-        long inserted = Math.min(maxAmount, getCapacity() - amount);
+        long inserted = Math.min(maxAmount, item.getMaxMana() - amount);
 
         if (inserted > 0) {
             updateSnapshots(transaction);
@@ -55,6 +41,10 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
     @Override
     public long extract(ManaVariant resource, long maxAmount, TransactionContext transaction) {
         StoragePreconditions.notNegative(maxAmount);
+
+        if (item.isNoExport()) {
+            return 0;
+        }
 
         long extracted = Math.min(maxAmount, amount);
 
@@ -72,7 +62,7 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
         return Iterators.singletonIterator(new StorageView<ManaVariant>() {
             @Override
             public long extract(ManaVariant resource, long maxAmount, TransactionContext transaction) {
-                return ManaStorage.this.extract(resource, maxAmount, transaction);
+                return ManaItemStorage.this.extract(resource, maxAmount, transaction);
             }
 
             @Override
@@ -92,7 +82,7 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
 
             @Override
             public long getCapacity() {
-                return ManaStorage.this.getCapacity();
+                return item.getMaxMana();
             }
         });
     }
@@ -109,6 +99,6 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
 
     @Override
     protected void onFinalCommit() {
-        receiver.receiveMana(amount - receiver.getCurrentMana());
+        item.addMana(amount - item.getMana());
     }
 }

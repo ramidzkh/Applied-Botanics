@@ -1,44 +1,47 @@
 package appbot;
 
-import net.minecraft.Util;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 
-import appbot.ae2.ManaKeyType;
-import appbot.ae2.ManaP2PTunnelPart;
+import appbot.ae2.*;
 import appbot.botania.MECorporeaNode;
 import appbot.storage.Apis;
 import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 
+import appeng.api.behaviors.ContainerItemStrategy;
+import appeng.api.behaviors.GenericSlotCapacities;
 import appeng.api.features.P2PTunnelAttunement;
 import appeng.api.inventories.PartApiLookup;
-import appeng.api.parts.PartModels;
 import appeng.api.stacks.AEKeyTypes;
-import appeng.core.CreativeTab;
-import appeng.items.parts.PartItem;
-import appeng.items.parts.PartModelsHelper;
+import appeng.parts.automation.FabricExternalStorageStrategy;
+import appeng.parts.automation.StackWorldBehaviors;
 
+@SuppressWarnings("UnstableApiUsage")
 public interface AppliedBotanics {
 
     String MOD_ID = "appbot";
-
-    PartItem<?> MANA_P2P_TUNNEL = Util.make(() -> {
-        PartModels.registerModels(PartModelsHelper.createModels(ManaP2PTunnelPart.class));
-        return Registry.register(Registry.ITEM, id("mana_p2p_tunnel"), new PartItem<>(
-                new Item.Properties().tab(CreativeTab.INSTANCE), ManaP2PTunnelPart.class, ManaP2PTunnelPart::new));
-    });
 
     static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
 
     static void initialize() {
+        ABItems.register();
         AEKeyTypes.register(ManaKeyType.TYPE);
         PartApiLookup.register(Apis.BLOCK, (part, context) -> part.getExposedApi(), ManaP2PTunnelPart.class);
 
+        StackWorldBehaviors.registerImportStrategy(ManaKeyType.TYPE, (level, fromPos, fromSide) -> Reflect
+                .newStorageImportStrategy(Apis.BLOCK, ManaVariantConversion.INSTANCE, level, fromPos, fromSide));
+        StackWorldBehaviors.registerExportStrategy(ManaKeyType.TYPE, (level, fromPos, fromSide) -> Reflect
+                .newStorageExportStrategy(Apis.BLOCK, ManaVariantConversion.INSTANCE, level, fromPos, fromSide));
+        StackWorldBehaviors.registerExternalStorageStrategy(ManaKeyType.TYPE,
+                (level, fromPos, fromSide) -> new FabricExternalStorageStrategy<>(Apis.BLOCK,
+                        ManaVariantConversion.INSTANCE, level, fromPos, fromSide));
+
+        ContainerItemStrategy.register(ManaKeyType.TYPE, ManaKey.class, new ManaContainerItemStrategy());
+        GenericSlotCapacities.register(ManaKeyType.TYPE, 500000L);
+
         CorporeaNodeDetectors.register(MECorporeaNode::getNode);
 
-        P2PTunnelAttunement.registerAttunementTag(MANA_P2P_TUNNEL);
+        P2PTunnelAttunement.registerAttunementTag(ABItems.MANA_P2P_TUNNEL);
     }
 }
