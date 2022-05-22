@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import appbot.ae2.ManaKeyType;
 import appbot.ae2.ManaP2PTunnelPart;
-import vazkii.botania.common.item.ModItems;
 
 import appeng.api.client.StorageCellModels;
 import appeng.api.implementations.blockentities.IChestOrDrive;
@@ -44,7 +43,8 @@ public class ABItems {
         return new Item.Properties().tab(CREATIVE_TAB);
     }
 
-    public static final Item MANA_CELL_HOUSING = ModItems.gaiaIngot;
+    public static final Item MANA_CELL_HOUSING = Registry.register(Registry.ITEM, id("mana_cell_housing"),
+            new Item(properties()));
 
     public static final Item MANA_CELL_CREATIVE = Registry.register(Registry.ITEM, id("creative_mana_cell"),
             new CreativeCellItem(properties().stacksTo(1).rarity(Rarity.EPIC)));
