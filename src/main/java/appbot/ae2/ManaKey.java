@@ -54,12 +54,12 @@ public class ManaKey extends AEKey {
 
         var times = Math.min((amount + 999) / 1000, 10);
 
-        for (int i = 0; i < times; i++) {
-            float red = (float) i / times;
-            float green = 0.5F;
-            float blue = 0.2F;
+        for (var i = 0; i < times; i++) {
+            var red = (float) i / times;
+            var green = 0.5F;
+            var blue = 0.2F;
 
-            WispParticleData data = WispParticleData.wisp((float) Math.random() / 3F, red, green, blue, 2F);
+            var data = WispParticleData.wisp((float) Math.random() / 3F, red, green, blue, 2F);
             serverLevel.sendParticles(data, pos.getX() + 0.3 + Math.random() * 0.5,
                     pos.getY() + 0.6 + Math.random() * 0.25, pos.getZ() + Math.random(), 8, 0.1, 0.1, 0.1, 0.04);
         }

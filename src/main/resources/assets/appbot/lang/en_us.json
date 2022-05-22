@@ -11,5 +11,11 @@
   "item.appbot.mana_storage_cell_64k": "64k ME Mana Storage Cell",
   "item.appbot.mana_storage_cell_256k": "256k ME Mana Storage Cell",
 
+  "item.appbot.portable_mana_storage_cell_1k": "1k Portable Mana Cell",
+  "item.appbot.portable_mana_storage_cell_4k": "4k Portable Mana Cell",
+  "item.appbot.portable_mana_storage_cell_16k": "16k Portable Mana Cell",
+  "item.appbot.portable_mana_storage_cell_64k": "64k Portable Mana Cell",
+  "item.appbot.portable_mana_storage_cell_256k": "256k Portable Mana Cell",
+
   "item.appbot.mana_p2p_tunnel": "Mana P2P Tunnel"
 }

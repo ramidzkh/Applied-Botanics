@@ -10,7 +10,8 @@
   },
   "entrypoints": {
     "ae2": ["appbot.AppliedBotanics::initialize"],
-    "ae2:client": ["appbot.client.AppliedBotanicsClient::initialize"]
+    "ae2:client": ["appbot.client.AppliedBotanicsClient::initialize"],
+    "fabric-datagen": ["appbot.data.ABDataGenerator"]
   },
   "name": "Applied Botanics",
   "description": "mana through ae2, what could go wrong",

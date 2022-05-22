@@ -25,7 +25,9 @@ public interface AppliedBotanics {
     }
 
     static void initialize() {
+        ABMenus.register();
         ABItems.register();
+
         AEKeyTypes.register(ManaKeyType.TYPE);
         PartApiLookup.register(Apis.BLOCK, (part, context) -> part.getExposedApi(), ManaP2PTunnelPart.class);
 

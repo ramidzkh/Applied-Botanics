@@ -46,10 +46,12 @@ public class ManaItemStorage extends SnapshotParticipant<ItemVariant> implements
                 if (inserted > 0) {
                     item.addMana(inserted);
                     var variant = ItemVariant.of(stack);
-                    context.insert(variant, 1, transaction);
-                    this.item = variant;
-                    inner.commit();
-                    return inserted;
+
+                    if (context.insert(variant, 1, inner) == 1) {
+                        this.item = variant;
+                        inner.commit();
+                        return inserted;
+                    }
                 }
             }
         }
@@ -72,15 +74,17 @@ public class ManaItemStorage extends SnapshotParticipant<ItemVariant> implements
                     return 0;
                 }
 
-                var extracted = (int) Math.min(maxAmount, item.getMaxMana());
+                var extracted = (int) Math.min(maxAmount, item.getMana());
 
                 if (extracted > 0) {
                     item.addMana(-extracted);
                     var variant = ItemVariant.of(stack);
-                    context.insert(variant, 1, transaction);
-                    this.item = variant;
-                    inner.commit();
-                    return extracted;
+
+                    if (context.insert(variant, 1, inner) == 1) {
+                        this.item = variant;
+                        inner.commit();
+                        return extracted;
+                    }
                 }
             }
         }

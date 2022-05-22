@@ -30,6 +30,7 @@ import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModelsHelper;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.storage.CreativeCellItem;
+import appeng.items.tools.powered.PortableCellItem;
 import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
 import appeng.menu.me.common.MEStorageMenu;
@@ -63,6 +64,22 @@ public class ABItems {
     public static final Item MANA_CELL_256K = Registry.register(Registry.ITEM, id("mana_storage_cell_256k"),
             new BasicStorageCell(properties().stacksTo(1), AEItems.CELL_COMPONENT_256K, MANA_CELL_HOUSING, 2.5f, 256,
                     2048, 1, ManaKeyType.TYPE));
+
+    public static final Item PORTABLE_MANA_CELL_1K = Registry.register(Registry.ITEM,
+            id("portable_mana_storage_cell_1k"), new PortableCellItem(ManaKeyType.TYPE, ABMenus.PORTABLE_MANA_CELL_TYPE,
+                    PortableCellItem.SIZE_1K, properties().stacksTo(1)));
+    public static final Item PORTABLE_MANA_CELL_4K = Registry.register(Registry.ITEM,
+            id("portable_mana_storage_cell_4k"), new PortableCellItem(ManaKeyType.TYPE, ABMenus.PORTABLE_MANA_CELL_TYPE,
+                    PortableCellItem.SIZE_4K, properties().stacksTo(1)));
+    public static final Item PORTABLE_MANA_CELL_16K = Registry.register(Registry.ITEM,
+            id("portable_mana_storage_cell_16k"), new PortableCellItem(ManaKeyType.TYPE,
+                    ABMenus.PORTABLE_MANA_CELL_TYPE, PortableCellItem.SIZE_16K, properties().stacksTo(1)));
+    public static final Item PORTABLE_MANA_CELL_64K = Registry.register(Registry.ITEM,
+            id("portable_mana_storage_cell_64k"), new PortableCellItem(ManaKeyType.TYPE,
+                    ABMenus.PORTABLE_MANA_CELL_TYPE, PortableCellItem.SIZE_64K, properties().stacksTo(1)));
+    public static final Item PORTABLE_MANA_CELL_256K = Registry.register(Registry.ITEM,
+            id("portable_mana_storage_cell_256k"), new PortableCellItem(ManaKeyType.TYPE,
+                    ABMenus.PORTABLE_MANA_CELL_TYPE, PortableCellItem.SIZE_256K, properties().stacksTo(1)));
 
     public static final PartItem<?> MANA_P2P_TUNNEL = Util.make(() -> {
         PartModels.registerModels(PartModelsHelper.createModels(ManaP2PTunnelPart.class));
@@ -101,6 +118,16 @@ public class ABItems {
             case _16K -> MANA_CELL_16K;
             case _64K -> MANA_CELL_64K;
             case _256K -> MANA_CELL_256K;
+        };
+    }
+
+    public static Item getPortableCell(Tier tier) {
+        return switch (tier) {
+            case _1K -> PORTABLE_MANA_CELL_1K;
+            case _4K -> PORTABLE_MANA_CELL_4K;
+            case _16K -> PORTABLE_MANA_CELL_16K;
+            case _64K -> PORTABLE_MANA_CELL_64K;
+            case _256K -> PORTABLE_MANA_CELL_256K;
         };
     }
 

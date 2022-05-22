@@ -41,7 +41,7 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
     public long insert(ManaVariant resource, long maxAmount, TransactionContext transaction) {
         StoragePreconditions.notNegative(maxAmount);
 
-        long inserted = Math.min(maxAmount, getCapacity() - amount);
+        var inserted = Math.min(maxAmount, getCapacity() - amount);
 
         if (inserted > 0) {
             updateSnapshots(transaction);
@@ -56,7 +56,7 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
     public long extract(ManaVariant resource, long maxAmount, TransactionContext transaction) {
         StoragePreconditions.notNegative(maxAmount);
 
-        long extracted = Math.min(maxAmount, amount);
+        var extracted = Math.min(maxAmount, amount);
 
         if (extracted > 0) {
             updateSnapshots(transaction);
