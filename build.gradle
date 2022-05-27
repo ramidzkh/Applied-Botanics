@@ -1,7 +1,7 @@
 plugins {
     id("fabric-loom") version "0.12-SNAPSHOT"
     id("com.matthewprenger.cursegradle") version "1.4.0"
-    id("com.diffplug.spotless") version "6.4.1"
+    id("com.diffplug.spotless") version "6.6.1"
 }
 
 group = "me.ramidzkh"
@@ -95,9 +95,32 @@ dependencies {
     modImplementation("vazkii.botania:Botania:${minecraft_version}-${botania_version}")
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir("src/generated/resources")
+        }
+    }
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+loom {
+    runs {
+        create("data") {
+            client()
+
+            configName = "Data Generation"
+            runDir = "build/data"
+
+            vmArg("-Dfabric-api.datagen")
+            vmArg("-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}")
+            vmArg("-Dfabric-api.datagen.strict-validation")
+        }
     }
 }
 

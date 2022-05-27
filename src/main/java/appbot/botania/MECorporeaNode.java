@@ -18,6 +18,7 @@ import vazkii.botania.api.corporea.ICorporeaSpark;
 import vazkii.botania.common.impl.corporea.AbstractCorporeaNode;
 
 import appeng.api.config.Actionable;
+import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.IStorageMonitorableAccessor;
 import appeng.api.storage.MEStorage;
@@ -26,9 +27,9 @@ import appeng.me.helpers.BaseActionSource;
 public class MECorporeaNode extends AbstractCorporeaNode {
 
     private final MEStorage storage;
-    private final BaseActionSource source;
+    private final IActionSource source;
 
-    public MECorporeaNode(Level level, BlockPos pos, ICorporeaSpark spark, MEStorage storage, BaseActionSource source) {
+    public MECorporeaNode(Level level, BlockPos pos, ICorporeaSpark spark, MEStorage storage, IActionSource source) {
         super(level, pos, spark);
         this.storage = storage;
         this.source = source;
