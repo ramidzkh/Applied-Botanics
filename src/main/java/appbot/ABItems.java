@@ -3,7 +3,6 @@ package appbot;
 import static appbot.AppliedBotanics.id;
 
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.player.Player;
@@ -106,7 +105,6 @@ public class ABItems {
 
         for (var tier : Tier.values()) {
             var cell = get(tier);
-            ColorProviderRegistry.ITEM.register(BasicStorageCell::getColor, cell);
             StorageCellModels.registerModel(cell, id("block/drive/cells/" + Registry.ITEM.getKey(cell).getPath()));
         }
     }
