@@ -26,6 +26,7 @@ public interface AppliedBotanics {
 
     static void initialize() {
         ABMenus.register();
+        ABBlocks.register();
         ABItems.register();
 
         AEKeyTypes.register(ManaKeyType.TYPE);
