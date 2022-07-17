@@ -1,16 +1,18 @@
 package appbot.block;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -45,7 +47,7 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
             if (!entitiesToRemove.isEmpty()) {
                 TickHandler.instance().addCallable(serverWorld, (world) -> {
                     for (var blockEntity : entitiesToRemove) {
-                        blockEntity.getMainNode().destroy();
+                        blockEntity.onChunkUnloaded();
                     }
                 });
             }
@@ -55,26 +57,76 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
     private static final IGridNodeListener<FluixPoolBlockEntity> NODE_LISTENER = new BlockEntityNodeListener<>() {
         @Override
         public void onGridChanged(FluixPoolBlockEntity nodeOwner, IGridNode node) {
-            // nodeOwner.gridChanged();
+            nodeOwner.logic.gridChanged();
         }
     };
 
     private final IManagedGridNode mainNode = GridHelper.createManagedNode(this, NODE_LISTENER)
             .setVisualRepresentation(ABBlocks.FLUIX_MANA_POOL)
             .setInWorldNode(true)
-            .setExposedOnSides(Set.of(Direction.DOWN))
+            .setExposedOnSides(EnumSet.complementOf(EnumSet.of(Direction.UP)))
             .setTagName("proxy");
+
+    private final FluixPoolLogic logic = new FluixPoolLogic(this.getMainNode(), this);
 
     public FluixPoolBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         super(pos, state);
     }
 
+    @Override
+    public boolean onUsedByWand(@Nullable Player player, ItemStack stack, Direction side) {
+        if ((player == null || player.isShiftKeyDown()) && side != Direction.UP) {
+            logic.setConfig((manaCap / 5) - logic.getConfig());
+            return true;
+        } else {
+            return super.onUsedByWand(player, stack, side);
+        }
+    }
+
+    @Override
+    public void receiveMana(int mana) {
+        super.receiveMana(mana);
+        logic.updatePlan();
+    }
+
+    @Override
+    public void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
+        this.logic.writeToNBT(tag);
+    }
+
+    @Override
+    public void load(@NotNull CompoundTag tag) {
+        super.load(tag);
+        this.logic.readFromNBT(tag);
+    }
+
+    @Nullable
+    @Override
+    public IGridNode getGridNode(Direction dir) {
+        if (dir != Direction.UP) {
+            return mainNode.getNode();
+        }
+
+        return null;
+    }
+
+    @Override
+    public AECableType getCableConnectionType(Direction dir) {
+        return AECableType.SMART;
+    }
+
+    @Override
+    public IManagedGridNode getMainNode() {
+        return mainNode;
+    }
+
+    @Override
     public void securityBreak() {
         this.level.destroyBlock(this.worldPosition, true);
     }
 
-    private boolean setChangedQueued = false;
-
+    @Override
     public void saveChanges() {
         if (this.level == null) {
             return;
@@ -87,7 +139,6 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
             this.setChanged();
         } else {
             this.level.blockEntityChanged(this.worldPosition);
-
             if (!this.setChangedQueued) {
                 TickHandler.instance().addCallable(null, this::setChangedAtEndOfTick);
                 this.setChangedQueued = true;
@@ -95,42 +146,26 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
         }
     }
 
-    private void setChangedAtEndOfTick(Level level) {
+    private boolean setChangedQueued = false;
+
+    private void setChangedAtEndOfTick() {
         this.setChanged();
         this.setChangedQueued = false;
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
-        this.getMainNode().loadFromNBT(tag);
-    }
-
-    @Override
-    public void saveAdditional(CompoundTag data) {
-        super.saveAdditional(data);
-        this.getMainNode().saveToNBT(data);
-    }
-
-    public final IManagedGridNode getMainNode() {
-        return this.mainNode;
-    }
-
-    @Override
-    public IGridNode getGridNode(Direction dir) {
-        var node = this.getMainNode().getNode();
-
-        // Check if the proxy exposes the node on this side
-        if (node != null && node.isExposedOnSide(dir)) {
-            return node;
+    public void onMainNodeStateChanged(IGridNodeListener.State reason) {
+        if (getMainNode().hasGridBooted()) {
+            this.logic.notifyNeighbors();
         }
-
-        return null;
     }
 
-    @Override
-    public AECableType getCableConnectionType(Direction dir) {
-        return AECableType.SMART;
+    public void onChunkUnloaded() {
+        this.getMainNode().destroy();
+    }
+
+    public void onReady() {
+        this.getMainNode().create(getLevel(), getBlockPos());
     }
 
     @Override
@@ -142,6 +177,6 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
     @Override
     public void clearRemoved() {
         super.clearRemoved();
-        GridHelper.onFirstTick(this, self -> self.getMainNode().create(getLevel(), getBlockPos()));
+        GridHelper.onFirstTick(this, FluixPoolBlockEntity::onReady);
     }
 }
