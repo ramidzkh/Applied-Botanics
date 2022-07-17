@@ -37,7 +37,7 @@ public interface AppliedBotanicsClient {
                 return -1;
             }
 
-            int color = ColorHelper.getColorValue(DyeColor.WHITE);
+            var color = ColorHelper.getColorValue(DyeColor.WHITE);
 
             if (world != null && pos != null) {
                 if (world.getBlockEntity(pos)instanceof TilePool pool) {
@@ -45,8 +45,8 @@ public interface AppliedBotanicsClient {
                 }
             }
 
-            float time = ClientTickHandler.ticksInGame + ClientTickHandler.partialTicks;
-            int fabulousColor = Mth.hsvToRgb(240 + 20 * Mth.sin(time / 200), 0.6F, 1F);
+            var time = ClientTickHandler.ticksInGame + ClientTickHandler.partialTicks;
+            var fabulousColor = Mth.hsvToRgb(240 + 20 * Mth.sin(time / 200), 0.6F, 1F);
             return MathHelper.multiplyColor(fabulousColor, color);
         }, ABBlocks.FLUIX_MANA_POOL);
 
@@ -55,8 +55,8 @@ public interface AppliedBotanicsClient {
                 return -1;
             }
 
-            int color = ColorHelper.getColorValue(DyeColor.WHITE);
-            int fabulousColor = Mth.hsvToRgb(250, 0.6F, 1F);
+            var color = ColorHelper.getColorValue(DyeColor.WHITE);
+            var fabulousColor = Mth.hsvToRgb(250, 0.6F, 1F);
             return MathHelper.multiplyColor(fabulousColor, color);
         }, ABItems.FLUIX_MANA_POOL);
     }

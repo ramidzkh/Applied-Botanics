@@ -2,7 +2,6 @@ package appbot.data;
 
 import static appbot.AppliedBotanics.id;
 
-import java.lang.reflect.Field;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -85,7 +84,7 @@ public class ModelProvider extends FabricModelProvider {
 
     private static BiConsumer<ResourceLocation, Supplier<JsonElement>> output(ItemModelGenerators generator) {
         try {
-            Field output = ItemModelGenerators.class.getDeclaredField("output");
+            var output = ItemModelGenerators.class.getDeclaredField("output");
             output.setAccessible(true);
             return (BiConsumer<ResourceLocation, Supplier<JsonElement>>) output.get(generator);
         } catch (Throwable throwable) {

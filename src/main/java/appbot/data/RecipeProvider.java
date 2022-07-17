@@ -25,12 +25,10 @@ public class RecipeProvider extends FabricRecipeProvider {
 
     @Override
     protected void generateRecipes(Consumer<FinishedRecipe> exporter) {
-        ShapedRecipeBuilder.shaped(ABItems.FLUIX_MANA_POOL)
-                .pattern("FPF")
-                .pattern("FFF")
-                .define('F', AEBlocks.FLUIX_BLOCK)
-                .define('P', ModBlocks.fabulousPool)
-                .unlockedBy("has_fabulous_pool", has(ModBlocks.fabulousPool))
+        ShapelessRecipeBuilder.shapeless(ABItems.FLUIX_MANA_POOL)
+                .requires(ModBlocks.fabulousPool)
+                .requires(AEBlocks.INTERFACE)
+                .unlockedBy("has_fabulous_pool", has(AEBlocks.INTERFACE))
                 .save(exporter, AppliedBotanics.id("fluix_mana_pool"));
 
         ShapedRecipeBuilder.shaped(ABItems.MANA_CELL_HOUSING)
