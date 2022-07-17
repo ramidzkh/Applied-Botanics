@@ -1,0 +1,141 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"1": "block/fluixpool",
+		"2": "block/fluixpoolinside",
+		"3": "block/fluixpoolgreebles"
+	},
+	"elements": [
+		{
+			"name": "base",
+			"from": [0, 0, 0],
+			"to": [16, 1, 16],
+			"faces": {
+				"north": {"uv": [0, 15, 16, 16], "texture": "#1", "tintindex": 0},
+				"east": {"uv": [0, 15, 16, 16], "texture": "#1", "tintindex": 0},
+				"south": {"uv": [0, 15, 16, 16], "texture": "#1", "tintindex": 0},
+				"west": {"uv": [0, 15, 16, 16], "texture": "#1", "tintindex": 0},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#2", "tintindex": 0},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#1", "cullface": "down", "tintindex": 0}
+			}
+		},
+		{
+			"name": "sideSouth",
+			"from": [0, 1, 15],
+			"to": [16, 8, 16],
+			"faces": {
+				"north": {"uv": [0, 8, 16, 15], "texture": "#3", "tintindex": 0},
+				"east": {"uv": [0, 8, 1, 15], "texture": "#1", "tintindex": 0},
+				"south": {"uv": [0, 8, 16, 15], "texture": "#1", "tintindex": 0},
+				"west": {"uv": [15, 8, 16, 15], "texture": "#1", "tintindex": 0},
+				"up": {"uv": [0, 8, 16, 9], "texture": "#1", "tintindex": 0},
+				"down": {"uv": [0, 0, 16, 1], "texture": "#1", "tintindex": 0}
+			}
+		},
+		{
+			"name": "sideNorth",
+			"from": [0, 1, 0],
+			"to": [16, 8, 1],
+			"faces": {
+				"north": {"uv": [0, 8, 16, 15], "texture": "#1", "tintindex": 0},
+				"east": {"uv": [15, 8, 16, 15], "texture": "#1", "tintindex": 0},
+				"south": {"uv": [0, 8, 16, 15], "texture": "#3", "tintindex": 0},
+				"west": {"uv": [0, 8, 1, 15], "texture": "#1", "tintindex": 0},
+				"up": {"uv": [0, 8, 16, 9], "texture": "#1", "tintindex": 0},
+				"down": {"uv": [0, 15, 16, 16], "texture": "#1", "tintindex": 0}
+			}
+		},
+		{
+			"name": "sideWest",
+			"from": [15, 1, 1],
+			"to": [16, 8, 15],
+			"faces": {
+				"north": {"uv": [0, 8, 1, 15], "texture": "#1", "tintindex": 0},
+				"east": {"uv": [1, 8, 15, 15], "texture": "#1", "tintindex": 0},
+				"south": {"uv": [15, 8, 16, 15], "texture": "#1", "tintindex": 0},
+				"west": {"uv": [1, 8, 15, 15], "texture": "#3", "tintindex": 0},
+				"up": {"uv": [8, 1, 9, 15], "texture": "#1", "tintindex": 0},
+				"down": {"uv": [15, 1, 16, 15], "texture": "#1", "tintindex": 0}
+			}
+		},
+		{
+			"name": "sideEast",
+			"from": [0, 1, 1],
+			"to": [1, 8, 15],
+			"faces": {
+				"north": {"uv": [15, 8, 16, 15], "texture": "#1", "tintindex": 0},
+				"east": {"uv": [1, 8, 15, 15], "texture": "#3", "tintindex": 0},
+				"south": {"uv": [0, 8, 1, 15], "texture": "#1", "tintindex": 0},
+				"west": {"uv": [1, 8, 15, 15], "texture": "#1", "tintindex": 0},
+				"up": {"uv": [7, 1, 8, 15], "texture": "#1", "tintindex": 0},
+				"down": {"uv": [0, 1, 1, 15], "texture": "#1", "tintindex": 0}
+			}
+		},
+		{
+			"name": "CableConnector",
+			"from": [5, 5, 0],
+			"to": [11, 11, 2],
+			"faces": {
+				"north": {"uv": [5, 5, 11, 11], "texture": "#1"},
+				"east": {"uv": [6, 5, 4, 11], "texture": "#3"},
+				"south": {"uv": [5, 5, 11, 11], "texture": "#3"},
+				"west": {"uv": [4, 5, 6, 11], "texture": "#3"},
+				"up": {"uv": [5, 4, 11, 6], "texture": "#3"},
+				"down": {"uv": [5, 6, 11, 4], "texture": "#3"}
+			}
+		},
+		{
+			"name": "CableConnector",
+			"from": [0, 5, 5],
+			"to": [2, 11, 11],
+			"faces": {
+				"north": {"uv": [6, 5, 4, 11], "texture": "#3"},
+				"east": {"uv": [5, 5, 11, 11], "texture": "#3"},
+				"south": {"uv": [4, 5, 6, 11], "texture": "#3"},
+				"west": {"uv": [5, 5, 11, 11], "texture": "#1"},
+				"up": {"uv": [5, 4, 11, 6], "rotation": 270, "texture": "#3"},
+				"down": {"uv": [5, 6, 11, 4], "rotation": 90, "texture": "#3"}
+			}
+		},
+		{
+			"name": "CableConnector",
+			"from": [14, 5, 5],
+			"to": [16, 11, 11],
+			"faces": {
+				"north": {"uv": [4, 5, 6, 11], "texture": "#3"},
+				"east": {"uv": [5, 5, 11, 11], "texture": "#1"},
+				"south": {"uv": [6, 5, 4, 11], "texture": "#3"},
+				"west": {"uv": [5, 5, 11, 11], "texture": "#3"},
+				"up": {"uv": [5, 4, 11, 6], "rotation": 90, "texture": "#3"},
+				"down": {"uv": [5, 6, 11, 4], "rotation": 270, "texture": "#3"}
+			}
+		},
+		{
+			"name": "CableConnector",
+			"from": [5, 5, 14],
+			"to": [11, 11, 16],
+			"faces": {
+				"north": {"uv": [5, 5, 11, 11], "texture": "#3"},
+				"east": {"uv": [4, 5, 6, 11], "texture": "#3"},
+				"south": {"uv": [5, 5, 11, 11], "texture": "#1"},
+				"west": {"uv": [6, 5, 4, 11], "texture": "#3"},
+				"up": {"uv": [5, 4, 11, 6], "rotation": 180, "texture": "#3"},
+				"down": {"uv": [5, 6, 11, 4], "rotation": 180, "texture": "#3"}
+			}
+		},
+		{
+			"name": "FluixNode",
+			"from": [5, 1, 5],
+			"to": [11, 2, 11],
+			"faces": {
+				"north": {"uv": [5, 5, 11, 6], "texture": "#2"},
+				"east": {"uv": [5, 5, 6, 11], "rotation": 90, "texture": "#2"},
+				"south": {"uv": [5, 10, 11, 11], "texture": "#2"},
+				"west": {"uv": [5, 5, 6, 11], "rotation": 90, "texture": "#2"},
+				"up": {"uv": [5, 5, 11, 11], "texture": "#2"},
+				"down": {"uv": [5, 5, 11, 11], "texture": "#2"}
+			}
+		}
+	]
+}
