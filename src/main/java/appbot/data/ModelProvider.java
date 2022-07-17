@@ -17,8 +17,10 @@ import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.model.*;
 import net.minecraft.resources.ResourceLocation;
 
+import appbot.ABBlocks;
 import appbot.ABItems;
 import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.lib.ResourceLocationHelper;
 
 import appeng.core.AppEng;
 
@@ -31,6 +33,8 @@ public class ModelProvider extends FabricModelProvider {
     private static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     private static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
 
+    private static final ModelTemplate FABULOUS_POOL = new ModelTemplate(
+            Optional.of(ResourceLocationHelper.prefix("item/fabulous_pool")), Optional.empty());
     private static final ModelTemplate GENERATED_1 = new ModelTemplate(
             Optional.of(new ResourceLocation("item/generated")), Optional.empty(), TextureSlot.LAYER0, LAYER1);
     private static final ModelTemplate P2P_TUNNEL_BASE_ITEM = new ModelTemplate(
@@ -46,12 +50,16 @@ public class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockModelGenerators generator) {
+        generator.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(ABBlocks.FLUIX_MANA_POOL,
+                ResourceLocationHelper.prefix("block/fabulous_pool")));
     }
 
     @Override
     public void generateItemModels(ItemModelGenerators generator) {
         var output = output(generator);
 
+        FABULOUS_POOL.create(ModelLocationUtils.getModelLocation(ABItems.FLUIX_MANA_POOL), new TextureMapping(),
+                output);
         generator.generateFlatItem(ABItems.MANA_CELL_HOUSING, ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(ABItems.MANA_CELL_CREATIVE, ModelTemplates.FLAT_ITEM);
 

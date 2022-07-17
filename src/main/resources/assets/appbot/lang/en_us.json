@@ -3,6 +3,8 @@
 
   "itemGroup.appbot.tab": "Applied Botanics",
 
+  "block.appbot.fluix_mana_pool": "Fluix Mana Pool",
+
   "item.appbot.mana_cell_housing": "ME Mana Cell Housing",
   "item.appbot.creative_mana_cell": "Creative ME Mana Cell",
 
@@ -18,5 +20,9 @@
   "item.appbot.portable_mana_storage_cell_64k": "64k Portable Mana Cell",
   "item.appbot.portable_mana_storage_cell_256k": "256k Portable Mana Cell",
 
-  "item.appbot.mana_p2p_tunnel": "Mana P2P Tunnel"
+  "item.appbot.mana_p2p_tunnel": "Mana P2P Tunnel",
+
+  "appbot.entry.fluix_mana_pool": "Fluix Mana Pool",
+  "appbot.page.fluix_mana_pool0": "The $(item)Fluix Mana Pool$(0) inserts $(thing)Mana$(0) into an attached ME system, or if toggled with a $(item)Wand of the Forest$(0), will extract $(thing)Mana$(0) into itself.",
+  "appbot.page.fluix_mana_pool1": "just what vazkii never wanted"
 }
