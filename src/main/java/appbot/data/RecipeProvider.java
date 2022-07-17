@@ -28,7 +28,7 @@ public class RecipeProvider extends FabricRecipeProvider {
         ShapelessRecipeBuilder.shapeless(ABItems.FLUIX_MANA_POOL)
                 .requires(ModBlocks.fabulousPool)
                 .requires(AEBlocks.INTERFACE)
-                .unlockedBy("has_fabulous_pool", has(AEBlocks.INTERFACE))
+                .unlockedBy("has_interface", has(AEBlocks.INTERFACE))
                 .save(exporter, AppliedBotanics.id("fluix_mana_pool"));
 
         ShapedRecipeBuilder.shaped(ABItems.MANA_CELL_HOUSING)

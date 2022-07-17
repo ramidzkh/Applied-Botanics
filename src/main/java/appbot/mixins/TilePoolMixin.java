@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import appbot.block.FluixPoolBlockEntity;
 import vazkii.botania.common.block.tile.mana.TilePool;
 
-@Mixin(TilePool.class)
+@Mixin(value = TilePool.class, remap = false)
 public class TilePoolMixin implements FluixPoolBlockEntity.Accessor {
 
     @Shadow

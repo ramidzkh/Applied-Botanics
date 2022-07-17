@@ -130,6 +130,7 @@ tasks.withType(JavaCompile) {
 
 processResources {
     inputs.property("version", project.version)
+    setDuplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 
     from("LICENSE")
 

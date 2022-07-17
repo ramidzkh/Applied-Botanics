@@ -20,8 +20,6 @@
   "item.appbot.portable_mana_storage_cell_64k": "64k Portable Mana Cell",
   "item.appbot.portable_mana_storage_cell_256k": "256k Portable Mana Cell",
 
-  "item.appbot.mana_p2p_tunnel": "Mana P2P Tunnel",
-
   "appbot.entry.fluix_mana_pool": "Fluix Mana Pool",
   "appbot.page.fluix_mana_pool0": "The $(item)Fluix Mana Pool$(0) operates on $(thing)Mana$(0) from the attached ME system",
   "appbot.page.fluix_mana_pool1": "this isn't so bad",
