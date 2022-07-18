@@ -78,7 +78,7 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
             return true;
         }
 
-        return grid.getStorageService().getInventory().extract(ManaKey.KEY, 1, Actionable.SIMULATE, actionSource) == 0;
+        return grid.getStorageService().getInventory().insert(ManaKey.KEY, 1, Actionable.SIMULATE, actionSource) == 0;
     }
 
     @Override

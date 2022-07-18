@@ -11,6 +11,7 @@ public class ABDataGenerator implements DataGeneratorEntrypoint {
         dataGenerator.addProvider(blockTagsProvider);
         dataGenerator.addProvider(new ItemTagsProvider(dataGenerator, blockTagsProvider));
         dataGenerator.addProvider(new RecipeProvider(dataGenerator));
+        dataGenerator.addProvider(new BlockLootTableProvider(dataGenerator));
 
         dataGenerator.addProvider(new ModelProvider(dataGenerator));
     }
