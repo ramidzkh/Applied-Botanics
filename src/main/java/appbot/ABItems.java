@@ -6,14 +6,12 @@ import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import appbot.ae2.ManaKeyType;
 import appbot.ae2.ManaP2PTunnelPart;
+import vazkii.botania.common.item.ModItems;
 
 import appeng.api.client.StorageCellModels;
 import appeng.api.implementations.blockentities.IChestOrDrive;
@@ -41,6 +39,9 @@ public class ABItems {
     private static Item.Properties properties() {
         return new Item.Properties().tab(CREATIVE_TAB);
     }
+
+    public static final Item FLUIX_MANA_POOL = Registry.register(Registry.ITEM, id("fluix_mana_pool"),
+            new BlockItem(ABBlocks.FLUIX_MANA_POOL, ModItems.defaultBuilder().tab(CREATIVE_TAB)));
 
     public static final Item MANA_CELL_HOUSING = Registry.register(Registry.ITEM, id("mana_cell_housing"),
             new Item(properties()));

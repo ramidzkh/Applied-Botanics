@@ -2,7 +2,6 @@ package appbot.data;
 
 import static appbot.AppliedBotanics.id;
 
-import java.lang.reflect.Field;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -17,6 +16,7 @@ import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.model.*;
 import net.minecraft.resources.ResourceLocation;
 
+import appbot.ABBlocks;
 import appbot.ABItems;
 import vazkii.botania.common.block.ModBlocks;
 
@@ -46,6 +46,8 @@ public class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockModelGenerators generator) {
+        generator.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(ABBlocks.FLUIX_MANA_POOL,
+                id("block/fluix_mana_pool")));
     }
 
     @Override
@@ -77,7 +79,7 @@ public class ModelProvider extends FabricModelProvider {
 
     private static BiConsumer<ResourceLocation, Supplier<JsonElement>> output(ItemModelGenerators generator) {
         try {
-            Field output = ItemModelGenerators.class.getDeclaredField("output");
+            var output = ItemModelGenerators.class.getDeclaredField("output");
             output.setAccessible(true);
             return (BiConsumer<ResourceLocation, Supplier<JsonElement>>) output.get(generator);
         } catch (Throwable throwable) {

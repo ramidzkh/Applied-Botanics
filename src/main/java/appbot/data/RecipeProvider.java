@@ -11,6 +11,7 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 
 import appbot.ABItems;
 import appbot.AppliedBotanics;
+import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.ModItems;
 
 import appeng.core.definitions.AEBlocks;
@@ -24,6 +25,12 @@ public class RecipeProvider extends FabricRecipeProvider {
 
     @Override
     protected void generateRecipes(Consumer<FinishedRecipe> exporter) {
+        ShapelessRecipeBuilder.shapeless(ABItems.FLUIX_MANA_POOL)
+                .requires(ModBlocks.fabulousPool)
+                .requires(AEBlocks.INTERFACE)
+                .unlockedBy("has_interface", has(AEBlocks.INTERFACE))
+                .save(exporter, AppliedBotanics.id("fluix_mana_pool"));
+
         ShapedRecipeBuilder.shaped(ABItems.MANA_CELL_HOUSING)
                 .pattern("QSQ")
                 .pattern("S S")

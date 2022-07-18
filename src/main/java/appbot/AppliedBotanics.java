@@ -8,10 +8,12 @@ import appbot.storage.Apis;
 import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 
 import appeng.api.behaviors.ContainerItemStrategy;
+import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.behaviors.GenericSlotCapacities;
 import appeng.api.features.P2PTunnelAttunement;
 import appeng.api.inventories.PartApiLookup;
 import appeng.api.stacks.AEKeyTypes;
+import appeng.helpers.externalstorage.GenericStackInvStorage;
 import appeng.parts.automation.FabricExternalStorageStrategy;
 import appeng.parts.automation.StackWorldBehaviors;
 
@@ -26,10 +28,20 @@ public interface AppliedBotanics {
 
     static void initialize() {
         ABMenus.register();
+        ABBlocks.register();
         ABItems.register();
 
         AEKeyTypes.register(ManaKeyType.TYPE);
         PartApiLookup.register(Apis.BLOCK, (part, context) -> part.getExposedApi(), ManaP2PTunnelPart.class);
+
+        Apis.BLOCK.registerFallback((world, pos, state, blockEntity, direction) -> {
+            // Fall back to generic inv
+            var genericInv = GenericInternalInventory.SIDED.find(world, pos, state, blockEntity, direction);
+            if (genericInv != null) {
+                return new GenericStackInvStorage<>(ManaVariantConversion.INSTANCE, ManaKeyType.TYPE, genericInv);
+            }
+            return null;
+        });
 
         StackWorldBehaviors.registerImportStrategy(ManaKeyType.TYPE, (level, fromPos, fromSide) -> Reflect
                 .newStorageImportStrategy(Apis.BLOCK, ManaVariantConversion.INSTANCE, level, fromPos, fromSide));
