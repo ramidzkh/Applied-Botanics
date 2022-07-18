@@ -133,6 +133,7 @@ processResources {
     setDuplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 
     from("LICENSE")
+    exclude(".cache")
 
     filesMatching("fabric.mod.json") {
         expand("version": project.version)

@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "appbot.mixins",
   "compatibilityLevel": "JAVA_17",
-  "mixins": ["ModTilesMixin", "TilePoolMixin"],
+  "mixins": ["ModTilesMixin", "TilePoolMixin", "WailaModuleMixin"],
   "injectors": {
     "defaultRequire": 1
   }

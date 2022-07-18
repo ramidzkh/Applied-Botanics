@@ -74,7 +74,7 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
     public boolean isFull() {
         var grid = getMainNode().getGrid();
 
-        if (grid == null) {
+        if (grid == null || !getMainNode().isActive()) {
             return true;
         }
 
@@ -85,7 +85,7 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
     public void receiveMana(int mana) {
         var grid = getMainNode().getGrid();
 
-        if (grid == null) {
+        if (grid == null || !getMainNode().isActive()) {
             return;
         }
 
@@ -114,6 +114,10 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
             return mana.getMana();
         }
 
+        if (!getMainNode().isActive()) {
+            return 0;
+        }
+
         return (int) grid.getStorageService().getInventory().extract(ManaKey.KEY, Integer.MAX_VALUE,
                 Actionable.SIMULATE, actionSource);
     }
@@ -125,13 +129,21 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
             return;
         }
 
-        var storage = grid.getStorageService().getInventory();
         var oldMana = mana.getMana();
         var oldManaCap = manaCap;
-        mana.setMana(
-                Ints.saturatedCast(storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource)));
-        manaCap = Ints.saturatedCast(storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource)
-                + storage.insert(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource));
+
+        if (getMainNode().isActive()) {
+            var storage = grid.getStorageService().getInventory();
+            mana.setMana(
+                    Ints.saturatedCast(
+                            storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource)));
+            manaCap = Ints
+                    .saturatedCast(storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource)
+                            + storage.insert(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource));
+        } else {
+            mana.setMana(0);
+            manaCap = 0;
+        }
 
         if (oldMana != mana.getMana() || oldManaCap != manaCap) {
             setChanged();
@@ -154,11 +166,8 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
     @Nullable
     @Override
     public IGridNode getGridNode(Direction dir) {
-        if (dir != Direction.UP) {
-            return mainNode.getNode();
-        }
-
-        return null;
+        var node = this.getMainNode().getNode();
+        return node != null && node.isExposedOnSide(dir) ? node : null;
     }
 
     @Override
