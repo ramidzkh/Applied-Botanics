@@ -4,7 +4,8 @@
   "textures": {
     "main": "appbot:block/fluixpool",
     "inside": "appbot:block/fluixpoolinside",
-    "greebles": "appbot:block/fluixpoolgreebles"
+    "greebles": "appbot:block/fluixpoolgreebles",
+    "particle": "#main"
   },
   "elements": [
     {

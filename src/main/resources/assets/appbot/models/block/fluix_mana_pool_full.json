@@ -6,7 +6,7 @@
     "inside": "appbot:block/fluixpoolinside",
     "greebles": "appbot:block/fluixpoolgreebles",
     "liquid": "botania:block/mana_water",
-    "particle": ""
+    "particle": "#main"
   },
   "elements": [
     {
