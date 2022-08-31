@@ -20,12 +20,13 @@ public enum ManaVariantConversion implements IVariantConversion<ManaVariant> {
 
     @Override
     public ManaVariant getVariant(@Nullable AEKey key) {
-        return ManaVariant.VARIANT;
+        return key != null && key.getType() == getKeyType() ? ManaVariant.VARIANT : ManaVariant.BLANK;
     }
 
+    @Nullable
     @Override
     public AEKey getKey(ManaVariant variant) {
-        return ManaKey.KEY;
+        return variant.isBlank() ? null : ManaKey.KEY;
     }
 
     @Override

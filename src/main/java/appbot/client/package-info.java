@@ -1,6 +1,3 @@
-/**
- * Implementing mana as a storage
- */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 package appbot.client;

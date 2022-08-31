@@ -9,14 +9,18 @@ import net.minecraft.network.FriendlyByteBuf;
 @SuppressWarnings("UnstableApiUsage")
 public class ManaVariant implements TransferVariant<ManaVariant> {
 
-    public static final ManaVariant VARIANT = new ManaVariant();
+    public static final ManaVariant VARIANT = new ManaVariant(false);
+    public static final ManaVariant BLANK = new ManaVariant(true);
 
-    private ManaVariant() {
+    private final boolean blank;
+
+    private ManaVariant(boolean blank) {
+        this.blank = blank;
     }
 
     @Override
     public boolean isBlank() {
-        return false;
+        return blank;
     }
 
     @Override
