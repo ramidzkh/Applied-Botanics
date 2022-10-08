@@ -25,7 +25,7 @@ public abstract class ItemManaMirrorMixin {
     @Unique
     private static final String MAX_MANA = "maxMana";
 
-    @Inject(method = "inventoryTick", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    @Inject(method = "inventoryTick", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILEXCEPTION, remap = true)
     private void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected,
             CallbackInfo callbackInfo, IManaPool pool) {
         if (pool instanceof TilePool tilePool) {
