@@ -15,7 +15,7 @@ buildscript {
 
 plugins {
     id("com.matthewprenger.cursegradle") version "1.4.0"
-    id("com.diffplug.spotless") version "6.4.1"
+    id("com.diffplug.spotless") version "6.10.0"
 }
 
 apply(plugin: "net.minecraftforge.gradle")
@@ -30,6 +30,15 @@ repositories {
 
         content {
             includeGroup("appeng")
+        }
+    }
+
+    maven {
+        name = "Cursemaven"
+        url = uri("https://cursemaven.com")
+
+        content {
+            includeGroup("curse.maven")
         }
     }
 
