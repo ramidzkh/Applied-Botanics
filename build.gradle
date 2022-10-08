@@ -18,6 +18,15 @@ repositories {
     }
 
     maven {
+        name = "Cursemaven"
+        url = uri("https://cursemaven.com")
+
+        content {
+            includeGroup("curse.maven")
+        }
+    }
+
+    maven {
         name = "Jared"
         url = uri("https://maven.blamejared.com/")
 

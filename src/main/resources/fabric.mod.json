@@ -4,7 +4,7 @@
   "version": "${version}",
   "mixins": ["appbot.mixins.json"],
   "depends": {
-    "ae2": ">=11.0.0",
+    "ae2": ">=11.5.0",
     "botania": "*",
     "minecraft": ">=1.18.2 <1.19"
   },

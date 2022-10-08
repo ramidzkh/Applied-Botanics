@@ -16,6 +16,8 @@ import appeng.api.stacks.AEKeyTypes;
 import appeng.helpers.externalstorage.GenericStackInvStorage;
 import appeng.parts.automation.FabricExternalStorageStrategy;
 import appeng.parts.automation.StackWorldBehaviors;
+import appeng.parts.automation.StorageExportStrategy;
+import appeng.parts.automation.StorageImportStrategy;
 
 @SuppressWarnings("UnstableApiUsage")
 public interface AppliedBotanics {
@@ -43,10 +45,12 @@ public interface AppliedBotanics {
             return null;
         });
 
-        StackWorldBehaviors.registerImportStrategy(ManaKeyType.TYPE, (level, fromPos, fromSide) -> Reflect
-                .newStorageImportStrategy(Apis.BLOCK, ManaVariantConversion.INSTANCE, level, fromPos, fromSide));
-        StackWorldBehaviors.registerExportStrategy(ManaKeyType.TYPE, (level, fromPos, fromSide) -> Reflect
-                .newStorageExportStrategy(Apis.BLOCK, ManaVariantConversion.INSTANCE, level, fromPos, fromSide));
+        StackWorldBehaviors.registerImportStrategy(ManaKeyType.TYPE,
+                (level, fromPos, fromSide) -> new StorageImportStrategy<>(Apis.BLOCK, ManaVariantConversion.INSTANCE,
+                        level, fromPos, fromSide));
+        StackWorldBehaviors.registerExportStrategy(ManaKeyType.TYPE,
+                (level, fromPos, fromSide) -> new StorageExportStrategy<>(Apis.BLOCK, ManaVariantConversion.INSTANCE,
+                        level, fromPos, fromSide));
         StackWorldBehaviors.registerExternalStorageStrategy(ManaKeyType.TYPE,
                 (level, fromPos, fromSide) -> new FabricExternalStorageStrategy<>(Apis.BLOCK,
                         ManaVariantConversion.INSTANCE, level, fromPos, fromSide));
