@@ -3,8 +3,7 @@ package appbot.data;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -17,21 +16,21 @@ import vazkii.botania.common.item.ModItems;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 
-public class RecipeProvider extends FabricRecipeProvider {
+public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
-    public RecipeProvider(FabricDataGenerator dataGenerator) {
-        super(dataGenerator);
+    public RecipeProvider(DataGenerator p_125973_) {
+        super(p_125973_);
     }
 
     @Override
-    protected void generateRecipes(Consumer<FinishedRecipe> exporter) {
-        ShapelessRecipeBuilder.shapeless(ABItems.FLUIX_MANA_POOL)
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> exporter) {
+        ShapelessRecipeBuilder.shapeless(ABItems.FLUIX_MANA_POOL::get)
                 .requires(ModBlocks.fabulousPool)
                 .requires(AEBlocks.INTERFACE)
                 .unlockedBy("has_interface", has(AEBlocks.INTERFACE))
                 .save(exporter, AppliedBotanics.id("fluix_mana_pool"));
 
-        ShapedRecipeBuilder.shaped(ABItems.MANA_CELL_HOUSING)
+        ShapedRecipeBuilder.shaped(ABItems.MANA_CELL_HOUSING::get)
                 .pattern("QSQ")
                 .pattern("S S")
                 .pattern("III")
@@ -52,17 +51,17 @@ public class RecipeProvider extends FabricRecipeProvider {
 
             var tierName = tier.toString().toLowerCase(Locale.ROOT);
 
-            ShapelessRecipeBuilder.shapeless(ABItems.get(tier))
-                    .requires(ABItems.MANA_CELL_HOUSING)
+            ShapelessRecipeBuilder.shapeless(ABItems.get(tier)::get)
+                    .requires(ABItems.MANA_CELL_HOUSING::get)
                     .requires(cellComponent)
                     .unlockedBy("has_cell_component" + tierName, has(cellComponent))
                     .save(exporter);
-            ShapelessRecipeBuilder.shapeless(ABItems.getPortableCell(tier))
+            ShapelessRecipeBuilder.shapeless(ABItems.getPortableCell(tier)::get)
                     .requires(AEBlocks.CHEST)
                     .requires(cellComponent)
                     .requires(AEBlocks.ENERGY_CELL)
-                    .requires(ABItems.MANA_CELL_HOUSING)
-                    .unlockedBy("has_mana_cell_housing", has(ABItems.MANA_CELL_HOUSING))
+                    .requires(ABItems.MANA_CELL_HOUSING::get)
+                    .unlockedBy("has_mana_cell_housing", has(ABItems.MANA_CELL_HOUSING::get))
                     .unlockedBy("has_energy_cell", has(AEBlocks.ENERGY_CELL))
                     .save(exporter);
         }

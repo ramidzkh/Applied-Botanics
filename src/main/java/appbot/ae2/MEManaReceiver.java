@@ -1,9 +1,7 @@
-package appbot.storage;
+package appbot.ae2;
 
 import com.google.common.base.Predicates;
 
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
@@ -16,20 +14,12 @@ import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.mana.spark.IManaSpark;
 import vazkii.botania.api.mana.spark.ISparkAttachable;
 
-import appeng.util.Platform;
+import appeng.api.behaviors.GenericInternalInventory;
+import appeng.api.config.Actionable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ManaReceiver implements IManaReceiver, IManaPool, ISparkAttachable {
-
-    private final Level level;
-    private final BlockPos pos;
-    private final Storage<ManaVariant> storage;
-
-    public ManaReceiver(Level level, BlockPos pos, Storage<ManaVariant> storage) {
-        this.level = level;
-        this.pos = pos;
-        this.storage = storage;
-    }
+public record MEManaReceiver(GenericInternalInventory inventory, Level level,
+        BlockPos pos) implements IManaReceiver, IManaPool, ISparkAttachable {
 
     @Override
     public Level getManaReceiverLevel() {
@@ -43,25 +33,35 @@ public class ManaReceiver implements IManaReceiver, IManaPool, ISparkAttachable 
 
     @Override
     public int getCurrentMana() {
-        return (int) storage.simulateExtract(ManaVariant.VARIANT, Integer.MAX_VALUE, Transaction.getCurrentUnsafe());
+        var accumulator = 0;
+
+        for (var i = 0; i < inventory.size(); i++) {
+            accumulator += inventory.extract(i, ManaKey.KEY, Long.MAX_VALUE, Actionable.SIMULATE);
+        }
+
+        return accumulator;
     }
 
     @Override
     public boolean isFull() {
-        return (int) storage.simulateInsert(ManaVariant.VARIANT, 1, Transaction.getCurrentUnsafe()) == 0;
+        for (var i = 0; i < inventory.size(); i++) {
+            if (inventory.insert(i, ManaKey.KEY, 1, Actionable.SIMULATE) != 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     public void receiveMana(int mana) {
         if (mana > 0) {
-            try (var transaction = Platform.openOrJoinTx()) {
-                storage.insert(ManaVariant.VARIANT, mana, transaction);
-                transaction.commit();
+            for (var i = 0; i < inventory.size(); i++) {
+                mana -= inventory.insert(i, ManaKey.KEY, mana, Actionable.MODULATE);
             }
         } else if (mana < 0) {
-            try (var transaction = Platform.openOrJoinTx()) {
-                storage.extract(ManaVariant.VARIANT, -mana, transaction);
-                transaction.commit();
+            for (var i = 0; i < inventory.size(); i++) {
+                mana += inventory.extract(i, ManaKey.KEY, -mana, Actionable.MODULATE);
             }
         }
     }
@@ -72,28 +72,19 @@ public class ManaReceiver implements IManaReceiver, IManaPool, ISparkAttachable 
     }
 
     @Override
-    public boolean isOutputtingPower() {
-        return false;
-    }
-
-    @Override
-    public DyeColor getColor() {
-        return DyeColor.PURPLE;
-    }
-
-    @Override
-    public void setColor(DyeColor color) {
-    }
-
-    @Override
-    public boolean canAttachSpark(ItemStack stack) {
+    public boolean canAttachSpark(ItemStack itemStack) {
         return true;
     }
 
     @Override
     public int getAvailableSpaceForMana() {
-        return (int) (Integer.MAX_VALUE
-                - storage.simulateInsert(ManaVariant.VARIANT, Integer.MAX_VALUE, Transaction.getCurrentUnsafe()));
+        var free = 0;
+
+        for (var i = 0; i < inventory.size(); i++) {
+            free += inventory.insert(i, ManaKey.KEY, Long.MAX_VALUE, Actionable.SIMULATE);
+        }
+
+        return free;
     }
 
     @Override
@@ -112,5 +103,19 @@ public class ManaReceiver implements IManaReceiver, IManaPool, ISparkAttachable 
     @Override
     public boolean areIncomingTranfersDone() {
         return !isFull();
+    }
+
+    @Override
+    public boolean isOutputtingPower() {
+        return false;
+    }
+
+    @Override
+    public DyeColor getColor() {
+        return DyeColor.PURPLE;
+    }
+
+    @Override
+    public void setColor(DyeColor dyeColor) {
     }
 }

@@ -1,28 +1,28 @@
 package appbot.client;
 
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appbot.ABItems;
-import appbot.ABMenus;
-import appbot.ae2.ManaKey;
-import appbot.ae2.ManaKeyType;
 
-import appeng.api.client.AEStackRendering;
-import appeng.client.gui.me.common.MEStorageScreen;
-import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
-import appeng.menu.me.common.MEStorageMenu;
+import appeng.items.tools.powered.PortableCellItem;
 
 public interface AppliedBotanicsClient {
 
     static void initialize() {
-        AEStackRendering.register(ManaKeyType.TYPE, ManaKey.class, new ManaRenderer());
+        var bus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        bus.addListener(AppliedBotanicsClient::registerItemColors);
+        ManaRenderer.initialize(bus);
+    }
+
+    private static void registerItemColors(ColorHandlerEvent.Item event) {
+        var colors = event.getItemColors();
 
         for (var tier : ABItems.Tier.values()) {
-            ColorProviderRegistry.ITEM.register(BasicStorageCell::getColor, ABItems.get(tier));
+            colors.register(BasicStorageCell::getColor, ABItems.get(tier)::get);
+            colors.register(PortableCellItem::getColor, ABItems.getPortableCell(tier)::get);
         }
-
-        InitScreens.<MEStorageMenu, MEStorageScreen<MEStorageMenu>>register(ABMenus.PORTABLE_MANA_CELL_TYPE,
-                MEStorageScreen::new, "/screens/terminals/portable_mana_cell.json");
     }
 }

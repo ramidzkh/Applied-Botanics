@@ -1,24 +1,22 @@
 package appbot.ae2;
 
+import com.google.common.primitives.Ints;
+
 import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 
-import appbot.storage.Apis;
-import appbot.storage.ManaVariant;
+import vazkii.botania.common.item.ItemManaTablet;
+import vazkii.botania.xplat.IXplatAbstractions;
 
 import appeng.api.behaviors.ContainerItemStrategy;
 import appeng.api.config.Actionable;
 import appeng.api.stacks.GenericStack;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey, Storage<ManaVariant>> {
+public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey, ManaContainerItemStrategy.Context> {
 
     @Override
     public @Nullable GenericStack getContainedStack(ItemStack stack) {
@@ -26,44 +24,78 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
             return null;
         }
 
-        var content = StorageUtil.findExtractableContent(ContainerItemContext.withInitial(stack).find(Apis.ITEM), null);
+        var item = IXplatAbstractions.INSTANCE.findManaItem(stack);
 
-        if (content != null) {
-            return new GenericStack(ManaKey.KEY, content.amount());
+        if (item != null) {
+            return new GenericStack(ManaKey.KEY, item.getMana());
         } else {
             return null;
         }
     }
 
     @Override
-    public @Nullable Storage<ManaVariant> findCarriedContext(Player player, AbstractContainerMenu menu) {
-        return ContainerItemContext.ofPlayerCursor(player, menu).find(Apis.ITEM);
+    public @Nullable Context findCarriedContext(Player player, AbstractContainerMenu menu) {
+        if (IXplatAbstractions.INSTANCE.findManaItem(menu.getCarried()) != null) {
+            return new Context(player, menu);
+        }
+
+        return null;
     }
 
     @Override
-    public long extract(Storage<ManaVariant> context, ManaKey what, long amount, Actionable mode) {
-        try (var tx = Transaction.openOuter()) {
-            var extracted = context.extract(ManaVariant.VARIANT, amount, tx);
+    public long extract(Context context, ManaKey what, long amount, Actionable mode) {
+        var held = context.menu.getCarried();
+        var copy = held.copy();
+        var item = IXplatAbstractions.INSTANCE.findManaItem(copy);
 
-            if (mode == Actionable.MODULATE) {
-                tx.commit();
+        if (item == null) {
+            return 0;
+        }
+
+        var before = item.getMana();
+        item.addMana(-Ints.saturatedCast(amount));
+
+        if (mode == Actionable.MODULATE) {
+            held.shrink(1);
+
+            if (held.isEmpty()) {
+                context.menu.setCarried(copy);
+            } else {
+                context.player.getInventory().placeItemBackInInventory(copy);
             }
+        }
 
-            return extracted;
+        if (ItemManaTablet.isStackCreative(copy)) {
+            return amount;
+        } else {
+            return before - item.getMana();
         }
     }
 
     @Override
-    public long insert(Storage<ManaVariant> context, ManaKey what, long amount, Actionable mode) {
-        try (var tx = Transaction.openOuter()) {
-            var inserted = context.insert(ManaVariant.VARIANT, amount, tx);
+    public long insert(Context context, ManaKey what, long amount, Actionable mode) {
+        var held = context.menu.getCarried();
+        var copy = held.copy();
+        var item = IXplatAbstractions.INSTANCE.findManaItem(copy);
 
-            if (mode == Actionable.MODULATE) {
-                tx.commit();
-            }
-
-            return inserted;
+        if (item == null) {
+            return 0;
         }
+
+        var before = item.getMana();
+        item.addMana(Ints.saturatedCast(amount));
+
+        if (mode == Actionable.MODULATE) {
+            held.shrink(1);
+
+            if (held.isEmpty()) {
+                context.menu.setCarried(copy);
+            } else {
+                context.player.getInventory().placeItemBackInInventory(copy);
+            }
+        }
+
+        return item.getMana() - before;
     }
 
     @Override
@@ -75,13 +107,10 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
     }
 
     @Override
-    public @Nullable GenericStack getExtractableContent(Storage<ManaVariant> context) {
-        var resourceAmount = StorageUtil.findExtractableContent(context, null);
+    public @Nullable GenericStack getExtractableContent(Context context) {
+        return getContainedStack(context.menu.getCarried());
+    }
 
-        if (resourceAmount == null) {
-            return null;
-        }
-
-        return new GenericStack(ManaKey.KEY, resourceAmount.amount());
+    record Context(Player player, AbstractContainerMenu menu) {
     }
 }

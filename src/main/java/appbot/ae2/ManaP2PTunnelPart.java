@@ -18,22 +18,25 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
+import appbot.AppliedBotanics;
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.IManaCollector;
 import vazkii.botania.api.mana.IManaPool;
 import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.mana.spark.IManaSpark;
 import vazkii.botania.api.mana.spark.ISparkAttachable;
+import vazkii.botania.common.block.tile.mana.TilePool;
 
 import appeng.api.config.PowerUnits;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
 import appeng.items.parts.PartModels;
 import appeng.parts.p2p.CapabilityP2PTunnelPart;
+import appeng.parts.p2p.P2PModels;
 
 public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart, IManaReceiver> {
 
-    private static final P2PModels MODELS = new P2PModels("part/mana_p2p_tunnel");
+    private static final P2PModels MODELS = new P2PModels(AppliedBotanics.id("part/mana_p2p_tunnel"));
     private final ISparkAttachable sparkAttachable = new ISparkAttachable() {
         @Override
         public boolean canAttachSpark(ItemStack stack) {
@@ -42,13 +45,15 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
 
         @Override
         public int getAvailableSpaceForMana() {
-            int space = 0;
+            var space = 0;
 
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
                     var receiver = get(guard);
 
-                    if (receiver instanceof ISparkAttachable sparkAttachable) {
+                    if (receiver instanceof TilePool pool) {
+                        space += pool.getAvailableSpaceForMana();
+                    } else if (receiver instanceof ISparkAttachable sparkAttachable) {
                         space += sparkAttachable.getAvailableSpaceForMana();
                     } else if (receiver instanceof IManaCollector collector) {
                         space += collector.getMaxMana() - receiver.getCurrentMana();

@@ -7,15 +7,24 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import appbot.ae2.ManaKey;
 import appbot.ae2.ManaKeyType;
 import vazkii.botania.client.core.handler.MiscellaneousModels;
 
+import appeng.api.client.AEStackRendering;
 import appeng.api.client.IAEStackRenderHandler;
 import appeng.client.gui.style.Blitter;
 
 public class ManaRenderer implements IAEStackRenderHandler<ManaKey> {
+
+    public static void initialize(IEventBus bus) {
+        bus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(() -> {
+            AEStackRendering.register(ManaKeyType.TYPE, ManaKey.class, new ManaRenderer());
+        }));
+    }
 
     @Override
     public void drawInGui(Minecraft minecraft, PoseStack poseStack, int x, int y, int zIndex, ManaKey stack) {

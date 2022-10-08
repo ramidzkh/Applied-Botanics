@@ -1,15 +1,12 @@
 package appbot.block;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
 import com.google.common.primitives.Ints;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -30,37 +27,10 @@ import appeng.me.helpers.IGridConnectedBlockEntity;
 
 public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHost, IGridConnectedBlockEntity {
 
-    static {
-        /*
-         * We need to defer actually unloading tile entities until the end of the tick, after the chunk has been saved
-         * to disk. The CHUNK_UNLOAD event runs before the chunk has been saved, and if we disconnect nodes at that
-         * point, the saved data will be missing information from the node (such as the player id).
-         *
-         * From DeferredBlockEntityUnloader
-         */
-        ServerChunkEvents.CHUNK_UNLOAD.register((serverWorld, worldChunk) -> {
-            List<FluixPoolBlockEntity> entitiesToRemove = new ArrayList<>();
-
-            for (var value : worldChunk.getBlockEntities().values()) {
-                if (value instanceof FluixPoolBlockEntity fluixPoolBlockEntity) {
-                    entitiesToRemove.add(fluixPoolBlockEntity);
-                }
-            }
-
-            if (!entitiesToRemove.isEmpty()) {
-                TickHandler.instance().addCallable(serverWorld, (world) -> {
-                    for (var blockEntity : entitiesToRemove) {
-                        blockEntity.onChunkUnloaded();
-                    }
-                });
-            }
-        });
-    }
-
     private final Accessor mana = (Accessor) this;
     private final IManagedGridNode mainNode = GridHelper.createManagedNode(this, BlockEntityNodeListener.INSTANCE)
             .setFlags(GridFlags.REQUIRE_CHANNEL)
-            .setVisualRepresentation(ABBlocks.FLUIX_MANA_POOL)
+            .setVisualRepresentation(ABBlocks.FLUIX_MANA_POOL.get())
             .setInWorldNode(true)
             .setExposedOnSides(EnumSet.complementOf(EnumSet.of(Direction.UP)))
             .setTagName("proxy");

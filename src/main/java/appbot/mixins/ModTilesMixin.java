@@ -29,7 +29,7 @@ public class ModTilesMixin {
             Block... blocks) {
         if (id.equals(prefix(LibBlockNames.POOL))) {
             return (blockPos, blockState) -> {
-                if (blockState.is(ABBlocks.FLUIX_MANA_POOL)) {
+                if (blockState.is(ABBlocks.FLUIX_MANA_POOL.get())) {
                     // noinspection unchecked
                     return (T) new FluixPoolBlockEntity(blockPos, blockState);
                 } else {
@@ -46,7 +46,7 @@ public class ModTilesMixin {
     private static <T extends BlockEntity> Block[] add(ResourceLocation id, BiFunction<BlockPos, BlockState, T> func,
             Block... blocks) {
         if (id.equals(prefix(LibBlockNames.POOL))) {
-            blocks = ArrayUtils.add(blocks, ABBlocks.FLUIX_MANA_POOL);
+            blocks = ArrayUtils.add(blocks, ABBlocks.FLUIX_MANA_POOL.get());
         }
 
         return blocks;
