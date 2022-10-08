@@ -7,8 +7,7 @@
     "ItemManaMirrorMixin",
     "ItemManaMirrorMixin$ManaItemMixin",
     "ModTilesMixin",
-    "TilePoolMixin",
-    "WailaModuleMixin"
+    "TilePoolMixin"
   ],
   "injectors": {
     "defaultRequire": 1
