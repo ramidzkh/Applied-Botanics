@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -17,6 +18,8 @@ import appeng.api.stacks.AEKeyType;
 public class ManaKey extends AEKey {
 
     public static final AEKey KEY = new ManaKey();
+
+    private static final ResourceLocation ID = new ResourceLocation("botania", "mana");
 
     private ManaKey() {
         super(ManaKeyType.MANA);
@@ -40,6 +43,11 @@ public class ManaKey extends AEKey {
     @Override
     public Object getPrimaryKey() {
         return this;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return ID;
     }
 
     @Override

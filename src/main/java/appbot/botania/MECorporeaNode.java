@@ -22,7 +22,6 @@ import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.IStorageMonitorableAccessor;
 import appeng.api.storage.MEStorage;
-import appeng.me.helpers.BaseActionSource;
 
 public class MECorporeaNode extends AbstractCorporeaNode {
 
@@ -40,7 +39,7 @@ public class MECorporeaNode extends AbstractCorporeaNode {
         var accessor = IStorageMonitorableAccessor.SIDED.find(level, spark.getAttachPos(), Direction.UP);
 
         if (accessor != null) {
-            var source = new BaseActionSource();
+            var source = IActionSource.empty();
             var storage = accessor.getInventory(source);
 
             if (storage != null) {
