@@ -1,0 +1,172 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "minecraft:block/block",
+  "textures": {
+    "main": "appbot:block/fluixpool",
+    "inside": "appbot:block/fluixpoolinside",
+    "greebles": "appbot:block/fluixpoolgreebles",
+    "liquid": "botania:block/mana_water",
+    "particle": "#main"
+  },
+  "elements": [
+    {
+      "name": "basePlate",
+      "from": [0, 0, 0],
+      "to": [16, 1, 16],
+      "faces": {
+        "north": { "uv": [0, 15, 16, 16], "texture": "#main", "tintindex": 0 },
+        "east": { "uv": [0, 15, 16, 16], "texture": "#main", "tintindex": 0 },
+        "south": { "uv": [0, 15, 16, 16], "texture": "#main", "tintindex": 0 },
+        "west": { "uv": [0, 15, 16, 16], "texture": "#main", "tintindex": 0 },
+        "up": { "uv": [0, 0, 16, 16], "texture": "#inside", "tintindex": 0 },
+        "down": {
+          "uv": [0, 0, 16, 16],
+          "texture": "#main",
+          "cullface": "down",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "side",
+      "from": [0, 1, 15],
+      "to": [16, 8, 16],
+      "faces": {
+        "north": {
+          "uv": [0, 8, 16, 15],
+          "texture": "#greebles",
+          "tintindex": 0
+        },
+        "east": { "uv": [0, 8, 1, 15], "texture": "#main", "tintindex": 0 },
+        "south": { "uv": [0, 8, 16, 15], "texture": "#main", "tintindex": 0 },
+        "west": { "uv": [15, 8, 16, 15], "texture": "#main", "tintindex": 0 },
+        "up": { "uv": [0, 8, 16, 9], "texture": "#main", "tintindex": 0 },
+        "down": { "uv": [0, 0, 16, 1], "texture": "#main", "tintindex": 0 }
+      }
+    },
+    {
+      "name": "side",
+      "from": [0, 1, 0],
+      "to": [16, 8, 1],
+      "faces": {
+        "north": { "uv": [0, 8, 16, 15], "texture": "#main", "tintindex": 0 },
+        "east": { "uv": [15, 8, 16, 15], "texture": "#main", "tintindex": 0 },
+        "south": {
+          "uv": [0, 8, 16, 15],
+          "texture": "#greebles",
+          "tintindex": 0
+        },
+        "west": { "uv": [0, 8, 1, 15], "texture": "#main", "tintindex": 0 },
+        "up": { "uv": [0, 8, 16, 9], "texture": "#main", "tintindex": 0 },
+        "down": { "uv": [0, 15, 16, 16], "texture": "#main", "tintindex": 0 }
+      }
+    },
+    {
+      "name": "side",
+      "from": [15, 1, 1],
+      "to": [16, 8, 15],
+      "faces": {
+        "north": { "uv": [0, 8, 1, 15], "texture": "#main", "tintindex": 0 },
+        "east": { "uv": [1, 8, 15, 15], "texture": "#main", "tintindex": 0 },
+        "south": { "uv": [15, 8, 16, 15], "texture": "#main", "tintindex": 0 },
+        "west": {
+          "uv": [1, 8, 15, 15],
+          "texture": "#greebles",
+          "tintindex": 0
+        },
+        "up": { "uv": [8, 1, 9, 15], "texture": "#main", "tintindex": 0 },
+        "down": { "uv": [15, 1, 16, 15], "texture": "#main", "tintindex": 0 }
+      }
+    },
+    {
+      "name": "side",
+      "from": [0, 1, 1],
+      "to": [1, 8, 15],
+      "faces": {
+        "north": { "uv": [15, 8, 16, 15], "texture": "#main", "tintindex": 0 },
+        "east": {
+          "uv": [1, 8, 15, 15],
+          "texture": "#greebles",
+          "tintindex": 0
+        },
+        "south": { "uv": [0, 8, 1, 15], "texture": "#main", "tintindex": 0 },
+        "west": { "uv": [1, 8, 15, 15], "texture": "#main", "tintindex": 0 },
+        "up": { "uv": [7, 1, 8, 15], "texture": "#main", "tintindex": 0 },
+        "down": { "uv": [0, 1, 1, 15], "texture": "#main", "tintindex": 0 }
+      }
+    },
+    {
+      "name": "CableConnector",
+      "from": [5, 5, 0],
+      "to": [11, 11, 2],
+      "faces": {
+        "north": { "uv": [5, 5, 11, 11], "texture": "#main" },
+        "east": { "uv": [6, 5, 4, 11], "texture": "#greebles" },
+        "south": { "uv": [5, 5, 11, 11], "texture": "#greebles" },
+        "west": { "uv": [4, 5, 6, 11], "texture": "#greebles" },
+        "up": { "uv": [5, 4, 11, 6], "texture": "#greebles" },
+        "down": { "uv": [5, 6, 11, 4], "texture": "#greebles" }
+      }
+    },
+    {
+      "name": "CableConnector",
+      "from": [0, 5, 5],
+      "to": [2, 11, 11],
+      "faces": {
+        "north": { "uv": [6, 5, 4, 11], "texture": "#greebles" },
+        "east": { "uv": [5, 5, 11, 11], "texture": "#greebles" },
+        "south": { "uv": [4, 5, 6, 11], "texture": "#greebles" },
+        "west": { "uv": [5, 5, 11, 11], "texture": "#main" },
+        "up": { "uv": [5, 4, 11, 6], "rotation": 270, "texture": "#greebles" },
+        "down": { "uv": [5, 6, 11, 4], "rotation": 90, "texture": "#greebles" }
+      }
+    },
+    {
+      "name": "CableConnector",
+      "from": [14, 5, 5],
+      "to": [16, 11, 11],
+      "faces": {
+        "north": { "uv": [4, 5, 6, 11], "texture": "#greebles" },
+        "east": { "uv": [5, 5, 11, 11], "texture": "#main" },
+        "south": { "uv": [6, 5, 4, 11], "texture": "#greebles" },
+        "west": { "uv": [5, 5, 11, 11], "texture": "#greebles" },
+        "up": { "uv": [5, 4, 11, 6], "rotation": 90, "texture": "#greebles" },
+        "down": { "uv": [5, 6, 11, 4], "rotation": 270, "texture": "#greebles" }
+      }
+    },
+    {
+      "name": "CableConnector",
+      "from": [5, 5, 14],
+      "to": [11, 11, 16],
+      "faces": {
+        "north": { "uv": [5, 5, 11, 11], "texture": "#greebles" },
+        "east": { "uv": [4, 5, 6, 11], "texture": "#greebles" },
+        "south": { "uv": [5, 5, 11, 11], "texture": "#main" },
+        "west": { "uv": [6, 5, 4, 11], "texture": "#greebles" },
+        "up": { "uv": [5, 4, 11, 6], "rotation": 180, "texture": "#greebles" },
+        "down": { "uv": [5, 6, 11, 4], "rotation": 180, "texture": "#greebles" }
+      }
+    },
+    {
+      "name": "FluixNode",
+      "from": [5, 1, 5],
+      "to": [11, 2, 11],
+      "faces": {
+        "north": { "uv": [5, 5, 11, 6], "texture": "#inside" },
+        "east": { "uv": [5, 5, 6, 11], "rotation": 90, "texture": "#inside" },
+        "south": { "uv": [5, 10, 11, 11], "texture": "#inside" },
+        "west": { "uv": [5, 5, 6, 11], "rotation": 90, "texture": "#inside" },
+        "up": { "uv": [5, 5, 11, 11], "texture": "#inside" },
+        "down": { "uv": [5, 5, 11, 11], "texture": "#inside" }
+      }
+    },
+    {
+      "name": "liquid",
+      "from": [1, 7, 1],
+      "to": [15, 7.001, 15],
+      "faces": {
+        "up": { "uv": [1, 1, 15, 15], "texture": "#liquid" }
+      }
+    }
+  ]
+}

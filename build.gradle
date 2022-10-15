@@ -4,21 +4,27 @@ buildscript {
             name = "MinecraftForge"
             url = uri("https://maven.minecraftforge.net/")
         }
+        maven {
+            name = "SpongePowered"
+            url = uri("https://repo.spongepowered.org/maven/")
+        }
 
         mavenCentral()
     }
 
     dependencies {
         classpath(group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true)
+        classpath("org.spongepowered:mixingradle:0.7-SNAPSHOT")
     }
 }
 
 plugins {
     id("com.matthewprenger.cursegradle") version "1.4.0"
-    id("com.diffplug.spotless") version "6.4.1"
+    id("com.diffplug.spotless") version "6.10.0"
 }
 
 apply(plugin: "net.minecraftforge.gradle")
+apply(plugin: "org.spongepowered.mixin")
 
 group = "me.ramidzkh"
 version = (System.getenv("APPBOT_VERSION") ?: "0.0.0").replace("forge/", "")
@@ -30,6 +36,15 @@ repositories {
 
         content {
             includeGroup("appeng")
+        }
+    }
+
+    maven {
+        name = "Cursemaven"
+        url = uri("https://cursemaven.com")
+
+        content {
+            includeGroup("curse.maven")
         }
     }
 
@@ -63,6 +78,14 @@ dependencies {
     runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}"))
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir("src/generated/resources")
+        }
+    }
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -75,7 +98,9 @@ tasks.withType(JavaCompile) {
 
 processResources {
     inputs.property("version", project.version)
+    setDuplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 
+    exclude(".cache")
     from("LICENSE")
 
     filesMatching("META-INF/mods.toml") {
@@ -97,7 +122,8 @@ jar {
                 "Implementation-Title"    : "${project.name}",
                 "Implementation-Version"  : "${project.version}",
                 "Implementation-Vendor"   : "ramidzkh",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : "appbot.mixins.json"
         ])
     }
 }
@@ -123,6 +149,8 @@ minecraft {
         property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
         // property "mixin.debug.export", "true"
 
+        args("-mixin.config=appbot.mixins.json")
+
         mods {
             appbot {
                 source(sourceSets.main)
@@ -138,7 +166,19 @@ minecraft {
         server {
             with(commonRunProperties)
         }
+
+        data {
+            with(commonRunProperties)
+            // ForgeGradle will just force-exit the Gradle Daemon which fails our builds in case
+            // a daemon is used for any reason.
+            forceExit false
+            args("--mod", "appbot", "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources"))
+        }
     }
+}
+
+mixin {
+    add sourceSets.main, "appbot.mixins.refmap.json"
 }
 
 /////////////
@@ -157,6 +197,7 @@ spotless {
 
     format("json") {
         target("src/main/resources/**/*.json")
+        targetExclude("src/generated/resources/**")
         prettier().config(parser: "json")
     }
 }

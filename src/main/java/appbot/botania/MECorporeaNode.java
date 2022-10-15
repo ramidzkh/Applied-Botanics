@@ -22,7 +22,6 @@ import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.MEStorage;
 import appeng.capabilities.Capabilities;
-import appeng.me.helpers.BaseActionSource;
 
 public class MECorporeaNode extends AbstractCorporeaNode {
 
@@ -46,7 +45,7 @@ public class MECorporeaNode extends AbstractCorporeaNode {
         var accessor = blockEntity.getCapability(Capabilities.STORAGE_MONITORABLE_ACCESSOR, Direction.UP).orElse(null);
 
         if (accessor != null) {
-            var source = new BaseActionSource();
+            var source = IActionSource.empty();
             var storage = accessor.getInventory(source);
 
             if (storage != null) {
