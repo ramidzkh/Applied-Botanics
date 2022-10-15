@@ -70,6 +70,7 @@ repositories {
 
 dependencies {
     minecraft("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 
     implementation(fg.deobf("appeng:appliedenergistics2:${ae2_version}"))
     implementation(fg.deobf("vazkii.botania:Botania:${minecraft_version}-${botania_version}"))
@@ -147,9 +148,6 @@ minecraft {
         // See https://github.com/Vazkii/Patchouli#mixin-troubleshooting
         property("mixin.env.remapRefMap", "true")
         property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
-        // property "mixin.debug.export", "true"
-
-        args("-mixin.config=appbot.mixins.json")
 
         mods {
             appbot {
@@ -178,7 +176,8 @@ minecraft {
 }
 
 mixin {
-    add sourceSets.main, "appbot.mixins.refmap.json"
+    add(sourceSets.main, "appbot.mixins.refmap.json")
+    config("appbot.mixins.json")
 }
 
 /////////////
