@@ -15,6 +15,7 @@ import appeng.api.config.Actionable;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.AEKeyType;
 import appeng.api.stacks.GenericStack;
+import appeng.api.stacks.KeyCounter;
 import appeng.me.storage.ExternalStorageFacade;
 import appeng.parts.automation.HandlerStrategy;
 
@@ -66,6 +67,10 @@ public class ManaHandlerStrategy extends HandlerStrategy<IManaReceiver, Object> 
 
             @Override
             public boolean containsAnyFuzzy(Set<AEKey> keys) {
+                if (handler.getCurrentMana() == 0) {
+                    return false;
+                }
+
                 for (var key : keys) {
                     if (key instanceof ManaKey) {
                         return true;
@@ -73,6 +78,15 @@ public class ManaHandlerStrategy extends HandlerStrategy<IManaReceiver, Object> 
                 }
 
                 return false;
+            }
+
+            @Override
+            public void getAvailableStacks(KeyCounter out) {
+                var currentMana = handler.getCurrentMana();
+
+                if (currentMana != 0) {
+                    out.add(ManaKey.KEY, currentMana);
+                }
             }
         };
     }
