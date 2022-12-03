@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.google.common.primitives.Ints;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +46,7 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
             }
 
             if (!entitiesToRemove.isEmpty()) {
-                TickHandler.instance().addCallable(serverWorld, (world) -> {
+                TickHandler.instance().addCallable(serverWorld, world -> {
                     for (var blockEntity : entitiesToRemove) {
                         blockEntity.onChunkUnloaded();
                     }
@@ -134,12 +132,9 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
 
         if (getMainNode().isActive()) {
             var storage = grid.getStorageService().getInventory();
-            mana.setMana(
-                    Ints.saturatedCast(
-                            storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource)));
-            manaCap = Ints
-                    .saturatedCast(storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource)
-                            + storage.insert(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource));
+            mana.setMana((int) storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource));
+            manaCap = (int) (storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource)
+                    + storage.insert(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource));
         } else {
             mana.setMana(0);
             manaCap = 0;

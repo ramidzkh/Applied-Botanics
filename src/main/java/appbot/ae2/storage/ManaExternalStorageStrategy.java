@@ -1,7 +1,5 @@
 package appbot.ae2.storage;
 
-import com.google.common.primitives.Ints;
-
 import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -51,8 +49,8 @@ public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
 
         @Override
         public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
-            var inserted = Ints.saturatedCast(
-                    Math.min(amount, ManaVariantConversion.getCapacity(receiver) - receiver.getCurrentMana()));
+            var inserted = (int) Math.min(amount,
+                    ManaVariantConversion.getCapacity(receiver) - receiver.getCurrentMana());
 
             if (inserted > 0 && mode == Actionable.MODULATE) {
                 receiver.receiveMana(inserted);
@@ -64,7 +62,7 @@ public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
 
         @Override
         public long extract(AEKey what, long amount, Actionable mode, IActionSource source) {
-            var extracted = Ints.saturatedCast(Math.min(amount, receiver.getCurrentMana()));
+            var extracted = (int) Math.min(amount, receiver.getCurrentMana());
 
             if (extracted > 0 && mode == Actionable.MODULATE) {
                 receiver.receiveMana(-extracted);

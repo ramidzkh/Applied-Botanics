@@ -6,6 +6,7 @@ import appbot.ae2.*;
 import appbot.ae2.storage.ManaExternalStorageStrategy;
 import appbot.ae2.storage.ManaGenericStackInvStorage;
 import appbot.ae2.storage.ManaStorageExportStrategy;
+import appbot.ae2.storage.ManaStorageImportStrategy;
 import appbot.botania.MECorporeaNode;
 import appbot.storage.Apis;
 import vazkii.botania.api.BotaniaFabricCapabilities;
@@ -18,7 +19,6 @@ import appeng.api.features.P2PTunnelAttunement;
 import appeng.api.inventories.PartApiLookup;
 import appeng.api.stacks.AEKeyTypes;
 import appeng.parts.automation.StackWorldBehaviors;
-import appeng.parts.automation.StorageImportStrategy;
 
 @SuppressWarnings("UnstableApiUsage")
 public interface AppliedBotanics {
@@ -55,9 +55,7 @@ public interface AppliedBotanics {
             return null;
         });
 
-        StackWorldBehaviors.registerImportStrategy(ManaKeyType.TYPE,
-                (level, fromPos, fromSide) -> new StorageImportStrategy<>(Apis.BLOCK, ManaVariantConversion.INSTANCE,
-                        level, fromPos, fromSide));
+        StackWorldBehaviors.registerImportStrategy(ManaKeyType.TYPE, ManaStorageImportStrategy::new);
         StackWorldBehaviors.registerExportStrategy(ManaKeyType.TYPE, ManaStorageExportStrategy::new);
         StackWorldBehaviors.registerExternalStorageStrategy(ManaKeyType.TYPE, ManaExternalStorageStrategy::new);
 

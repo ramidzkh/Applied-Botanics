@@ -87,7 +87,11 @@ public class MECorporeaNode extends AbstractCorporeaNode {
                             request.trackExtracted(remainder);
                         }
 
-                        itemKey.addDrops(remainder, list, null, null);
+                        while (remainder > 0) {
+                            var taken = Math.min(remainder, stack.getMaxStackSize());
+                            remainder -= taken;
+                            list.add(itemKey.toStack(taken));
+                        }
                     }
                 }
             }

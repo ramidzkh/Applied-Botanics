@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 
+import appbot.ae2.ManaKey;
 import appbot.ae2.ManaVariantConversion;
 import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.api.mana.IManaReceiver;
@@ -42,9 +43,9 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
         }
 
         var extracted = StorageHelper.poweredExtraction(context.getEnergySource(),
-                context.getInternalStorage().getInventory(), what, amount, context.getActionSource(), mode);
-        var inserted = Ints.saturatedCast(
-                Math.min(extracted, ManaVariantConversion.getCapacity(receiver) - receiver.getCurrentMana()));
+                context.getInternalStorage().getInventory(), ManaKey.KEY, amount, context.getActionSource(), mode);
+        var inserted = (int) Math.min(extracted,
+                ManaVariantConversion.getCapacity(receiver) - receiver.getCurrentMana());
 
         if (mode == Actionable.MODULATE) {
             if (inserted > 0) {
@@ -52,7 +53,7 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
             }
 
             if (inserted < extracted) {
-                LOGGER.error("Storage export issue, voided {}x{}", extracted - inserted, what);
+                LOGGER.error("Storage export issue, voided {} mana", extracted - inserted);
             }
         }
 
