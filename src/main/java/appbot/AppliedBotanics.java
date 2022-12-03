@@ -3,8 +3,10 @@ package appbot;
 import net.minecraft.resources.ResourceLocation;
 
 import appbot.ae2.*;
+import appbot.ae2.storage.ManaGenericStackInvStorage;
 import appbot.botania.MECorporeaNode;
 import appbot.storage.Apis;
+import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 
 import appeng.api.behaviors.ContainerItemStrategy;
@@ -13,7 +15,6 @@ import appeng.api.behaviors.GenericSlotCapacities;
 import appeng.api.features.P2PTunnelAttunement;
 import appeng.api.inventories.PartApiLookup;
 import appeng.api.stacks.AEKeyTypes;
-import appeng.helpers.externalstorage.GenericStackInvStorage;
 import appeng.parts.automation.FabricExternalStorageStrategy;
 import appeng.parts.automation.StackWorldBehaviors;
 import appeng.parts.automation.StorageExportStrategy;
@@ -36,11 +37,20 @@ public interface AppliedBotanics {
         AEKeyTypes.register(ManaKeyType.TYPE);
         PartApiLookup.register(Apis.BLOCK, (part, context) -> part.getExposedApi(), ManaP2PTunnelPart.class);
 
-        Apis.BLOCK.registerFallback((world, pos, state, blockEntity, direction) -> {
+        BotaniaFabricCapabilities.MANA_RECEIVER.registerFallback((world, pos, state, blockEntity, context) -> {
             // Fall back to generic inv
-            var genericInv = GenericInternalInventory.SIDED.find(world, pos, state, blockEntity, direction);
+            var genericInv = GenericInternalInventory.SIDED.find(world, pos, state, blockEntity, context);
             if (genericInv != null) {
-                return new GenericStackInvStorage<>(ManaVariantConversion.INSTANCE, ManaKeyType.TYPE, genericInv);
+                return new ManaGenericStackInvStorage(genericInv, world, pos);
+            }
+            return null;
+        });
+
+        BotaniaFabricCapabilities.SPARK_ATTACHABLE.registerFallback((world, pos, state, blockEntity, context) -> {
+            // Fall back to generic inv
+            var genericInv = GenericInternalInventory.SIDED.find(world, pos, state, blockEntity, context);
+            if (genericInv != null) {
+                return new ManaGenericStackInvStorage(genericInv, world, pos);
             }
             return null;
         });
