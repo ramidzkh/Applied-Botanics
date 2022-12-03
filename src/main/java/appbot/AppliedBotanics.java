@@ -3,6 +3,7 @@ package appbot;
 import net.minecraft.resources.ResourceLocation;
 
 import appbot.ae2.*;
+import appbot.ae2.storage.ManaExternalStorageStrategy;
 import appbot.ae2.storage.ManaGenericStackInvStorage;
 import appbot.botania.MECorporeaNode;
 import appbot.storage.Apis;
@@ -15,7 +16,6 @@ import appeng.api.behaviors.GenericSlotCapacities;
 import appeng.api.features.P2PTunnelAttunement;
 import appeng.api.inventories.PartApiLookup;
 import appeng.api.stacks.AEKeyTypes;
-import appeng.parts.automation.FabricExternalStorageStrategy;
 import appeng.parts.automation.StackWorldBehaviors;
 import appeng.parts.automation.StorageExportStrategy;
 import appeng.parts.automation.StorageImportStrategy;
@@ -61,9 +61,7 @@ public interface AppliedBotanics {
         StackWorldBehaviors.registerExportStrategy(ManaKeyType.TYPE,
                 (level, fromPos, fromSide) -> new StorageExportStrategy<>(Apis.BLOCK, ManaVariantConversion.INSTANCE,
                         level, fromPos, fromSide));
-        StackWorldBehaviors.registerExternalStorageStrategy(ManaKeyType.TYPE,
-                (level, fromPos, fromSide) -> new FabricExternalStorageStrategy<>(Apis.BLOCK,
-                        ManaVariantConversion.INSTANCE, level, fromPos, fromSide));
+        StackWorldBehaviors.registerExternalStorageStrategy(ManaKeyType.TYPE, ManaExternalStorageStrategy::new);
 
         ContainerItemStrategy.register(ManaKeyType.TYPE, ManaKey.class, new ManaContainerItemStrategy());
         GenericSlotCapacities.register(ManaKeyType.TYPE, 500000L);
