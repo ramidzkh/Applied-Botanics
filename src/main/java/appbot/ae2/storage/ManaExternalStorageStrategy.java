@@ -12,10 +12,9 @@ import net.minecraft.server.level.ServerLevel;
 
 import appbot.ae2.ManaKey;
 import appbot.ae2.ManaKeyType;
+import appbot.ae2.ManaVariantConversion;
 import vazkii.botania.api.BotaniaFabricCapabilities;
-import vazkii.botania.api.mana.IManaCollector;
 import vazkii.botania.api.mana.IManaReceiver;
-import vazkii.botania.api.mana.spark.ISparkAttachable;
 
 import appeng.api.behaviors.ExternalStorageStrategy;
 import appeng.api.config.Actionable;
@@ -52,7 +51,8 @@ public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
 
         @Override
         public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
-            var inserted = Ints.saturatedCast(Math.min(amount, getCapacity() - receiver.getCurrentMana()));
+            var inserted = Ints.saturatedCast(
+                    Math.min(amount, ManaVariantConversion.getCapacity(receiver) - receiver.getCurrentMana()));
 
             if (inserted > 0 && mode == Actionable.MODULATE) {
                 receiver.receiveMana(inserted);
@@ -86,18 +86,6 @@ public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
         @Override
         public Component getDescription() {
             return GuiText.ExternalStorage.text(ManaKeyType.TYPE.getDescription());
-        }
-
-        private int getCapacity() {
-            if (receiver instanceof IManaCollector collector) {
-                return collector.getMaxMana();
-            } else if (receiver instanceof ISparkAttachable sparkAttachable) {
-                return receiver.getCurrentMana() + sparkAttachable.getAvailableSpaceForMana();
-            } else if (!receiver.isFull()) {
-                return 1000;
-            }
-
-            return 0;
         }
     }
 }

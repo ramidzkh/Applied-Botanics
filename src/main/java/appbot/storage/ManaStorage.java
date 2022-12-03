@@ -10,9 +10,8 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 
-import vazkii.botania.api.mana.IManaCollector;
+import appbot.ae2.ManaVariantConversion;
 import vazkii.botania.api.mana.IManaReceiver;
-import vazkii.botania.api.mana.spark.ISparkAttachable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ManaStorage extends SnapshotParticipant<Integer> implements Storage<ManaVariant> {
@@ -25,23 +24,11 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
         this.amount = receiver.getCurrentMana();
     }
 
-    private int getCapacity() {
-        if (receiver instanceof IManaCollector collector) {
-            return collector.getMaxMana();
-        } else if (receiver instanceof ISparkAttachable sparkAttachable) {
-            return receiver.getCurrentMana() + sparkAttachable.getAvailableSpaceForMana();
-        } else if (!receiver.isFull()) {
-            return 1000;
-        }
-
-        return 0;
-    }
-
     @Override
     public long insert(ManaVariant resource, long maxAmount, TransactionContext transaction) {
         StoragePreconditions.notNegative(maxAmount);
 
-        var inserted = Math.min(maxAmount, getCapacity() - amount);
+        var inserted = Math.min(maxAmount, ManaVariantConversion.getCapacity(receiver) - amount);
 
         if (inserted > 0) {
             updateSnapshots(transaction);
@@ -92,7 +79,7 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
 
             @Override
             public long getCapacity() {
-                return ManaStorage.this.getCapacity();
+                return ManaVariantConversion.getCapacity(receiver);
             }
         });
     }
