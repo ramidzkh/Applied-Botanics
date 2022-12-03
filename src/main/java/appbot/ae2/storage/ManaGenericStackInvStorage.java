@@ -22,6 +22,13 @@ public class ManaGenericStackInvStorage implements IManaReceiver, IManaPool, ISp
 
     private final Level level;
     private final BlockPos pos;
+    private final GenericInternalInventory inv;
+
+    public ManaGenericStackInvStorage(GenericInternalInventory inv, Level level, BlockPos pos) {
+        this.inv = inv;
+        this.level = level;
+        this.pos = pos;
+    }
 
     @Override
     public Level getManaReceiverLevel() {
@@ -99,26 +106,20 @@ public class ManaGenericStackInvStorage implements IManaReceiver, IManaPool, ISp
         return !isFull();
     }
 
-    private final GenericInternalInventory inv;
-
-    public ManaGenericStackInvStorage(GenericInternalInventory inv, Level level, BlockPos pos) {
-        this.inv = inv;
-        this.level = level;
-        this.pos = pos;
-    }
-
     public int insert(int amount, Actionable actionable) {
-        int inserted = 0;
-        for (int i = 0; i < inv.size() && inserted < amount; ++i) {
+        var inserted = 0;
+
+        for (var i = 0; i < inv.size() && inserted < amount; ++i) {
             inserted += (int) inv.insert(i, ManaKey.KEY, amount - inserted, actionable);
         }
+
         return inserted;
     }
 
     private int extract(int amount, Actionable actionable) {
-        int extracted = 0;
+        var extracted = 0;
 
-        for (int i = 0; i < inv.size() && extracted < amount; ++i) {
+        for (var i = 0; i < inv.size() && extracted < amount; ++i) {
             extracted += (int) inv.extract(i, ManaKey.KEY, amount - extracted, actionable);
         }
 
