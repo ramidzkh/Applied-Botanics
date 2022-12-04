@@ -3,10 +3,10 @@ package appbot;
 import net.minecraft.resources.ResourceLocation;
 
 import appbot.ae2.*;
-import appbot.ae2.storage.ManaExternalStorageStrategy;
-import appbot.ae2.storage.ManaGenericStackInvStorage;
-import appbot.ae2.storage.ManaStorageExportStrategy;
-import appbot.ae2.storage.ManaStorageImportStrategy;
+import appbot.ae2.ManaExternalStorageStrategy;
+import appbot.ae2.ManaGenericStackInvStorage;
+import appbot.ae2.ManaStorageExportStrategy;
+import appbot.ae2.ManaStorageImportStrategy;
 import appbot.botania.MECorporeaNode;
 import appbot.storage.Apis;
 import vazkii.botania.api.BotaniaFabricCapabilities;

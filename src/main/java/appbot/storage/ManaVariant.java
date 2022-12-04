@@ -10,7 +10,6 @@ import net.minecraft.network.FriendlyByteBuf;
 public class ManaVariant implements TransferVariant<ManaVariant> {
 
     public static final ManaVariant VARIANT = new ManaVariant(false);
-    public static final ManaVariant BLANK = new ManaVariant(true);
 
     private final boolean blank;
 

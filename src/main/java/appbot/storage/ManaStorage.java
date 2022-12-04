@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 
-import appbot.ae2.ManaVariantConversion;
+import appbot.ae2.ManaHelper;
 import vazkii.botania.api.mana.IManaReceiver;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -28,7 +28,7 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
     public long insert(ManaVariant resource, long maxAmount, TransactionContext transaction) {
         StoragePreconditions.notNegative(maxAmount);
 
-        var inserted = Math.min(maxAmount, ManaVariantConversion.getCapacity(receiver) - amount);
+        var inserted = Math.min(maxAmount, ManaHelper.getCapacity(receiver) - amount);
 
         if (inserted > 0) {
             updateSnapshots(transaction);
@@ -79,7 +79,7 @@ public class ManaStorage extends SnapshotParticipant<Integer> implements Storage
 
             @Override
             public long getCapacity() {
-                return ManaVariantConversion.getCapacity(receiver);
+                return ManaHelper.getCapacity(receiver);
             }
         });
     }

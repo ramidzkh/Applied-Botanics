@@ -1,4 +1,4 @@
-package appbot.ae2.storage;
+package appbot.ae2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 
-import appbot.ae2.ManaKey;
-import appbot.ae2.ManaKeyType;
-import appbot.ae2.ManaVariantConversion;
 import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.api.mana.IManaReceiver;
 
@@ -18,6 +15,7 @@ import appeng.api.behaviors.StackImportStrategy;
 import appeng.api.behaviors.StackTransferContext;
 import appeng.api.config.Actionable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ManaStorageImportStrategy implements StackImportStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ManaStorageImportStrategy.class);
@@ -59,7 +57,7 @@ public class ManaStorageImportStrategy implements StackImportStrategy {
         if (inserted < amount) {
             var leftover = amount - inserted;
             var backfill = (int) Math.min(leftover,
-                    ManaVariantConversion.getCapacity(receiver) - receiver.getCurrentMana());
+                    ManaHelper.getCapacity(receiver) - receiver.getCurrentMana());
 
             if (backfill > 0) {
                 receiver.receiveMana(backfill);

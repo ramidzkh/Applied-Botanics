@@ -1,4 +1,4 @@
-package appbot.ae2.storage;
+package appbot.ae2;
 
 import com.google.common.base.Predicates;
 
@@ -9,7 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-import appbot.ae2.ManaKey;
 import vazkii.botania.api.mana.IManaPool;
 import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.mana.spark.IManaSpark;
@@ -18,6 +17,7 @@ import vazkii.botania.api.mana.spark.ISparkAttachable;
 import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.config.Actionable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ManaGenericStackInvStorage implements IManaReceiver, IManaPool, ISparkAttachable {
 
     private final Level level;

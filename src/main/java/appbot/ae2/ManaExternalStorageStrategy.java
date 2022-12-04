@@ -1,4 +1,4 @@
-package appbot.ae2.storage;
+package appbot.ae2;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -8,9 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import appbot.ae2.ManaKey;
-import appbot.ae2.ManaKeyType;
-import appbot.ae2.ManaVariantConversion;
 import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.api.mana.IManaReceiver;
 
@@ -22,6 +19,7 @@ import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.MEStorage;
 import appeng.core.localization.GuiText;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
 
     private final BlockApiCache<IManaReceiver, Direction> apiCache;
@@ -50,7 +48,7 @@ public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
         @Override
         public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
             var inserted = (int) Math.min(amount,
-                    ManaVariantConversion.getCapacity(receiver) - receiver.getCurrentMana());
+                    ManaHelper.getCapacity(receiver) - receiver.getCurrentMana());
 
             if (inserted > 0 && mode == Actionable.MODULATE) {
                 receiver.receiveMana(inserted);

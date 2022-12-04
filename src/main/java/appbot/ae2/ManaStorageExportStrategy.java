@@ -1,12 +1,10 @@
-package appbot.ae2.storage;
+package appbot.ae2;
 
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 
-import appbot.ae2.ManaKey;
-import appbot.ae2.ManaVariantConversion;
 import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.api.mana.IManaReceiver;
 
@@ -16,6 +14,7 @@ import appeng.api.config.Actionable;
 import appeng.api.stacks.AEKey;
 import appeng.api.storage.StorageHelper;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ManaStorageExportStrategy implements StackExportStrategy {
 
     private final BlockApiCache<IManaReceiver, Direction> apiCache;
@@ -37,7 +36,7 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
         }
 
         var insertable = (int) Math.min(amount,
-                ManaVariantConversion.getCapacity(receiver) - receiver.getCurrentMana());
+                ManaHelper.getCapacity(receiver) - receiver.getCurrentMana());
         var extracted = (int) StorageHelper.poweredExtraction(context.getEnergySource(),
                 context.getInternalStorage().getInventory(), ManaKey.KEY, insertable, context.getActionSource(), mode);
 
@@ -56,7 +55,7 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
             return 0;
         }
 
-        var inserted = (int) Math.min(amount, ManaVariantConversion.getCapacity(receiver) - receiver.getCurrentMana());
+        var inserted = (int) Math.min(amount, ManaHelper.getCapacity(receiver) - receiver.getCurrentMana());
 
         if (inserted > 0 && mode == Actionable.MODULATE) {
             receiver.receiveMana(inserted);
