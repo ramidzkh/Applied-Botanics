@@ -8,7 +8,6 @@ import appbot.ae2.ManaGenericStackInvStorage;
 import appbot.ae2.ManaStorageExportStrategy;
 import appbot.ae2.ManaStorageImportStrategy;
 import appbot.botania.MECorporeaNode;
-import appbot.storage.Apis;
 import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 
@@ -35,7 +34,10 @@ public interface AppliedBotanics {
         ABItems.register();
 
         AEKeyTypes.register(ManaKeyType.TYPE);
-        PartApiLookup.register(Apis.BLOCK, (part, context) -> part.getExposedApi(), ManaP2PTunnelPart.class);
+        PartApiLookup.register(BotaniaFabricCapabilities.MANA_RECEIVER, (part, context) -> part.getExposedApi(),
+                ManaP2PTunnelPart.class);
+        PartApiLookup.register(BotaniaFabricCapabilities.SPARK_ATTACHABLE, (part, context) -> part.getSparkAttachable(),
+                ManaP2PTunnelPart.class);
 
         BotaniaFabricCapabilities.MANA_RECEIVER.registerFallback((world, pos, state, blockEntity, context) -> {
             // Fall back to generic inv
