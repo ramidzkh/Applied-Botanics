@@ -76,7 +76,7 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
     public int getMaxMana() {
         var slots = 0;
 
-        for (int i = 0; i < inv.size(); i++) {
+        for (var i = 0; i < inv.size(); i++) {
             var key = inv.getKey(i);
 
             if (key == null || key == ManaKey.KEY) {

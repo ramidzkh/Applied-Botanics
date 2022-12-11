@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -25,13 +26,11 @@ import appeng.api.storage.MEStorage;
 
 public class MECorporeaNode extends AbstractCorporeaNode {
 
-    private final MEStorage storage;
-    private final IActionSource source;
+    private final IStorageMonitorableAccessor accessor;
 
-    public MECorporeaNode(Level level, BlockPos pos, CorporeaSpark spark, MEStorage storage, IActionSource source) {
+    public MECorporeaNode(Level level, BlockPos pos, CorporeaSpark spark, IStorageMonitorableAccessor accessor) {
         super(level, pos, spark);
-        this.storage = storage;
-        this.source = source;
+        this.accessor = accessor;
     }
 
     @Nullable
@@ -39,11 +38,10 @@ public class MECorporeaNode extends AbstractCorporeaNode {
         var accessor = IStorageMonitorableAccessor.SIDED.find(level, spark.getAttachPos(), Direction.UP);
 
         if (accessor != null) {
-            var source = IActionSource.empty();
-            var storage = accessor.getInventory(source);
+            var storage = accessor.getInventory(IActionSource.empty());
 
             if (storage != null) {
-                return new MECorporeaNode(level, spark.getAttachPos(), spark, storage, source);
+                return new MECorporeaNode(level, spark.getAttachPos(), spark, accessor);
             }
         }
 
@@ -62,6 +60,18 @@ public class MECorporeaNode extends AbstractCorporeaNode {
 
     protected List<ItemStack> work(CorporeaRequest request, boolean execute) {
         var list = new ArrayList<ItemStack>();
+        MEStorage storage;
+        IActionSource source;
+
+        if (request.getEntity()instanceof Player player) {
+            storage = accessor.getInventory(source = IActionSource.ofPlayer(player));
+        } else {
+            storage = accessor.getInventory(source = IActionSource.empty());
+        }
+
+        if (storage == null) {
+            return list;
+        }
 
         for (var entry : storage.getAvailableStacks()) {
             var amount = Ints.saturatedCast(entry.getLongValue());
