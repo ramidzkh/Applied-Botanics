@@ -9,6 +9,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 
 import vazkii.botania.api.BotaniaFabricCapabilities;
+import vazkii.botania.api.mana.ManaItem;
 import vazkii.botania.common.handler.BotaniaSounds;
 
 import appeng.api.behaviors.ContainerItemStrategy;
@@ -16,7 +17,7 @@ import appeng.api.config.Actionable;
 import appeng.api.stacks.GenericStack;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey, AbstractContainerMenu> {
+public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey, ManaItem> {
 
     @Override
     public @Nullable GenericStack getContainedStack(ItemStack stack) {
@@ -34,47 +35,35 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
     }
 
     @Override
-    public @Nullable AbstractContainerMenu findCarriedContext(Player player, AbstractContainerMenu menu) {
-        return menu;
+    public @Nullable ManaItem findCarriedContext(Player player, AbstractContainerMenu menu) {
+        return BotaniaFabricCapabilities.MANA_ITEM.find(menu.getCarried(), Unit.INSTANCE);
     }
 
     @Override
-    public @Nullable AbstractContainerMenu findPlayerSlotContext(Player player, int slot) {
-        return player.containerMenu;
+    public @Nullable ManaItem findPlayerSlotContext(Player player, int slot) {
+        return BotaniaFabricCapabilities.MANA_ITEM.find(player.getInventory().getItem(slot), Unit.INSTANCE);
     }
 
     @Override
-    public long extract(AbstractContainerMenu context, ManaKey what, long amount, Actionable mode) {
-        var item = BotaniaFabricCapabilities.MANA_ITEM.find(context.getCarried(), Unit.INSTANCE);
+    public long extract(ManaItem item, ManaKey what, long amount, Actionable mode) {
+        var extracted = (int) Math.min(amount, item.getMana());
 
-        if (item != null) {
-            var extracted = (int) Math.min(amount, item.getMana());
-
-            if (extracted > 0 && mode == Actionable.MODULATE) {
-                item.addMana(-extracted);
-            }
-
-            return extracted;
+        if (extracted > 0 && mode == Actionable.MODULATE) {
+            item.addMana(-extracted);
         }
 
-        return 0;
+        return extracted;
     }
 
     @Override
-    public long insert(AbstractContainerMenu context, ManaKey what, long amount, Actionable mode) {
-        var item = BotaniaFabricCapabilities.MANA_ITEM.find(context.getCarried(), Unit.INSTANCE);
+    public long insert(ManaItem item, ManaKey what, long amount, Actionable mode) {
+        var inserted = (int) Math.min(amount, item.getMaxMana() - item.getMana());
 
-        if (item != null) {
-            var inserted = (int) Math.min(amount, item.getMaxMana() - item.getMana());
-
-            if (inserted > 0 && mode == Actionable.MODULATE) {
-                item.addMana(inserted);
-            }
-
-            return inserted;
+        if (inserted > 0 && mode == Actionable.MODULATE) {
+            item.addMana(inserted);
         }
 
-        return 0;
+        return inserted;
     }
 
     @Override
@@ -88,7 +77,7 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
     }
 
     @Override
-    public @Nullable GenericStack getExtractableContent(AbstractContainerMenu context) {
-        return getContainedStack(context.getCarried());
+    public @Nullable GenericStack getExtractableContent(ManaItem item) {
+        return new GenericStack(ManaKey.KEY, item.getMana());
     }
 }

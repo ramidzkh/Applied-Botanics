@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -36,7 +35,7 @@ public class ManaCellItem extends AEBaseItem implements IManaCellItem, AEToolIte
     public ManaCellItem(Properties properties, ItemLike coreItem, int kilobytes, double idleDrain) {
         super(properties.stacksTo(1));
         this.coreItem = coreItem;
-        this.totalBytes = kilobytes * 1000;
+        this.totalBytes = kilobytes * 1024;
         this.idleDrain = idleDrain;
     }
 
@@ -64,7 +63,7 @@ public class ManaCellItem extends AEBaseItem implements IManaCellItem, AEToolIte
                 return false;
             }
 
-            final Inventory playerInventory = player.getInventory();
+            var playerInventory = player.getInventory();
             var inv = StorageCells.getCellInventory(stack, null);
 
             if (inv != null && playerInventory.getSelected() == stack) {
