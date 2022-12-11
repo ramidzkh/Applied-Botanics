@@ -68,13 +68,8 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
 
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
-                    IManaReceiver result;
-                    try {
-                        result = guard.get();
-                    } catch (Throwable e) {
-                        throw new RuntimeException(e);
-                    }
-                    space += ManaHelper.getCapacity(result);
+                    var receiver = guard.get();
+                    space += ManaHelper.getCapacity(receiver);
                 }
             }
 
@@ -98,13 +93,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         public boolean areIncomingTranfersDone() {
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
-                    IManaReceiver result;
-                    try {
-                        result = guard.get();
-                    } catch (Throwable e) {
-                        throw new RuntimeException(e);
-                    }
-                    var receiver = result;
+                    var receiver = guard.get();
 
                     if (receiver.canReceiveManaFromBursts() && !receiver.isFull()) {
                         return true;
@@ -137,13 +126,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         public boolean isFull() {
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
-                    IManaReceiver result;
-                    try {
-                        result = guard.get();
-                    } catch (Throwable e) {
-                        throw new RuntimeException(e);
-                    }
-                    if (!result.isFull()) {
+                    if (!guard.get().isFull()) {
                         return false;
                     }
                 }
@@ -157,14 +140,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
             var outputs = getOutputStream()
                     .filter(part -> {
                         try (var guard = part.getAdjacentCapability()) {
-                            IManaReceiver result;
-                            try {
-                                result = guard.get();
-                            } catch (Throwable e) {
-                                throw new RuntimeException(e);
-                            }
-                            var receiver = result;
-
+                            var receiver = guard.get();
                             return receiver.canReceiveManaFromBursts() && !receiver.isFull();
                         }
                     })
@@ -182,13 +158,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
 
             for (var output : outputs) {
                 try (var guard = output.getAdjacentCapability()) {
-                    IManaReceiver result;
-                    try {
-                        result = guard.get();
-                    } catch (Throwable e) {
-                        throw new RuntimeException(e);
-                    }
-                    result.receiveMana(manaForEach + (spill-- > 0 ? 1 : 0));
+                    guard.get().receiveMana(manaForEach + (spill-- > 0 ? 1 : 0));
                 }
             }
         }
@@ -197,12 +167,8 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         public boolean canReceiveManaFromBursts() {
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
-                    IManaReceiver result;
-                    try {
-                        result = guard.get();
-                    } catch (Throwable e) {
-                        throw new RuntimeException(e);
-                    }
+                    var result = guard.get();
+
                     if (result.canReceiveManaFromBursts()) {
                         return true;
                     }
