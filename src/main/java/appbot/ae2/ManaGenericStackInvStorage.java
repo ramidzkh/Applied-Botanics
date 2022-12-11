@@ -1,9 +1,7 @@
-package appbot.storage;
+package appbot.ae2;
 
 import com.google.common.base.Predicates;
 
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
@@ -16,19 +14,20 @@ import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.mana.spark.IManaSpark;
 import vazkii.botania.api.mana.spark.ISparkAttachable;
 
-import appeng.util.Platform;
+import appeng.api.behaviors.GenericInternalInventory;
+import appeng.api.config.Actionable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ManaReceiver implements IManaReceiver, IManaPool, ISparkAttachable {
+public class ManaGenericStackInvStorage implements IManaReceiver, IManaPool, ISparkAttachable {
 
     private final Level level;
     private final BlockPos pos;
-    private final Storage<ManaVariant> storage;
+    private final GenericInternalInventory inv;
 
-    public ManaReceiver(Level level, BlockPos pos, Storage<ManaVariant> storage) {
+    public ManaGenericStackInvStorage(GenericInternalInventory inv, Level level, BlockPos pos) {
+        this.inv = inv;
         this.level = level;
         this.pos = pos;
-        this.storage = storage;
     }
 
     @Override
@@ -43,26 +42,20 @@ public class ManaReceiver implements IManaReceiver, IManaPool, ISparkAttachable 
 
     @Override
     public int getCurrentMana() {
-        return (int) storage.simulateExtract(ManaVariant.VARIANT, Integer.MAX_VALUE, Transaction.getCurrentUnsafe());
+        return extract(Integer.MAX_VALUE, Actionable.SIMULATE);
     }
 
     @Override
     public boolean isFull() {
-        return (int) storage.simulateInsert(ManaVariant.VARIANT, 1, Transaction.getCurrentUnsafe()) == 0;
+        return insert(1, Actionable.SIMULATE) != 0;
     }
 
     @Override
     public void receiveMana(int mana) {
         if (mana > 0) {
-            try (var transaction = Platform.openOrJoinTx()) {
-                storage.insert(ManaVariant.VARIANT, mana, transaction);
-                transaction.commit();
-            }
+            insert(mana, Actionable.MODULATE);
         } else if (mana < 0) {
-            try (var transaction = Platform.openOrJoinTx()) {
-                storage.extract(ManaVariant.VARIANT, -mana, transaction);
-                transaction.commit();
-            }
+            extract(-mana, Actionable.MODULATE);
         }
     }
 
@@ -92,8 +85,7 @@ public class ManaReceiver implements IManaReceiver, IManaPool, ISparkAttachable 
 
     @Override
     public int getAvailableSpaceForMana() {
-        return (int) (Integer.MAX_VALUE
-                - storage.simulateInsert(ManaVariant.VARIANT, Integer.MAX_VALUE, Transaction.getCurrentUnsafe()));
+        return insert(Integer.MAX_VALUE, Actionable.SIMULATE);
     }
 
     @Override
@@ -112,5 +104,25 @@ public class ManaReceiver implements IManaReceiver, IManaPool, ISparkAttachable 
     @Override
     public boolean areIncomingTranfersDone() {
         return !isFull();
+    }
+
+    public int insert(int amount, Actionable actionable) {
+        var inserted = 0;
+
+        for (var i = 0; i < inv.size() && inserted < amount; ++i) {
+            inserted += (int) inv.insert(i, ManaKey.KEY, amount - inserted, actionable);
+        }
+
+        return inserted;
+    }
+
+    private int extract(int amount, Actionable actionable) {
+        var extracted = 0;
+
+        for (var i = 0; i < inv.size() && extracted < amount; ++i) {
+            extracted += (int) inv.extract(i, ManaKey.KEY, amount - extracted, actionable);
+        }
+
+        return extracted;
     }
 }
