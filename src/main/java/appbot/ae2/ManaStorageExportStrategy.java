@@ -6,7 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 
 import vazkii.botania.api.BotaniaFabricCapabilities;
-import vazkii.botania.api.mana.IManaReceiver;
+import vazkii.botania.api.mana.ManaReceiver;
 
 import appeng.api.behaviors.StackExportStrategy;
 import appeng.api.behaviors.StackTransferContext;
@@ -17,7 +17,7 @@ import appeng.api.storage.StorageHelper;
 @SuppressWarnings("UnstableApiUsage")
 public class ManaStorageExportStrategy implements StackExportStrategy {
 
-    private final BlockApiCache<IManaReceiver, Direction> apiCache;
+    private final BlockApiCache<ManaReceiver, Direction> apiCache;
     private final Direction fromSide;
 
     public ManaStorageExportStrategy(ServerLevel level,
@@ -28,7 +28,7 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
     }
 
     @Override
-    public long transfer(StackTransferContext context, AEKey what, long amount, Actionable mode) {
+    public long transfer(StackTransferContext context, AEKey what, long amount) {
         var receiver = apiCache.find(fromSide);
 
         if (receiver == null) {
@@ -38,9 +38,10 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
         var insertable = (int) Math.min(amount,
                 ManaHelper.getCapacity(receiver) - receiver.getCurrentMana());
         var extracted = (int) StorageHelper.poweredExtraction(context.getEnergySource(),
-                context.getInternalStorage().getInventory(), ManaKey.KEY, insertable, context.getActionSource(), mode);
+                context.getInternalStorage().getInventory(), ManaKey.KEY, insertable, context.getActionSource(),
+                Actionable.MODULATE);
 
-        if (extracted > 0 && mode == Actionable.MODULATE) {
+        if (extracted > 0) {
             receiver.receiveMana(extracted);
         }
 

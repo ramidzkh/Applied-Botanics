@@ -1,6 +1,9 @@
 package appbot.ae2;
 
+import java.util.Optional;
+
 import com.google.common.base.Predicates;
+import com.google.common.primitives.Ints;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -9,16 +12,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-import vazkii.botania.api.mana.IManaPool;
-import vazkii.botania.api.mana.IManaReceiver;
-import vazkii.botania.api.mana.spark.IManaSpark;
-import vazkii.botania.api.mana.spark.ISparkAttachable;
+import vazkii.botania.api.mana.ManaPool;
+import vazkii.botania.api.mana.ManaReceiver;
+import vazkii.botania.api.mana.spark.ManaSpark;
+import vazkii.botania.api.mana.spark.SparkAttachable;
 
 import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.config.Actionable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ManaGenericStackInvStorage implements IManaReceiver, IManaPool, ISparkAttachable {
+public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, SparkAttachable {
 
     private final Level level;
     private final BlockPos pos;
@@ -70,12 +73,27 @@ public class ManaGenericStackInvStorage implements IManaReceiver, IManaPool, ISp
     }
 
     @Override
-    public DyeColor getColor() {
-        return DyeColor.PURPLE;
+    public int getMaxMana() {
+        var slots = 0;
+
+        for (int i = 0; i < inv.size(); i++) {
+            var key = inv.getKey(i);
+
+            if (key == null || key == ManaKey.KEY) {
+                slots += 1;
+            }
+        }
+
+        return Ints.saturatedCast(slots * inv.getMaxAmount(ManaKey.KEY));
     }
 
     @Override
-    public void setColor(DyeColor color) {
+    public Optional<DyeColor> getColor() {
+        return Optional.of(DyeColor.PURPLE);
+    }
+
+    @Override
+    public void setColor(Optional<DyeColor> color) {
     }
 
     @Override
@@ -89,13 +107,13 @@ public class ManaGenericStackInvStorage implements IManaReceiver, IManaPool, ISp
     }
 
     @Override
-    public IManaSpark getAttachedSpark() {
+    public ManaSpark getAttachedSpark() {
         var sparkPos = pos.above();
         var sparks = level.getEntitiesOfClass(Entity.class, new AABB(sparkPos, sparkPos.offset(1, 1, 1)),
-                Predicates.instanceOf(IManaSpark.class));
+                Predicates.instanceOf(ManaSpark.class));
 
         if (sparks.size() == 1) {
-            return (IManaSpark) sparks.get(0);
+            return (ManaSpark) sparks.get(0);
         }
 
         return null;

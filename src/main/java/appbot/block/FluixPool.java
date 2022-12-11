@@ -11,9 +11,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import vazkii.botania.common.block.mana.BlockPool;
+import vazkii.botania.common.block.mana.ManaPoolBlock;
 
-public class FluixPool extends BlockPool {
+public class FluixPool extends ManaPoolBlock {
 
     public FluixPool(Variant v, Properties builder) {
         super(v, builder);

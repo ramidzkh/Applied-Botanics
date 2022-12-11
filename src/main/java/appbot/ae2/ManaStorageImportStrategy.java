@@ -9,7 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 
 import vazkii.botania.api.BotaniaFabricCapabilities;
-import vazkii.botania.api.mana.IManaReceiver;
+import vazkii.botania.api.mana.ManaReceiver;
 
 import appeng.api.behaviors.StackImportStrategy;
 import appeng.api.behaviors.StackTransferContext;
@@ -19,7 +19,7 @@ import appeng.api.config.Actionable;
 public class ManaStorageImportStrategy implements StackImportStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ManaStorageImportStrategy.class);
-    private final BlockApiCache<IManaReceiver, Direction> apiCache;
+    private final BlockApiCache<ManaReceiver, Direction> apiCache;
     private final Direction fromSide;
 
     public ManaStorageImportStrategy(ServerLevel level,

@@ -12,9 +12,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import vazkii.botania.api.corporea.ICorporeaNode;
-import vazkii.botania.api.corporea.ICorporeaRequest;
-import vazkii.botania.api.corporea.ICorporeaSpark;
+import vazkii.botania.api.corporea.CorporeaNode;
+import vazkii.botania.api.corporea.CorporeaRequest;
+import vazkii.botania.api.corporea.CorporeaSpark;
 import vazkii.botania.common.impl.corporea.AbstractCorporeaNode;
 
 import appeng.api.config.Actionable;
@@ -28,14 +28,14 @@ public class MECorporeaNode extends AbstractCorporeaNode {
     private final MEStorage storage;
     private final IActionSource source;
 
-    public MECorporeaNode(Level level, BlockPos pos, ICorporeaSpark spark, MEStorage storage, IActionSource source) {
+    public MECorporeaNode(Level level, BlockPos pos, CorporeaSpark spark, MEStorage storage, IActionSource source) {
         super(level, pos, spark);
         this.storage = storage;
         this.source = source;
     }
 
     @Nullable
-    public static ICorporeaNode getNode(Level level, ICorporeaSpark spark) {
+    public static CorporeaNode getNode(Level level, CorporeaSpark spark) {
         var accessor = IStorageMonitorableAccessor.SIDED.find(level, spark.getAttachPos(), Direction.UP);
 
         if (accessor != null) {
@@ -51,16 +51,16 @@ public class MECorporeaNode extends AbstractCorporeaNode {
     }
 
     @Override
-    public List<ItemStack> countItems(ICorporeaRequest request) {
+    public List<ItemStack> countItems(CorporeaRequest request) {
         return work(request, false);
     }
 
     @Override
-    public List<ItemStack> extractItems(ICorporeaRequest request) {
+    public List<ItemStack> extractItems(CorporeaRequest request) {
         return work(request, true);
     }
 
-    protected List<ItemStack> work(ICorporeaRequest request, boolean execute) {
+    protected List<ItemStack> work(CorporeaRequest request, boolean execute) {
         var list = new ArrayList<ItemStack>();
 
         for (var entry : storage.getAvailableStacks()) {

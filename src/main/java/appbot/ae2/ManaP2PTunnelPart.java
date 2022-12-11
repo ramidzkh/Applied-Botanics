@@ -2,6 +2,7 @@ package appbot.ae2;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Predicates;
@@ -17,10 +18,10 @@ import net.minecraft.world.phys.AABB;
 
 import appbot.AppliedBotanics;
 import vazkii.botania.api.BotaniaFabricCapabilities;
-import vazkii.botania.api.mana.IManaPool;
-import vazkii.botania.api.mana.IManaReceiver;
-import vazkii.botania.api.mana.spark.IManaSpark;
-import vazkii.botania.api.mana.spark.ISparkAttachable;
+import vazkii.botania.api.mana.ManaPool;
+import vazkii.botania.api.mana.ManaReceiver;
+import vazkii.botania.api.mana.spark.ManaSpark;
+import vazkii.botania.api.mana.spark.SparkAttachable;
 
 import appeng.api.config.PowerUnits;
 import appeng.api.parts.IPartItem;
@@ -29,10 +30,10 @@ import appeng.items.parts.PartModels;
 import appeng.parts.p2p.CapabilityP2PTunnelPart;
 import appeng.parts.p2p.P2PModels;
 
-public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart, IManaReceiver> {
+public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart, ManaReceiver> {
 
     private static final P2PModels MODELS = new P2PModels(AppliedBotanics.id("part/mana_p2p_tunnel"));
-    private final ISparkAttachable sparkAttachable = new P2PSparkAttachable();
+    private final SparkAttachable sparkAttachable = new P2PSparkAttachable();
 
     public ManaP2PTunnelPart(IPartItem<?> partItem) {
         super(partItem, BotaniaFabricCapabilities.MANA_RECEIVER);
@@ -51,11 +52,11 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
     }
 
     @Nullable
-    public ISparkAttachable getSparkAttachable() {
+    public SparkAttachable getSparkAttachable() {
         return isOutput() ? null : sparkAttachable;
     }
 
-    private class P2PSparkAttachable implements ISparkAttachable {
+    private class P2PSparkAttachable implements SparkAttachable {
 
         @Override
         public boolean canAttachSpark(ItemStack stack) {
@@ -77,13 +78,13 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         }
 
         @Override
-        public IManaSpark getAttachedSpark() {
+        public ManaSpark getAttachedSpark() {
             var sparkPos = getHost().getLocation().getPos().above();
             var sparks = getLevel().getEntitiesOfClass(Entity.class, new AABB(sparkPos, sparkPos.offset(1, 1, 1)),
-                    Predicates.instanceOf(IManaSpark.class));
+                    Predicates.instanceOf(ManaSpark.class));
 
             if (sparks.size() == 1) {
-                return (IManaSpark) sparks.get(0);
+                return (ManaSpark) sparks.get(0);
             }
 
             return null;
@@ -105,7 +106,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         }
     }
 
-    private class InputHandler implements IManaReceiver, IManaPool {
+    private class InputHandler implements ManaReceiver, ManaPool {
 
         @Override
         public Level getManaReceiverLevel() {
@@ -119,7 +120,13 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
 
         @Override
         public int getCurrentMana() {
-            return 0;
+            return getOutputStream()
+                    .map(part -> {
+                        try (var guard = part.getAdjacentCapability()) {
+                            return guard.get().getCurrentMana();
+                        }
+                    })
+                    .reduce(0, Integer::sum);
         }
 
         @Override
@@ -184,16 +191,27 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         }
 
         @Override
-        public DyeColor getColor() {
-            return DyeColor.PURPLE;
+        public int getMaxMana() {
+            return getOutputStream()
+                    .map(part -> {
+                        try (var guard = part.getAdjacentCapability()) {
+                            return ManaHelper.getCapacity(guard.get());
+                        }
+                    })
+                    .reduce(0, Integer::sum);
         }
 
         @Override
-        public void setColor(DyeColor color) {
+        public Optional<DyeColor> getColor() {
+            return Optional.of(DyeColor.PURPLE);
+        }
+
+        @Override
+        public void setColor(Optional<DyeColor> color) {
         }
     }
 
-    private class EmptyHandler implements IManaReceiver {
+    private class EmptyHandler implements ManaReceiver {
 
         @Override
         public Level getManaReceiverLevel() {

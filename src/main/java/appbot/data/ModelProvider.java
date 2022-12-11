@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import appbot.ABBlocks;
 import appbot.ABItems;
-import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.block.BotaniaBlocks;
 
 import appeng.core.AppEng;
 
@@ -72,9 +72,11 @@ public class ModelProvider extends FabricModelProvider {
         }
 
         P2P_TUNNEL_BASE_ITEM.create(id("item/mana_p2p_tunnel"),
-                new TextureMapping().put(TYPE, ModelLocationUtils.getModelLocation(ModBlocks.manasteelBlock)), output);
+                new TextureMapping().put(TYPE, ModelLocationUtils.getModelLocation(BotaniaBlocks.manasteelBlock)),
+                output);
         P2P_TUNNEL_BASE_PART.create(id("part/mana_p2p_tunnel"),
-                new TextureMapping().put(TYPE, ModelLocationUtils.getModelLocation(ModBlocks.manasteelBlock)), output);
+                new TextureMapping().put(TYPE, ModelLocationUtils.getModelLocation(BotaniaBlocks.manasteelBlock)),
+                output);
     }
 
     private static BiConsumer<ResourceLocation, Supplier<JsonElement>> output(ItemModelGenerators generator) {

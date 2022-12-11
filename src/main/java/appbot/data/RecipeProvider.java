@@ -11,8 +11,8 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 
 import appbot.ABItems;
 import appbot.AppliedBotanics;
-import vazkii.botania.common.block.ModBlocks;
-import vazkii.botania.common.item.ModItems;
+import vazkii.botania.common.block.BotaniaBlocks;
+import vazkii.botania.common.item.BotaniaItems;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
@@ -26,7 +26,7 @@ public class RecipeProvider extends FabricRecipeProvider {
     @Override
     protected void generateRecipes(Consumer<FinishedRecipe> exporter) {
         ShapelessRecipeBuilder.shapeless(ABItems.FLUIX_MANA_POOL)
-                .requires(ModBlocks.fabulousPool)
+                .requires(BotaniaBlocks.fabulousPool)
                 .requires(AEBlocks.INTERFACE)
                 .unlockedBy("has_interface", has(AEBlocks.INTERFACE))
                 .save(exporter, AppliedBotanics.id("fluix_mana_pool"));
@@ -36,9 +36,9 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .pattern("S S")
                 .pattern("III")
                 .define('Q', AEBlocks.QUARTZ_GLASS)
-                .define('S', ModItems.lifeEssence)
-                .define('I', ModItems.manaSteel)
-                .unlockedBy("has_life_essence", has(ModItems.lifeEssence))
+                .define('S', BotaniaItems.lifeEssence)
+                .define('I', BotaniaItems.manaSteel)
+                .unlockedBy("has_life_essence", has(BotaniaItems.lifeEssence))
                 .save(exporter, AppliedBotanics.id("mana_cell_housing"));
 
         for (var tier : ABItems.Tier.values()) {

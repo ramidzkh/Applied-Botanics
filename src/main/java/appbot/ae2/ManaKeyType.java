@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import appbot.AppliedBotanics;
 
@@ -14,7 +13,7 @@ import appeng.api.stacks.AEKeyType;
 
 public class ManaKeyType extends AEKeyType {
 
-    public static final Component MANA = new TranslatableComponent("gui." + AppliedBotanics.MOD_ID + ".mana");
+    public static final Component MANA = Component.translatable("gui." + AppliedBotanics.MOD_ID + ".mana");
 
     public static final AEKeyType TYPE = new ManaKeyType();
 

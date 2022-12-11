@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import appbot.ABBlocks;
 import appbot.ae2.ManaKey;
-import vazkii.botania.common.block.tile.mana.TilePool;
+import vazkii.botania.common.block.block_entity.mana.ManaPoolBlockEntity;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.*;
@@ -26,7 +26,8 @@ import appeng.hooks.ticking.TickHandler;
 import appeng.me.helpers.BlockEntityNodeListener;
 import appeng.me.helpers.IGridConnectedBlockEntity;
 
-public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHost, IGridConnectedBlockEntity {
+public class FluixPoolBlockEntity extends ManaPoolBlockEntity
+        implements IInWorldGridNodeHost, IGridConnectedBlockEntity {
 
     static {
         /*
@@ -120,15 +121,17 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
                 Actionable.SIMULATE, actionSource);
     }
 
-    public void recalculateManaCap() {
+    @Override
+    public int getMaxMana() {
         var grid = getMainNode().getGrid();
 
         if (grid == null) {
-            return;
+            return super.getMaxMana();
         }
 
         var oldMana = mana.getMana();
-        var oldManaCap = manaCap;
+        var oldManaCap = super.getMaxMana();
+        int manaCap;
 
         if (getMainNode().isActive()) {
             var storage = grid.getStorageService().getInventory();
@@ -144,6 +147,8 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
             setChanged();
             markDispatchable();
         }
+
+        return manaCap;
     }
 
     @Override
@@ -227,6 +232,7 @@ public class FluixPoolBlockEntity extends TilePool implements IInWorldGridNodeHo
         GridHelper.onFirstTick(this, FluixPoolBlockEntity::onReady);
     }
 
+    // For when grid == null, i.e. client-side visuals
     public interface Accessor {
         int getMana();
 

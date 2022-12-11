@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import appbot.ae2.ManaKeyType;
 import appbot.ae2.ManaP2PTunnelPart;
-import vazkii.botania.common.item.ModItems;
+import vazkii.botania.common.item.BotaniaItems;
 
 import appeng.api.client.StorageCellModels;
 import appeng.api.implementations.blockentities.IChestOrDrive;
@@ -26,6 +26,7 @@ import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModelsHelper;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.storage.CreativeCellItem;
+import appeng.items.storage.StorageTier;
 import appeng.items.tools.powered.PortableCellItem;
 import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
@@ -41,7 +42,7 @@ public class ABItems {
     }
 
     public static final Item FLUIX_MANA_POOL = Registry.register(Registry.ITEM, id("fluix_mana_pool"),
-            new BlockItem(ABBlocks.FLUIX_MANA_POOL, ModItems.defaultBuilder().tab(CREATIVE_TAB)));
+            new BlockItem(ABBlocks.FLUIX_MANA_POOL, BotaniaItems.defaultBuilder().tab(CREATIVE_TAB)));
 
     public static final Item MANA_CELL_HOUSING = Registry.register(Registry.ITEM, id("mana_cell_housing"),
             new Item(properties()));
@@ -67,19 +68,19 @@ public class ABItems {
 
     public static final Item PORTABLE_MANA_CELL_1K = Registry.register(Registry.ITEM,
             id("portable_mana_storage_cell_1k"), new PortableCellItem(ManaKeyType.TYPE, ABMenus.PORTABLE_MANA_CELL_TYPE,
-                    PortableCellItem.SIZE_1K, properties().stacksTo(1)));
+                    StorageTier.SIZE_1K, properties().stacksTo(1)));
     public static final Item PORTABLE_MANA_CELL_4K = Registry.register(Registry.ITEM,
             id("portable_mana_storage_cell_4k"), new PortableCellItem(ManaKeyType.TYPE, ABMenus.PORTABLE_MANA_CELL_TYPE,
-                    PortableCellItem.SIZE_4K, properties().stacksTo(1)));
+                    StorageTier.SIZE_4K, properties().stacksTo(1)));
     public static final Item PORTABLE_MANA_CELL_16K = Registry.register(Registry.ITEM,
             id("portable_mana_storage_cell_16k"), new PortableCellItem(ManaKeyType.TYPE,
-                    ABMenus.PORTABLE_MANA_CELL_TYPE, PortableCellItem.SIZE_16K, properties().stacksTo(1)));
+                    ABMenus.PORTABLE_MANA_CELL_TYPE, StorageTier.SIZE_16K, properties().stacksTo(1)));
     public static final Item PORTABLE_MANA_CELL_64K = Registry.register(Registry.ITEM,
             id("portable_mana_storage_cell_64k"), new PortableCellItem(ManaKeyType.TYPE,
-                    ABMenus.PORTABLE_MANA_CELL_TYPE, PortableCellItem.SIZE_64K, properties().stacksTo(1)));
+                    ABMenus.PORTABLE_MANA_CELL_TYPE, StorageTier.SIZE_64K, properties().stacksTo(1)));
     public static final Item PORTABLE_MANA_CELL_256K = Registry.register(Registry.ITEM,
             id("portable_mana_storage_cell_256k"), new PortableCellItem(ManaKeyType.TYPE,
-                    ABMenus.PORTABLE_MANA_CELL_TYPE, PortableCellItem.SIZE_256K, properties().stacksTo(1)));
+                    ABMenus.PORTABLE_MANA_CELL_TYPE, StorageTier.SIZE_256K, properties().stacksTo(1)));
 
     public static final PartItem<?> MANA_P2P_TUNNEL = Util.make(() -> {
         PartModels.registerModels(PartModelsHelper.createModels(ManaP2PTunnelPart.class));

@@ -3,12 +3,7 @@
   "minVersion": "0.8",
   "package": "appbot.mixins",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [
-    "ItemManaMirrorMixin",
-    "ItemManaMirrorMixin$ManaItemMixin",
-    "ModTilesMixin",
-    "TilePoolMixin"
-  ],
+  "mixins": ["BotaniaBlockEntitiesMixin", "ManaPoolBlockEntityMixin"],
   "injectors": {
     "defaultRequire": 1
   }

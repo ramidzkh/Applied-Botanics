@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
 import vazkii.botania.api.BotaniaFabricCapabilities;
-import vazkii.botania.api.mana.IManaReceiver;
+import vazkii.botania.api.mana.ManaReceiver;
 
 import appeng.api.behaviors.ExternalStorageStrategy;
 import appeng.api.config.Actionable;
@@ -22,7 +22,7 @@ import appeng.core.localization.GuiText;
 @SuppressWarnings("UnstableApiUsage")
 public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
 
-    private final BlockApiCache<IManaReceiver, Direction> apiCache;
+    private final BlockApiCache<ManaReceiver, Direction> apiCache;
     private final Direction fromSide;
 
     public ManaExternalStorageStrategy(ServerLevel level, BlockPos fromPos, Direction fromSide) {
@@ -43,7 +43,7 @@ public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
         return new ManaStorageAdapter(receiver, injectOrExtractCallback);
     }
 
-    private record ManaStorageAdapter(IManaReceiver receiver, Runnable injectOrExtractCallback) implements MEStorage {
+    private record ManaStorageAdapter(ManaReceiver receiver, Runnable injectOrExtractCallback) implements MEStorage {
 
         @Override
         public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
