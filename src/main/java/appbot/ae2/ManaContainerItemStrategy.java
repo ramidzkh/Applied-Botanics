@@ -2,12 +2,14 @@ package appbot.ae2;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 
 import vazkii.botania.api.BotaniaFabricCapabilities;
+import vazkii.botania.common.handler.BotaniaSounds;
 
 import appeng.api.behaviors.ContainerItemStrategy;
 import appeng.api.config.Actionable;
@@ -34,6 +36,11 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
     @Override
     public @Nullable AbstractContainerMenu findCarriedContext(Player player, AbstractContainerMenu menu) {
         return menu;
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu findPlayerSlotContext(Player player, int slot) {
+        return player.containerMenu;
     }
 
     @Override
@@ -72,10 +79,12 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
 
     @Override
     public void playFillSound(Player player, ManaKey what) {
+        player.playNotifySound(BotaniaSounds.manaPoolCraft, SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 
     @Override
     public void playEmptySound(Player player, ManaKey what) {
+        player.playNotifySound(BotaniaSounds.blackLotus, SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 
     @Override

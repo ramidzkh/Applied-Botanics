@@ -4,10 +4,6 @@ import static appbot.AppliedBotanics.id;
 
 import java.util.Locale;
 import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
-
-import com.google.gson.JsonElement;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -52,40 +48,28 @@ public class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerators generator) {
-        var output = output(generator);
-
         generator.generateFlatItem(ABItems.MANA_CELL_HOUSING, ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(ABItems.MANA_CELL_CREATIVE, ModelTemplates.FLAT_ITEM);
 
         for (var tier : ABItems.Tier.values()) {
             var cell = ABItems.get(tier);
-            var portableCell = ABItems.getPortableCell(tier);
+            var portableCell = ABItems.getPortable(tier);
 
             GENERATED_1.create(ModelLocationUtils.getModelLocation(cell),
-                    TextureMapping.layer0(cell).put(LAYER1, STORAGE_CELL_LED), output);
+                    TextureMapping.layer0(cell).put(LAYER1, STORAGE_CELL_LED), generator.output);
             GENERATED_1.create(ModelLocationUtils.getModelLocation(portableCell),
-                    TextureMapping.layer0(portableCell).put(LAYER1, PORTABLE_CELL_LED), output);
+                    TextureMapping.layer0(portableCell).put(LAYER1, PORTABLE_CELL_LED), generator.output);
 
             var path = "mana_storage_cell" + tier.toString().toLowerCase(Locale.ROOT);
             DRIVE_CELL.create(id("block/drive/cells/" + path),
-                    new TextureMapping().put(CELL, id("block/drive/cells/" + path)), output);
+                    new TextureMapping().put(CELL, id("block/drive/cells/" + path)), generator.output);
         }
 
         P2P_TUNNEL_BASE_ITEM.create(id("item/mana_p2p_tunnel"),
                 new TextureMapping().put(TYPE, ModelLocationUtils.getModelLocation(BotaniaBlocks.manasteelBlock)),
-                output);
+                generator.output);
         P2P_TUNNEL_BASE_PART.create(id("part/mana_p2p_tunnel"),
                 new TextureMapping().put(TYPE, ModelLocationUtils.getModelLocation(BotaniaBlocks.manasteelBlock)),
-                output);
-    }
-
-    private static BiConsumer<ResourceLocation, Supplier<JsonElement>> output(ItemModelGenerators generator) {
-        try {
-            var output = ItemModelGenerators.class.getDeclaredField("output");
-            output.setAccessible(true);
-            return (BiConsumer<ResourceLocation, Supplier<JsonElement>>) output.get(generator);
-        } catch (Throwable throwable) {
-            throw new RuntimeException(throwable);
-        }
+                generator.output);
     }
 }

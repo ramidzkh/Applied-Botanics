@@ -57,7 +57,7 @@ public class RecipeProvider extends FabricRecipeProvider {
                     .requires(cellComponent)
                     .unlockedBy("has_cell_component" + tierName, has(cellComponent))
                     .save(exporter);
-            ShapelessRecipeBuilder.shapeless(ABItems.getPortableCell(tier))
+            ShapelessRecipeBuilder.shapeless(ABItems.getPortable(tier))
                     .requires(AEBlocks.CHEST)
                     .requires(cellComponent)
                     .requires(AEBlocks.ENERGY_CELL)

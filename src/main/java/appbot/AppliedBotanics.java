@@ -8,6 +8,8 @@ import appbot.ae2.ManaGenericStackInvStorage;
 import appbot.ae2.ManaStorageExportStrategy;
 import appbot.ae2.ManaStorageImportStrategy;
 import appbot.botania.MECorporeaNode;
+import appbot.item.cell.CreativeManaCellHandler;
+import appbot.item.cell.ManaCellHandler;
 import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 
@@ -17,6 +19,7 @@ import appeng.api.behaviors.GenericSlotCapacities;
 import appeng.api.features.P2PTunnelAttunement;
 import appeng.api.inventories.PartApiLookup;
 import appeng.api.stacks.AEKeyTypes;
+import appeng.api.storage.StorageCells;
 import appeng.parts.automation.StackWorldBehaviors;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -63,6 +66,9 @@ public interface AppliedBotanics {
 
         ContainerItemStrategy.register(ManaKeyType.TYPE, ManaKey.class, new ManaContainerItemStrategy());
         GenericSlotCapacities.register(ManaKeyType.TYPE, 500000L);
+
+        StorageCells.addCellHandler(ManaCellHandler.INSTANCE);
+        StorageCells.addCellHandler(new CreativeManaCellHandler());
 
         CorporeaNodeDetectors.register(MECorporeaNode::getNode);
 
