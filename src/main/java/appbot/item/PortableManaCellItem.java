@@ -23,7 +23,7 @@ public class PortableManaCellItem extends AbstractPortableCell implements IManaC
 
     public PortableManaCellItem(Properties props, int kilobytes, double idleDrain) {
         super(ABMenus.PORTABLE_MANA_CELL_TYPE, props);
-        this.totalBytes = kilobytes * 1024;
+        this.totalBytes = kilobytes * 1000;
         this.idleDrain = idleDrain;
     }
 

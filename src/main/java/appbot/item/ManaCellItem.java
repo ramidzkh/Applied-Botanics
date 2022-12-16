@@ -35,7 +35,7 @@ public class ManaCellItem extends AEBaseItem implements IManaCellItem, AEToolIte
     public ManaCellItem(Properties properties, ItemLike coreItem, int kilobytes, double idleDrain) {
         super(properties.stacksTo(1));
         this.coreItem = coreItem;
-        this.totalBytes = kilobytes * 1024;
+        this.totalBytes = kilobytes * 1000;
         this.idleDrain = idleDrain;
     }
 
