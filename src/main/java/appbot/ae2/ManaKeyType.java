@@ -42,14 +42,4 @@ public class ManaKeyType extends AEKeyType {
     public int getAmountPerByte() {
         return 500;
     }
-
-    @Override
-    public int getAmountPerUnit() {
-        return 1;
-    }
-
-    @Override
-    public String getUnitSymbol() {
-        return " mana";
-    }
 }

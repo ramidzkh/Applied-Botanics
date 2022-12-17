@@ -11,6 +11,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import appbot.ae2.ManaKeyType;
 import appbot.ae2.ManaP2PTunnelPart;
+import appbot.item.CreativeManaCellItem;
+import appbot.item.ManaCellItem;
+import appbot.item.PortableManaCellItem;
 import vazkii.botania.common.item.BotaniaItems;
 
 import appeng.api.client.StorageCellModels;
@@ -20,14 +23,12 @@ import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.IBasicCellItem;
 import appeng.api.storage.cells.ICellGuiHandler;
 import appeng.api.storage.cells.ICellHandler;
+import appeng.api.upgrades.Upgrades;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
+import appeng.core.localization.GuiText;
 import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModelsHelper;
-import appeng.items.storage.BasicStorageCell;
-import appeng.items.storage.CreativeCellItem;
-import appeng.items.storage.StorageTier;
-import appeng.items.tools.powered.PortableCellItem;
 import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
 import appeng.menu.me.common.MEStorageMenu;
@@ -48,39 +49,29 @@ public class ABItems {
             new Item(properties()));
 
     public static final Item MANA_CELL_CREATIVE = Registry.register(Registry.ITEM, id("creative_mana_cell"),
-            new CreativeCellItem(properties().stacksTo(1).rarity(Rarity.EPIC)));
+            new CreativeManaCellItem(properties()));
 
     public static final Item MANA_CELL_1K = Registry.register(Registry.ITEM, id("mana_storage_cell_1k"),
-            new BasicStorageCell(properties().stacksTo(1), AEItems.CELL_COMPONENT_1K, MANA_CELL_HOUSING, 0.5f, 1, 8, 1,
-                    ManaKeyType.TYPE));
+            new ManaCellItem(properties(), AEItems.CELL_COMPONENT_1K, 1, 0.5f));
     public static final Item MANA_CELL_4K = Registry.register(Registry.ITEM, id("mana_storage_cell_4k"),
-            new BasicStorageCell(properties().stacksTo(1), AEItems.CELL_COMPONENT_4K, MANA_CELL_HOUSING, 1.0f, 4, 32, 1,
-                    ManaKeyType.TYPE));
+            new ManaCellItem(properties(), AEItems.CELL_COMPONENT_4K, 4, 1.0f));
     public static final Item MANA_CELL_16K = Registry.register(Registry.ITEM, id("mana_storage_cell_16k"),
-            new BasicStorageCell(properties().stacksTo(1), AEItems.CELL_COMPONENT_16K, MANA_CELL_HOUSING, 1.5f, 16, 128,
-                    1, ManaKeyType.TYPE));
+            new ManaCellItem(properties(), AEItems.CELL_COMPONENT_16K, 16, 1.5f));
     public static final Item MANA_CELL_64K = Registry.register(Registry.ITEM, id("mana_storage_cell_64k"),
-            new BasicStorageCell(properties().stacksTo(1), AEItems.CELL_COMPONENT_64K, MANA_CELL_HOUSING, 2.0f, 64, 512,
-                    1, ManaKeyType.TYPE));
+            new ManaCellItem(properties(), AEItems.CELL_COMPONENT_64K, 64, 2.0f));
     public static final Item MANA_CELL_256K = Registry.register(Registry.ITEM, id("mana_storage_cell_256k"),
-            new BasicStorageCell(properties().stacksTo(1), AEItems.CELL_COMPONENT_256K, MANA_CELL_HOUSING, 2.5f, 256,
-                    2048, 1, ManaKeyType.TYPE));
+            new ManaCellItem(properties(), AEItems.CELL_COMPONENT_256K, 256, 2.5f));
 
     public static final Item PORTABLE_MANA_CELL_1K = Registry.register(Registry.ITEM,
-            id("portable_mana_storage_cell_1k"), new PortableCellItem(ManaKeyType.TYPE, ABMenus.PORTABLE_MANA_CELL_TYPE,
-                    StorageTier.SIZE_1K, properties().stacksTo(1)));
+            id("portable_mana_storage_cell_1k"), new PortableManaCellItem(properties().stacksTo(1), 1, 0.5));
     public static final Item PORTABLE_MANA_CELL_4K = Registry.register(Registry.ITEM,
-            id("portable_mana_storage_cell_4k"), new PortableCellItem(ManaKeyType.TYPE, ABMenus.PORTABLE_MANA_CELL_TYPE,
-                    StorageTier.SIZE_4K, properties().stacksTo(1)));
+            id("portable_mana_storage_cell_4k"), new PortableManaCellItem(properties().stacksTo(1), 4, 1.0));
     public static final Item PORTABLE_MANA_CELL_16K = Registry.register(Registry.ITEM,
-            id("portable_mana_storage_cell_16k"), new PortableCellItem(ManaKeyType.TYPE,
-                    ABMenus.PORTABLE_MANA_CELL_TYPE, StorageTier.SIZE_16K, properties().stacksTo(1)));
+            id("portable_mana_storage_cell_16k"), new PortableManaCellItem(properties().stacksTo(1), 16, 1.5));
     public static final Item PORTABLE_MANA_CELL_64K = Registry.register(Registry.ITEM,
-            id("portable_mana_storage_cell_64k"), new PortableCellItem(ManaKeyType.TYPE,
-                    ABMenus.PORTABLE_MANA_CELL_TYPE, StorageTier.SIZE_64K, properties().stacksTo(1)));
+            id("portable_mana_storage_cell_64k"), new PortableManaCellItem(properties().stacksTo(1), 64, 2.0));
     public static final Item PORTABLE_MANA_CELL_256K = Registry.register(Registry.ITEM,
-            id("portable_mana_storage_cell_256k"), new PortableCellItem(ManaKeyType.TYPE,
-                    ABMenus.PORTABLE_MANA_CELL_TYPE, StorageTier.SIZE_256K, properties().stacksTo(1)));
+            id("portable_mana_storage_cell_256k"), new PortableManaCellItem(properties().stacksTo(1), 256, 2.5));
 
     public static final PartItem<?> MANA_P2P_TUNNEL = Util.make(() -> {
         PartModels.registerModels(PartModelsHelper.createModels(ManaP2PTunnelPart.class));
@@ -107,7 +98,12 @@ public class ABItems {
 
         for (var tier : Tier.values()) {
             var cell = get(tier);
+            var portable = getPortable(tier);
+
+            Upgrades.add(AEItems.ENERGY_CARD, portable, 2, GuiText.PortableCells.getTranslationKey());
+
             StorageCellModels.registerModel(cell, id("block/drive/cells/" + Registry.ITEM.getKey(cell).getPath()));
+            StorageCellModels.registerModel(portable, id("block/drive/cells/" + Registry.ITEM.getKey(cell).getPath()));
         }
     }
 
@@ -121,7 +117,7 @@ public class ABItems {
         };
     }
 
-    public static Item getPortableCell(Tier tier) {
+    public static Item getPortable(Tier tier) {
         return switch (tier) {
             case _1K -> PORTABLE_MANA_CELL_1K;
             case _4K -> PORTABLE_MANA_CELL_4K;
