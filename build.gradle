@@ -8,89 +8,70 @@ group = "me.ramidzkh"
 version = System.getenv("APPBOT_VERSION") ?: "0.0.0"
 
 repositories {
-    maven {
-        name = "Modmaven"
-        url = uri("https://modmaven.dev/")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modmaven"
+                url = uri("https://modmaven.dev/")
+            }
+        }
 
-        content {
+        filter {
             includeGroup("appeng")
-        }
-    }
-
-    maven {
-        name = "Cursemaven"
-        url = uri("https://cursemaven.com")
-
-        content {
-            includeGroup("curse.maven")
-        }
-    }
-
-    maven {
-        name = "Jared"
-        url = uri("https://maven.blamejared.com/")
-
-        content {
             includeGroup("vazkii.botania")
             includeGroup("vazkii.patchouli")
         }
     }
 
-    maven {
-        name = "Ladysnake Libs"
-        url = uri("https://ladysnake.jfrog.io/artifactory/mods/")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Ladysnake Libs"
+                url = uri("https://ladysnake.jfrog.io/artifactory/mods/")
+            }
+        }
 
-        content {
+        filter {
             includeGroup("dev.onyxstudios.cardinal-components-api")
-            includeGroup("io.github.onyxstudios.Cardinal-Components-API")
         }
     }
 
-    maven {
-        name = "TerraformersMC"
-        url = uri("https://maven.terraformersmc.com/")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "TerraformersMC"
+                url = uri("https://maven.terraformersmc.com/")
+            }
+        }
 
-        content {
-            includeGroup("com.terraformersmc")
+        filter {
             includeGroup("dev.emi")
         }
     }
 
-    maven {
-        name = "JamiesWhiteShirt"
-        url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "JamiesWhiteShirt"
+                url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
+            }
+        }
 
-        content {
+        filter {
             includeGroup("com.jamieswhiteshirt")
         }
     }
 
-    maven {
-        name = "shedaniel"
-        url = uri("https://maven.shedaniel.me/")
-
-        content {
-            includeGroup("dev.architectury")
-            includeGroup("me.shedaniel")
-            includeGroup("me.shedaniel.cloth")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Jitpack"
+                url = uri("https://jitpack.io/")
+            }
         }
-    }
 
-    maven {
-        name = "Jitpack"
-        url = uri("https://jitpack.io/")
-
-        content {
+        filter {
             includeGroup("com.github.emilyploszaj")
-        }
-    }
-
-    maven {
-        name = "Walia"
-        url = uri("https://maven.bai.lol/")
-
-        content {
-            includeGroup("mcp.mobius.waila")
         }
     }
 
