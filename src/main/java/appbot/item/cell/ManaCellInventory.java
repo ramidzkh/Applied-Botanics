@@ -1,7 +1,5 @@
 package appbot.item.cell;
 
-import java.util.Objects;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -26,7 +24,7 @@ public class ManaCellInventory implements StorageCell {
     private final ItemStack i;
     private final ISaveProvider container;
 
-    private long manaAmount;
+    private long storedMana;
     private boolean isPersisted = true;
 
     public ManaCellInventory(IManaCellItem cellType, ItemStack o, ISaveProvider container) {
@@ -34,7 +32,7 @@ public class ManaCellInventory implements StorageCell {
         this.i = o;
         this.container = container;
 
-        this.manaAmount = getTag().getLong(AMOUNT);
+        this.storedMana = getTag().getLong(AMOUNT);
 
         // Only migration for <=1.19.2 releases
         var ITEM_COUNT_TAG = "ic";
@@ -47,7 +45,7 @@ public class ManaCellInventory implements StorageCell {
 
             for (var i = 0; i < amounts.length; i++) {
                 if (AEKey.fromTagGeneric(tags.getCompound(i)) == ManaKey.KEY) {
-                    manaAmount += amounts[i];
+                    this.storedMana += amounts[i];
                 }
             }
 
@@ -64,13 +62,13 @@ public class ManaCellInventory implements StorageCell {
 
     @Override
     public CellState getStatus() {
-        if (this.manaAmount == 0) {
+        if (this.storedMana == 0) {
             return CellState.EMPTY;
         }
-        if (this.manaAmount == getMaxMana()) {
+        if (this.storedMana == getMaxMana()) {
             return CellState.FULL;
         }
-        if (this.manaAmount > getMaxMana() / 2) {
+        if (this.storedMana > getMaxMana() / 2) {
             return CellState.TYPES_FULL;
         }
         return CellState.NOT_EMPTY;
@@ -91,7 +89,7 @@ public class ManaCellInventory implements StorageCell {
 
     protected long getUsedBytes() {
         var amountPerByte = ManaKeyType.TYPE.getAmountPerByte();
-        return (this.manaAmount + amountPerByte - 1) / amountPerByte;
+        return (this.storedMana + amountPerByte - 1) / amountPerByte;
     }
 
     protected void saveChanges() {
@@ -106,34 +104,34 @@ public class ManaCellInventory implements StorageCell {
 
     @Override
     public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
-        if (amount == 0 || !(what instanceof ManaKey) || this.manaAmount == getMaxMana()) {
+        if (!(what instanceof ManaKey)) {
             return 0;
         }
 
-        var remainingAmount = Math.max(0, getMaxMana() - this.manaAmount);
-        if (amount > remainingAmount) {
-            amount = remainingAmount;
-        }
+        var inserted = Math.min(getMaxMana() - this.storedMana, amount);
+
         if (mode == Actionable.MODULATE) {
-            this.manaAmount += amount;
+            this.storedMana += inserted;
             saveChanges();
         }
-        return amount;
+
+        return inserted;
     }
 
     @Override
     public long extract(AEKey what, long amount, Actionable mode, IActionSource source) {
-        var extractAmount = Math.min(Integer.MAX_VALUE, amount);
-        var currentAmount = this.manaAmount;
-
-        if (this.manaAmount > 0 && Objects.equals(ManaKey.KEY, what)) {
-            if (mode == Actionable.MODULATE) {
-                this.manaAmount = Math.max(0, this.manaAmount - extractAmount);
-                saveChanges();
-            }
-            return Math.min(extractAmount, currentAmount);
+        if (!(what instanceof ManaKey)) {
+            return 0;
         }
-        return 0;
+
+        var extracted = Math.min(this.storedMana, amount);
+
+        if (mode == Actionable.MODULATE) {
+            this.storedMana -= extracted;
+            saveChanges();
+        }
+
+        return extracted;
     }
 
     @Override
@@ -142,10 +140,10 @@ public class ManaCellInventory implements StorageCell {
             return;
         }
 
-        if (this.manaAmount <= 0) {
+        if (this.storedMana <= 0) {
             this.getTag().remove(AMOUNT);
         } else {
-            this.getTag().putLong(AMOUNT, this.manaAmount);
+            this.getTag().putLong(AMOUNT, this.storedMana);
         }
 
         this.isPersisted = true;
@@ -153,8 +151,8 @@ public class ManaCellInventory implements StorageCell {
 
     @Override
     public void getAvailableStacks(KeyCounter out) {
-        if (this.manaAmount > 0) {
-            out.add(ManaKey.KEY, this.manaAmount);
+        if (this.storedMana > 0) {
+            out.add(ManaKey.KEY, this.storedMana);
         }
     }
 
