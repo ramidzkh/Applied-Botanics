@@ -23,8 +23,10 @@ import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.IBasicCellItem;
 import appeng.api.storage.cells.ICellGuiHandler;
 import appeng.api.storage.cells.ICellHandler;
+import appeng.api.upgrades.Upgrades;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
+import appeng.core.localization.GuiText;
 import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModelsHelper;
 import appeng.menu.MenuOpener;
@@ -97,6 +99,9 @@ public class ABItems {
         for (var tier : Tier.values()) {
             var cell = get(tier);
             var portable = getPortable(tier);
+
+            Upgrades.add(AEItems.ENERGY_CARD, portable, 2, GuiText.PortableCells.getTranslationKey());
+
             StorageCellModels.registerModel(cell, id("block/drive/cells/" + Registry.ITEM.getKey(cell).getPath()));
             StorageCellModels.registerModel(portable, id("block/drive/cells/" + Registry.ITEM.getKey(cell).getPath()));
         }
