@@ -71,7 +71,7 @@ public class ManaCellItem extends AEBaseItem implements IManaCellItem, AEToolIte
                 if (list.isEmpty()) {
                     playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
                     playerInventory.placeItemBackInInventory(new ItemStack(coreItem));
-                    playerInventory.placeItemBackInInventory(new ItemStack(ABItems.MANA_CELL_HOUSING));
+                    playerInventory.placeItemBackInInventory(new ItemStack(ABItems.MANA_CELL_HOUSING.get()));
                     return true;
                 }
             }

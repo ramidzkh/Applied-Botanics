@@ -1,10 +1,9 @@
 pluginManagement {
     repositories {
         maven {
-            name = "FabricMC"
-            url = uri("https://maven.fabricmc.net/")
+            name = "MinecraftForge"
+            url = uri("https://maven.minecraftforge.net/")
         }
-
 
         gradlePluginPortal()
     }

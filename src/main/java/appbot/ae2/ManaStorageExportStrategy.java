@@ -1,11 +1,10 @@
 package appbot.ae2;
 
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 
-import vazkii.botania.api.BotaniaFabricCapabilities;
+import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.ManaReceiver;
 
 import appeng.api.behaviors.StackExportStrategy;
@@ -13,17 +12,18 @@ import appeng.api.behaviors.StackTransferContext;
 import appeng.api.config.Actionable;
 import appeng.api.stacks.AEKey;
 import appeng.api.storage.StorageHelper;
+import appeng.util.BlockApiCache;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ManaStorageExportStrategy implements StackExportStrategy {
 
-    private final BlockApiCache<ManaReceiver, Direction> apiCache;
+    private final BlockApiCache<ManaReceiver> apiCache;
     private final Direction fromSide;
 
     public ManaStorageExportStrategy(ServerLevel level,
             BlockPos fromPos,
             Direction fromSide) {
-        this.apiCache = BlockApiCache.create(BotaniaFabricCapabilities.MANA_RECEIVER, level, fromPos);
+        this.apiCache = BlockApiCache.create(BotaniaForgeCapabilities.MANA_RECEIVER, level, fromPos);
         this.fromSide = fromSide;
     }
 

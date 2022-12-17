@@ -34,9 +34,9 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
       - name: Generate data
-        run: ./gradlew runData
+        run: ./gradlew runData --max-workers 1
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew build --max-workers 1
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:

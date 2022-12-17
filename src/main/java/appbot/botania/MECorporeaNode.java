@@ -23,6 +23,7 @@ import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.IStorageMonitorableAccessor;
 import appeng.api.storage.MEStorage;
+import appeng.capabilities.Capabilities;
 
 public class MECorporeaNode extends AbstractCorporeaNode {
 
@@ -35,7 +36,13 @@ public class MECorporeaNode extends AbstractCorporeaNode {
 
     @Nullable
     public static CorporeaNode getNode(Level level, CorporeaSpark spark) {
-        var accessor = IStorageMonitorableAccessor.SIDED.find(level, spark.getAttachPos(), Direction.UP);
+        var blockEntity = level.getBlockEntity(spark.getAttachPos());
+
+        if (blockEntity == null) {
+            return null;
+        }
+
+        var accessor = blockEntity.getCapability(Capabilities.STORAGE_MONITORABLE_ACCESSOR, Direction.UP).orElse(null);
 
         if (accessor != null) {
             var storage = accessor.getInventory(IActionSource.empty());

@@ -3,14 +3,13 @@ package appbot.ae2;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Unit;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 
-import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.api.mana.ManaItem;
 import vazkii.botania.common.handler.BotaniaSounds;
+import vazkii.botania.xplat.XplatAbstractions;
 
 import appeng.api.behaviors.ContainerItemStrategy;
 import appeng.api.config.Actionable;
@@ -25,7 +24,7 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
             return null;
         }
 
-        var item = BotaniaFabricCapabilities.MANA_ITEM.find(stack, Unit.INSTANCE);
+        var item = XplatAbstractions.INSTANCE.findManaItem(stack);
 
         if (item != null) {
             return new GenericStack(ManaKey.KEY, item.getMana());
@@ -36,12 +35,12 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
 
     @Override
     public @Nullable ManaItem findCarriedContext(Player player, AbstractContainerMenu menu) {
-        return BotaniaFabricCapabilities.MANA_ITEM.find(menu.getCarried(), Unit.INSTANCE);
+        return XplatAbstractions.INSTANCE.findManaItem(menu.getCarried());
     }
 
     @Override
     public @Nullable ManaItem findPlayerSlotContext(Player player, int slot) {
-        return BotaniaFabricCapabilities.MANA_ITEM.find(player.getInventory().getItem(slot), Unit.INSTANCE);
+        return XplatAbstractions.INSTANCE.findManaItem(player.getInventory().getItem(slot));
     }
 
     @Override

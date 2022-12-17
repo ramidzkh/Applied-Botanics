@@ -1,18 +1,21 @@
 package appbot.data;
 
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraftforge.data.event.GatherDataEvent;
 
-public class ABDataGenerator implements DataGeneratorEntrypoint {
+public class ABDataGenerator {
 
-    @Override
-    public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
-        var blockTagsProvider = new BlockTagsProvider(dataGenerator);
-        dataGenerator.addProvider(blockTagsProvider);
-        dataGenerator.addProvider(new ItemTagsProvider(dataGenerator, blockTagsProvider));
-        dataGenerator.addProvider(new RecipeProvider(dataGenerator));
-        dataGenerator.addProvider(new BlockLootTableProvider(dataGenerator));
+    public static void onGatherData(GatherDataEvent event) {
+        var dataGenerator = event.getGenerator();
+        var existingFileHelper = event.getExistingFileHelper();
 
-        dataGenerator.addProvider(new ModelProvider(dataGenerator));
+        var blockTagsProvider = new BlockTagsProvider(dataGenerator, existingFileHelper);
+        dataGenerator.addProvider(true, blockTagsProvider);
+        dataGenerator.addProvider(true, new ItemTagsProvider(dataGenerator, blockTagsProvider, existingFileHelper));
+        dataGenerator.addProvider(true, new RecipeProvider(dataGenerator));
+
+        dataGenerator.addProvider(true, new ItemModelProvider(dataGenerator, existingFileHelper));
+        dataGenerator.addProvider(true, new BlockModelProvider(dataGenerator, existingFileHelper));
+
+        dataGenerator.addProvider(true, new BlockLootTableProvider(dataGenerator.getOutputFolder()));
     }
 }

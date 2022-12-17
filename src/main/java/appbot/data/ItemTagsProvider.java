@@ -2,24 +2,27 @@ package appbot.data;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import appbot.ABItems;
+import appbot.AppliedBotanics;
 import vazkii.botania.common.lib.BotaniaTags;
 
 import appeng.api.features.P2PTunnelAttunement;
 
-public class ItemTagsProvider extends FabricTagProvider.ItemTagProvider {
+public class ItemTagsProvider extends net.minecraft.data.tags.ItemTagsProvider {
 
-    public ItemTagsProvider(FabricDataGenerator dataGenerator, @Nullable BlockTagProvider blockTagProvider) {
-        super(dataGenerator, blockTagProvider);
+    public ItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagsProvider,
+            @Nullable ExistingFileHelper existingFileHelper) {
+        super(dataGenerator, blockTagsProvider, AppliedBotanics.MOD_ID, existingFileHelper);
     }
 
     @Override
-    protected void generateTags() {
-        getOrCreateTagBuilder(P2PTunnelAttunement.getAttunementTag(ABItems.MANA_P2P_TUNNEL))
-                .forceAddTag(BotaniaTags.Items.PETALS)
-                .forceAddTag(BotaniaTags.Items.DUSTS_MANA);
+    protected void addTags() {
+        tag(P2PTunnelAttunement.getAttunementTag(ABItems.MANA_P2P_TUNNEL.get()))
+                .addOptionalTag(BotaniaTags.Items.PETALS.location())
+                .addOptionalTag(BotaniaTags.Items.DUSTS_MANA.location());
     }
 }

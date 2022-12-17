@@ -2,13 +2,12 @@ package appbot.ae2;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
-import vazkii.botania.api.BotaniaFabricCapabilities;
+import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.ManaReceiver;
 
 import appeng.api.behaviors.ExternalStorageStrategy;
@@ -18,15 +17,16 @@ import appeng.api.stacks.AEKey;
 import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.MEStorage;
 import appeng.core.localization.GuiText;
+import appeng.util.BlockApiCache;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
 
-    private final BlockApiCache<ManaReceiver, Direction> apiCache;
+    private final BlockApiCache<ManaReceiver> apiCache;
     private final Direction fromSide;
 
     public ManaExternalStorageStrategy(ServerLevel level, BlockPos fromPos, Direction fromSide) {
-        this.apiCache = BlockApiCache.create(BotaniaFabricCapabilities.MANA_RECEIVER, level, fromPos);
+        this.apiCache = BlockApiCache.create(BotaniaForgeCapabilities.MANA_RECEIVER, level, fromPos);
         this.fromSide = fromSide;
     }
 

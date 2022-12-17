@@ -22,20 +22,25 @@ jobs:
           distribution: temurin
           java-version: 17
       - name: Generate data
-        run: ./gradlew runData
+        run: ./gradlew runData --max-workers 1
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew build --max-workers 1
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
+      - name: Get version
+        id: get-version
+        run: |
+          version=$(echo ${{ github.event.release.tag_name }} | cut -c7-)
+          echo "::set-output name=version::$version"
       - name: Upload Release Artifact
         uses: softprops/action-gh-release@v1
         with:
-          files: build/libs/Applied-Botanics-${{ github.event.release.tag_name }}.jar
+          files: build/libs/Applied-Botanics-${{ steps.get-version.outputs.version }}.jar
           tag_name: ${{ github.event.release.tag_name }}
       - name: Upload to CurseForge
-        run: ./gradlew curseforge
+        run: ./gradlew curseforge --max-workers 1
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
           CURSEFORGE: ${{ secrets.CURSEFORGE }}
