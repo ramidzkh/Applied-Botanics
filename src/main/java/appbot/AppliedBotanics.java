@@ -1,6 +1,5 @@
 package appbot;
 
-import appeng.api.parts.IPartHost;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +32,7 @@ import appeng.api.behaviors.GenericSlotCapacities;
 import appeng.api.client.StorageCellModels;
 import appeng.api.features.P2PTunnelAttunement;
 import appeng.api.implementations.blockentities.IChestOrDrive;
+import appeng.api.parts.IPartHost;
 import appeng.api.stacks.AEKeyType;
 import appeng.api.stacks.AEKeyTypes;
 import appeng.api.storage.StorageCells;
