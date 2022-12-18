@@ -1,0 +1,32 @@
+{
+    "gui.appbot.mana": "Мана",
+  
+    "itemGroup.appbot.tab": "Applied Botanics",
+  
+    "block.appbot.fluix_mana_pool": "Флюксовий басейн мани",
+  
+    "item.appbot.mana_cell_housing": "МЕ Корпус комірки мани",
+    "item.appbot.creative_mana_cell": "Креативна МЕ мана комірка",
+  
+    "item.appbot.mana_storage_cell_1k": "1к МЕ Мана комірка",
+    "item.appbot.mana_storage_cell_4k": "4k МЕ Мана комірка",
+    "item.appbot.mana_storage_cell_16k": "16k МЕ Мана комірка",
+    "item.appbot.mana_storage_cell_64k": "64k МЕ Мана комірка",
+    "item.appbot.mana_storage_cell_256k": "256k МЕ Мана комірка",
+  
+    "item.appbot.portable_mana_storage_cell_1k": "1k Переносна мана комірка",
+    "item.appbot.portable_mana_storage_cell_4k": "4k Переносна мана комірка",
+    "item.appbot.portable_mana_storage_cell_16k": "16k Переносна мана комірка",
+    "item.appbot.portable_mana_storage_cell_64k": "64k Переносна мана комірка",
+    "item.appbot.portable_mana_storage_cell_256k": "256k Переносна мана комірка",
+  
+    "item.appbot.mana_p2p_tunnel": "Мана P2P Тунель",
+  
+    "appbot.entry.fluix_mana_pool": "Флюксовий басейн мани",
+    "appbot.page.fluix_mana_pool0": "$(item)Флюксовий басейн мани$(0) працює з $(thing)Маною$(0) з приєднаної до нього МЕ системи",
+    "appbot.page.fluix_mana_pool1": "це не так вже й погано",
+  
+    "appbot.entry.mana_drives": "Мана диски",
+    "appbot.page.mana_drives0": "Коли-небудь хотів кинути магію під шину і перейти в цифру? Ганьба тобі",
+    "appbot.page.mana_drives1": "якраз те, чого vazkii ніколи не хотів"
+}
