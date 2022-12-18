@@ -1,5 +1,6 @@
 package appbot;
 
+import appeng.api.parts.IPartHost;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -106,6 +107,15 @@ public class AppliedBotanics {
             @NotNull
             @Override
             public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction side) {
+                if (capability == BotaniaForgeCapabilities.SPARK_ATTACHABLE && blockEntity instanceof IPartHost host
+                        && host.getPart(side)instanceof ManaP2PTunnelPart p2p) {
+                    var sparkAttachable = p2p.getSparkAttachable();
+
+                    if (sparkAttachable != null) {
+                        return LazyOptional.of(() -> sparkAttachable).cast();
+                    }
+                }
+
                 if (capability == BotaniaForgeCapabilities.MANA_RECEIVER) {
                     return blockEntity.getCapability(Capabilities.GENERIC_INTERNAL_INV, side)
                             .lazyMap(inventory -> new MEManaReceiver(inventory, blockEntity.getLevel(),
