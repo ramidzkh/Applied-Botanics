@@ -1,7 +1,7 @@
 plugins {
     id("fabric-loom") version "1.0-SNAPSHOT"
     id("com.matthewprenger.cursegradle") version "1.4.0"
-    id("com.diffplug.spotless") version "6.10.0"
+    id("com.diffplug.spotless") version "6.12.1"
     id("com.modrinth.minotaur") version "2.5.0"
 }
 
