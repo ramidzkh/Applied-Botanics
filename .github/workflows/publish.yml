@@ -34,8 +34,9 @@ jobs:
         with:
           files: build/libs/Applied-Botanics-${{ github.event.release.tag_name }}.jar
           tag_name: ${{ github.event.release.tag_name }}
-      - name: Upload to CurseForge
-        run: ./gradlew curseforge
+      - name: Upload to external sites
+        run: ./gradlew curseforge modrinth
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
           CURSEFORGE: ${{ secrets.CURSEFORGE }}
+          MODRINTH: ${{ secrets.MODRINTH }}
