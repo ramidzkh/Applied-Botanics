@@ -16,7 +16,8 @@ buildscript {
 plugins {
     id("net.minecraftforge.gradle") version "5.1.+"
     id("com.matthewprenger.cursegradle") version "1.4.0"
-    id("com.diffplug.spotless") version "6.10.0"
+    id("com.diffplug.spotless") version "6.12.1"
+    id("com.modrinth.minotaur") version "2.5.0"
 }
 
 apply(plugin: "net.minecraftforge.gradle")
@@ -211,4 +212,34 @@ System.getenv("CURSEFORGE")?.with { String key ->
             }
         }
     }
+}
+
+////////////////
+// Modrinth
+modrinth {
+    token.set(System.getenv("MODRINTH"))
+    projectId.set("applied-botanics")
+    changelog.set("View changelog at [the release page](https://github.com/ramidzkh/Applied-Botanics/releases/tag/forge/${version})")
+    versionNumber.set("${project.version}-forge")
+    versionName.set("${project.version} [FORGE]")
+
+    if (version.contains("alpha")) {
+        versionType.set("alpha")
+    } else if (version.contains("beta")) {
+        versionType.set("beta")
+    } else {
+        versionType.set("release")
+    }
+
+    uploadFile.set(jar)
+    gameVersions.add(minecraft_version)
+
+    dependencies {
+        required.project("ae2")
+        required.project("botania")
+    }
+}
+
+tasks.modrinth.onlyIf {
+    System.getenv("MODRINTH")
 }

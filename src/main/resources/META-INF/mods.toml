@@ -13,6 +13,7 @@ modId = "appbot"
 version = "${version}"
 displayName = "Applied Botanics"
 description = "mana through ae2, what could go wrong"
+updateJSONURL = "https://api.modrinth.com/updates/applied-botanics/forge_updates.json"
 
 [[dependencies.appbot]]
 modId = "forge"
