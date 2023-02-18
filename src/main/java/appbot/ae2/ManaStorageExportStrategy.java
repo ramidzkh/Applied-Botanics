@@ -29,6 +29,10 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
 
     @Override
     public long transfer(StackTransferContext context, AEKey what, long amount, Actionable mode) {
+        if (!(what instanceof ManaKey)) {
+            return 0;
+        }
+
         var receiver = apiCache.find(fromSide);
 
         if (receiver == null) {
@@ -49,6 +53,10 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
 
     @Override
     public long push(AEKey what, long amount, Actionable mode) {
+        if (!(what instanceof ManaKey)) {
+            return 0;
+        }
+
         var receiver = apiCache.find(fromSide);
 
         if (receiver == null) {

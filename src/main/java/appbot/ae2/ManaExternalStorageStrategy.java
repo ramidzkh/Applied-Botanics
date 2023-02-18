@@ -47,6 +47,10 @@ public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
 
         @Override
         public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
+            if (!(what instanceof ManaKey)) {
+                return 0;
+            }
+
             var inserted = (int) Math.min(amount,
                     ManaHelper.getCapacity(receiver) - receiver.getCurrentMana());
 
@@ -60,6 +64,10 @@ public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
 
         @Override
         public long extract(AEKey what, long amount, Actionable mode, IActionSource source) {
+            if (!(what instanceof ManaKey)) {
+                return 0;
+            }
+
             var extracted = (int) Math.min(amount, receiver.getCurrentMana());
 
             if (extracted > 0 && mode == Actionable.MODULATE) {
