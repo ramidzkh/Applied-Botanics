@@ -1,0 +1,26 @@
+{
+  "gui.appbot.mana": "Мана",
+
+  "itemGroup.appbot.tab": "Applied Botanics",
+
+  "block.appbot.fluix_mana_pool": "Флюисовый бассейн маны",
+  "item.appbot.mana_cell_housing": "МЭ корпус для мана ячейки",
+  "item.appbot.creative_mana_cell": "Творческая МЭ мана ячейка",
+  "item.appbot.mana_storage_cell_1k": "1K МЭ мана ячейка хранения",
+  "item.appbot.mana_storage_cell_4k": "4K МЭ мана ячейка хранения",
+  "item.appbot.mana_storage_cell_16k": "16K МЭ мана ячейка хранения",
+  "item.appbot.mana_storage_cell_64k": "64K МЭ мана ячейка хранения",
+  "item.appbot.mana_storage_cell_256k": "256K МЭ мана ячейка хранения",
+  "item.appbot.portable_mana_storage_cell_1k": "1K Переносная мана ячейка",
+  "item.appbot.portable_mana_storage_cell_4k": "4K Переносная мана ячейка",
+  "item.appbot.portable_mana_storage_cell_16k": "16K Переносная мана ячейка",
+  "item.appbot.portable_mana_storage_cell_64k": "64K Переносная мана ячейка",
+  "item.appbot.portable_mana_storage_cell_256k": "256K Переносная мана ячейка",
+  "item.appbot.mana_p2p_tunnel": "Мана P2P тоннель",
+  "appbot.entry.fluix_mana_pool": "Флюисовый бассейн маны",
+  "appbot.page.fluix_mana_pool0": "$(item)Флюисовый бассейн маны$(0) работает с $(thing)Маной$(0) из присоединённой к нему МЭ системы",
+  "appbot.page.fluix_mana_pool1": "не так уж и плохо",
+  "appbot.entry.mana_drives": "Мана-дисковод",
+  "appbot.page.mana_drives0": "Когда-нибудь хотели бросить магию под шину с целью перехода в цифру? Позор Вам",
+  "appbot.page.mana_drives1": "именно то, чего vazkii никогда не хотел"
+}
