@@ -21,6 +21,7 @@ repositories {
             includeGroup("appeng")
             includeGroup("vazkii.botania")
             includeGroup("vazkii.patchouli")
+            includeGroup("mezz.jei")
         }
     }
 
@@ -88,6 +89,21 @@ repositories {
             includeGroup("maven.modrinth")
         }
     }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "shedaniel"
+                url = uri("https://maven.shedaniel.me/")
+            }
+        }
+
+        filter {
+            includeGroup("dev.architectury")
+            includeGroup("me.shedaniel")
+            includeGroup("me.shedaniel.cloth")
+        }
+    }
 }
 
 dependencies {
@@ -97,6 +113,14 @@ dependencies {
 
     modImplementation("appeng:appliedenergistics2-fabric:${ae2_version}")
     modImplementation("vazkii.botania:Botania:${minecraft_version}-${botania_version}")
+
+    modCompileOnly("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}") {
+        transitive = false
+    }
+
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 }
 
 sourceSets {
