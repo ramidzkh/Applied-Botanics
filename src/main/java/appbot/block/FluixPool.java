@@ -33,4 +33,10 @@ public class FluixPool extends ManaPoolBlock {
             blockEntity.getMainNode().setOwningPlayer(player);
         }
     }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+        var pool = (FluixPoolBlockEntity) world.getBlockEntity(pos);
+        return pool != null ? pool.calculateComparatorLevel() : 0;
+    }
 }
