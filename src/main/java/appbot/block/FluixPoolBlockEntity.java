@@ -203,6 +203,31 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
         GridHelper.onFirstTick(this, FluixPoolBlockEntity::onReady);
     }
 
+    public int calculateComparatorLevel() {
+        var grid = getMainNode().getGrid();
+        long currentMana;
+        long freeMana;
+
+        if (grid == null) {
+            currentMana = mana.getMana();
+            freeMana = super.getMaxMana() - currentMana;
+        } else if (!getMainNode().isActive()) {
+            currentMana = 0;
+            freeMana = 0;
+        } else {
+            var storage = grid.getStorageService().getInventory();
+            currentMana = storage.extract(ManaKey.KEY, Long.MAX_VALUE, Actionable.SIMULATE, actionSource);
+            freeMana = storage.insert(ManaKey.KEY, Long.MAX_VALUE, Actionable.SIMULATE, actionSource);
+        }
+
+        if (currentMana == 0) {
+            return 0;
+        }
+
+        // currentMana / (currentMana + freeMana) * 15
+        return (int) Math.ceil(1 / (1 + (double) freeMana / currentMana) * 15.0);
+    }
+
     // For when grid == null, i.e. client-side visuals
     public interface Accessor {
         int getMana();
