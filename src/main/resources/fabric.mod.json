@@ -11,7 +11,10 @@
   "entrypoints": {
     "ae2": ["appbot.AppliedBotanics::initialize"],
     "ae2:client": ["appbot.client.AppliedBotanicsClient::initialize"],
-    "fabric-datagen": ["appbot.data.ABDataGenerator"]
+    "fabric-datagen": ["appbot.data.ABDataGenerator"],
+    "rei_client": ["appbot.integration.rei.ABREIPlugin"],
+    "jei_mod_plugin": ["appbot.integration.jei.ABJEIPlugin"],
+    "emi": ["appbot.integration.emi.ABEMIPlugin"]
   },
   "name": "Applied Botanics",
   "description": "mana through ae2, what could go wrong",

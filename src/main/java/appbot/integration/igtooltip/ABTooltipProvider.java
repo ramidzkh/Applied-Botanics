@@ -1,4 +1,4 @@
-package appbot.ae2;
+package appbot.integration.igtooltip;
 
 import appbot.block.FluixPool;
 import appbot.block.FluixPoolBlockEntity;
