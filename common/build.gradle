@@ -1,0 +1,66 @@
+architectury {
+    common(["fabric", "forge"])
+}
+
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modmaven"
+                url = uri("https://modmaven.dev/")
+            }
+        }
+
+        filter {
+            includeGroup("appeng")
+            includeGroup("vazkii.botania")
+            includeGroup("mezz.jei")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "shedaniel"
+                url = uri("https://maven.shedaniel.me/")
+            }
+        }
+
+        filter {
+            includeGroup("me.shedaniel")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "TerraformersMC"
+                url = uri("https://maven.terraformersmc.com/")
+            }
+        }
+
+        filter {
+            includeGroup("dev.emi")
+        }
+    }
+}
+
+dependencies {
+    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+
+    modImplementation("net.fabricmc:fabric-loader:${rootProject.loader_version}")
+
+    // just for remapping
+    modCompileOnly("net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}")
+    modCompileOnly("appeng:appliedenergistics2-fabric:${rootProject.ae2_version}") {
+        transitive = false
+    }
+
+    modCompileOnly("vazkii.botania:Botania:${rootProject.minecraft_version}-${rootProject.botania_version_fabric}") {
+        transitive = false
+    }
+
+    modCompileOnly("mezz.jei:jei-${rootProject.minecraft_version}-common-api:${rootProject.jei_version}")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${rootProject.rei_version}")
+    modCompileOnly("dev.emi:emi-xplat-intermediary:${rootProject.emi_version}:api")
+}

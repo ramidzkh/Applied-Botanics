@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "appbot",
+  "version": "${version}",
+  "mixins": ["appbot.mixins.json"],
+  "depends": {
+    "ae2": ">=12.9.1",
+    "botania": "*",
+    "minecraft": "1.19.2"
+  },
+  "entrypoints": {
+    "ae2": ["appbot.fabric.AppliedBotanics::initialize"],
+    "ae2:client": ["appbot.fabric.client.AppliedBotanicsClient::initialize"],
+    "fabric-datagen": ["appbot.fabric.data.ABDataGenerator"],
+    "rei_client": ["appbot.common.integration.rei.ABREIPlugin"],
+    "jei_mod_plugin": ["appbot.common.integration.jei.ABJEIPlugin"],
+    "emi": ["appbot.common.integration.emi.ABEMIPlugin"]
+  },
+  "name": "Applied Botanics",
+  "description": "mana through ae2, what could go wrong",
+  "icon": "logo.png",
+  "authors": ["ramidzkh"],
+  "license": ["LGPL-3.0-or-later"],
+  "contact": {
+    "homepage": "https://github.com/ramidzkh/Applied-Botanics#readme",
+    "issues": "https://github.com/ramidzkh/Applied-Botanics/issues",
+    "sources": "https://github.com/ramidzkh/Applied-Botanics"
+  }
+}

@@ -1,0 +1,278 @@
+plugins {
+    id("com.github.johnrengelman.shadow")
+    id("com.matthewprenger.cursegradle")
+    id("com.modrinth.minotaur")
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    runs {
+        create("data") {
+            client()
+
+            configName = "Data Generation"
+            runDir = "build/data"
+
+            vmArg("-Dfabric-api.datagen")
+            vmArg("-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}")
+            vmArg("-Dfabric-api.datagen.strict-validation")
+            vmArg("-Dfabric-api.datagen.modid=appbot")
+        }
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modmaven"
+                url = uri("https://modmaven.dev/")
+            }
+        }
+
+        filter {
+            includeGroup("appeng")
+            includeGroup("vazkii.botania")
+            includeGroup("vazkii.patchouli")
+            includeGroup("mezz.jei")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Ladysnake Libs"
+                url = uri("https://maven.ladysnake.org/releases/")
+            }
+        }
+
+        filter {
+            includeGroup("dev.onyxstudios.cardinal-components-api")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "TerraformersMC"
+                url = uri("https://maven.terraformersmc.com/")
+            }
+        }
+
+        filter {
+            includeGroup("dev.emi")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "JamiesWhiteShirt"
+                url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
+            }
+        }
+
+        filter {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Jitpack"
+                url = uri("https://jitpack.io/")
+            }
+        }
+
+        filter {
+            includeGroup("com.github.emilyploszaj")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = uri("https://api.modrinth.com/maven")
+            }
+        }
+
+        filter {
+            includeGroup("maven.modrinth")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "shedaniel"
+                url = uri("https://maven.shedaniel.me/")
+            }
+        }
+
+        filter {
+            includeGroup("dev.architectury")
+            includeGroup("me.shedaniel")
+            includeGroup("me.shedaniel.cloth")
+        }
+    }
+}
+
+dependencies {
+    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+
+    modImplementation("net.fabricmc:fabric-loader:${rootProject.loader_version}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}")
+    modImplementation("dev.architectury:architectury-fabric:${rootProject.architectury_version}")
+
+    modImplementation("appeng:appliedenergistics2-fabric:${rootProject.ae2_version}")
+    modImplementation("vazkii.botania:Botania:${rootProject.minecraft_version}-${rootProject.botania_version_fabric}") {
+        exclude(group: "dev.emi", module: "emi")
+        exclude(group: "dev.emi", module: "emi-fabric")
+    }
+
+    // dev: choose runtime xei mod(s)
+    def xei = ["jei", "emi"]
+
+    if (xei.remove("jei")) {
+        modRuntimeOnly("mezz.jei:jei-${rootProject.minecraft_version}-fabric:${rootProject.jei_version}")
+    }
+
+    if (xei.remove("rei")) {
+        modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}")
+    }
+
+    if (xei.remove("emi")) {
+        modRuntimeOnly("dev.emi:emi-fabric:${rootProject.emi_version}")
+    }
+
+    if (!xei.isEmpty()) {
+        throw new GradleException("Unknown xei mods: $xei")
+    }
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive = false }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir("src/generated/resources")
+        }
+    }
+}
+
+clean {
+    delete("src/generated")
+}
+
+processResources {
+    inputs.property("version", project.version)
+
+    from(rootProject.file("LICENSE"))
+    exclude(".cache")
+
+    filesMatching("fabric.mod.json") {
+        expand("version": project.version)
+    }
+}
+
+shadowJar {
+    exclude("architectury.common.json")
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier.set("dev-shadow")
+}
+
+remapJar {
+    inputFile.set(shadowJar.archiveFile)
+    dependsOn(shadowJar)
+    archiveClassifier.set(null)
+}
+
+jar {
+    archiveClassifier.set("dev")
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+////////////////
+// CurseForge
+System.getenv("CURSEFORGE")?.with { String key ->
+    curseforge {
+        apiKey = key
+
+        project {
+            id = "610632"
+            changelogType = "markdown"
+            changelog = "View changelog at [the release page](https://github.com/ramidzkh/Applied-Botanics/releases/tag/${version})"
+
+            if (version.contains("alpha")) {
+                releaseType = "alpha"
+            } else if (version.contains("beta")) {
+                releaseType = "beta"
+            } else {
+                releaseType = "release"
+            }
+
+            addGameVersion("${minecraft_version}")
+            addGameVersion("Fabric")
+
+            mainArtifact(remapJar) {
+                displayName = "${project.version} [FABRIC]"
+
+                relations {
+                    requiredDependency("applied-energistics-2")
+                    requiredDependency("botania-fabric")
+                }
+            }
+        }
+    }
+}
+
+////////////////
+// Modrinth
+modrinth {
+    token.set(System.getenv("MODRINTH"))
+    projectId.set("applied-botanics")
+    changelog.set("View changelog at [the release page](https://github.com/ramidzkh/Applied-Botanics/releases/tag/${version})")
+    versionNumber.set("${project.version}-fabric")
+    versionName.set("${project.version} [FABRIC]")
+
+    if (version.contains("alpha")) {
+        versionType.set("alpha")
+    } else if (version.contains("beta")) {
+        versionType.set("beta")
+    } else {
+        versionType.set("release")
+    }
+
+    uploadFile.set(remapJar)
+    gameVersions.add(minecraft_version)
+
+    dependencies {
+        required.project("ae2")
+        required.project("botania")
+    }
+}
+
+tasks.modrinth.onlyIf {
+    System.getenv("MODRINTH")
+}

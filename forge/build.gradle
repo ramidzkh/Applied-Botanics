@@ -1,0 +1,200 @@
+plugins {
+    id("com.github.johnrengelman.shadow")
+    id("com.matthewprenger.cursegradle")
+    id("com.modrinth.minotaur")
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+loom {
+    forge {
+        mixinConfig("appbot.mixins.json")
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
+
+repositories {
+    maven {
+        name = "Modmaven"
+        url = uri("https://modmaven.dev/")
+
+        content {
+            includeGroup("appeng")
+            includeGroup("vazkii.botania")
+            includeGroup("vazkii.patchouli")
+            includeGroup("mezz.jei")
+        }
+    }
+
+    maven {
+        name = "theillusivec4"
+        url = uri("https://maven.theillusivec4.top/")
+
+        content {
+            includeGroup("top.theillusivec4.curios")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "TerraformersMC"
+                url = uri("https://maven.terraformersmc.com/")
+            }
+        }
+
+        filter {
+            includeGroup("dev.emi")
+        }
+    }
+}
+
+dependencies {
+    forge("net.minecraftforge:forge:${rootProject.forge_version}")
+    modImplementation("dev.architectury:architectury-forge:${rootProject.architectury_version}")
+
+    modImplementation("appeng:appliedenergistics2-forge:${rootProject.ae2_version}")
+    modImplementation("vazkii.botania:Botania:${rootProject.minecraft_version}-${rootProject.botania_version_forge}")
+
+    modRuntimeOnly("vazkii.patchouli:Patchouli:${rootProject.minecraft_version}-${rootProject.patchouli_version}")
+    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${rootProject.minecraft_version}-${rootProject.curios_version}")
+
+    // dev: choose runtime xei mod(s)
+    def xei = ["emi"]
+
+    if (xei.remove("jei")) {
+        modRuntimeOnly("mezz.jei:jei-${rootProject.minecraft_version}-forge:${rootProject.jei_version}")
+    }
+
+    if (xei.remove("rei")) {
+        modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-forge:${rootProject.rei_version}")
+    }
+
+    if (xei.remove("emi")) {
+        modRuntimeOnly("dev.emi:emi-forge:${rootProject.emi_version}")
+    }
+
+    if (!xei.isEmpty()) {
+        throw new GradleException("Unknown xei mods: $xei")
+    }
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir(project(":fabric").file("src/generated/resources"))
+        }
+    }
+}
+
+processResources {
+    inputs.property("version", project.version)
+
+    from(rootProject.file("LICENSE"))
+    exclude(".cache")
+
+    filesMatching("META-INF/mods.toml") {
+        expand("version": project.version)
+    }
+}
+
+shadowJar {
+    exclude("fabric.mod.json")
+    exclude("architectury.common.json")
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier.set("dev-shadow")
+}
+
+remapJar {
+    inputFile.set(shadowJar.archiveFile)
+    dependsOn(shadowJar)
+    archiveClassifier.set(null)
+}
+
+jar {
+    archiveClassifier.set("dev")
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+////////////////
+// CurseForge
+System.getenv("CURSEFORGE")?.with { String key ->
+    curseforge {
+        apiKey = key
+
+        project {
+            id = "610632"
+            changelogType = "markdown"
+            changelog = "View changelog at [the release page](https://github.com/ramidzkh/Applied-Botanics/releases/tag/${version})"
+
+            if (version.contains("alpha")) {
+                releaseType = "alpha"
+            } else if (version.contains("beta")) {
+                releaseType = "beta"
+            } else {
+                releaseType = "release"
+            }
+
+            addGameVersion("${minecraft_version}")
+            addGameVersion("Forge")
+
+            mainArtifact(remapJar) {
+                displayName = "${project.version} [FORGE]"
+
+                relations {
+                    requiredDependency("applied-energistics-2")
+                    requiredDependency("botania")
+                }
+            }
+        }
+    }
+}
+
+////////////////
+// Modrinth
+modrinth {
+    token.set(System.getenv("MODRINTH"))
+    projectId.set("applied-botanics")
+    changelog.set("View changelog at [the release page](https://github.com/ramidzkh/Applied-Botanics/releases/tag/forge/${version})")
+    versionNumber.set("${project.version}-forge")
+    versionName.set("${project.version} [FORGE]")
+
+    if (version.contains("alpha")) {
+        versionType.set("alpha")
+    } else if (version.contains("beta")) {
+        versionType.set("beta")
+    } else {
+        versionType.set("release")
+    }
+
+    uploadFile.set(remapJar)
+    gameVersions.add(minecraft_version)
+
+    dependencies {
+        required.project("ae2")
+        required.project("botania")
+    }
+}
+
+tasks.modrinth.onlyIf {
+    System.getenv("MODRINTH")
+}
