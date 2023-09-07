@@ -52,11 +52,12 @@ public class ManaStorageImportStrategy implements StackImportStrategy {
             receiver.receiveMana(-amount);
         }
 
-        var inserted = inv.getInventory().insert(ManaKey.KEY, amount, Actionable.MODULATE, context.getActionSource());
+        var inserted = (int) inv.getInventory().insert(ManaKey.KEY, amount, Actionable.MODULATE,
+                context.getActionSource());
 
         if (inserted < amount) {
             var leftover = amount - inserted;
-            var backfill = (int) Math.min(leftover,
+            var backfill = Math.min(leftover,
                     ManaHelper.getCapacity(receiver) - receiver.getCurrentMana());
 
             if (backfill > 0) {

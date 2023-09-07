@@ -2,6 +2,8 @@ package appbot.block;
 
 import java.util.EnumSet;
 
+import com.google.common.primitives.Ints;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,12 +103,12 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
 
         var oldMana = mana.getMana();
         var oldManaCap = super.getMaxMana();
-        int manaCap;
+        long manaCap;
 
         if (getMainNode().isActive()) {
             var storage = grid.getStorageService().getInventory();
             mana.setMana((int) storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource));
-            manaCap = (int) (storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource)
+            manaCap = (storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource)
                     + storage.insert(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, actionSource));
         } else {
             mana.setMana(0);
@@ -118,7 +120,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
             markDispatchable();
         }
 
-        return manaCap;
+        return Ints.saturatedCast(manaCap);
     }
 
     @Override
