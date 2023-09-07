@@ -125,22 +125,22 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
     }
 
     public int insert(int amount, Actionable actionable) {
-        var inserted = 0;
+        var inserted = 0L;
 
-        for (var i = 0; i < inv.size() && inserted < amount; ++i) {
-            inserted += (int) inv.insert(i, ManaKey.KEY, amount - inserted, actionable);
+        for (var i = 0; i < inv.size() && inserted < amount; i++) {
+            inserted += inv.insert(i, ManaKey.KEY, amount - inserted, actionable);
         }
 
-        return inserted;
+        return (int) inserted;
     }
 
     private int extract(int amount, Actionable actionable) {
-        var extracted = 0;
+        var extracted = 0L;
 
-        for (var i = 0; i < inv.size() && extracted < amount; ++i) {
-            extracted += (int) inv.extract(i, ManaKey.KEY, amount - extracted, actionable);
+        for (var i = 0; i < inv.size() && extracted < amount; i++) {
+            extracted += inv.extract(i, ManaKey.KEY, amount - extracted, actionable);
         }
 
-        return extracted;
+        return (int) extracted;
     }
 }
