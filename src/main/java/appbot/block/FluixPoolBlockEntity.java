@@ -67,6 +67,9 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
             .setTagName("proxy");
     private final IActionSource actionSource = IActionSource.ofMachine(mainNode::getNode);
 
+    // work-around for saveAdditional querying the grid
+    private boolean saving;
+
     public FluixPoolBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         super(pos, state);
     }
@@ -111,7 +114,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
     public int getCurrentMana() {
         var grid = getMainNode().getGrid();
 
-        if (grid == null) {
+        if (grid == null || saving) {
             return mana.getMana();
         }
 
@@ -127,7 +130,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
     public int getMaxMana() {
         var grid = getMainNode().getGrid();
 
-        if (grid == null) {
+        if (grid == null || saving) {
             return super.getMaxMana();
         }
 
@@ -155,7 +158,13 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
 
     @Override
     public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+        try {
+            saving = true;
+            super.saveAdditional(tag);
+        } finally {
+            saving = false;
+        }
+
         this.getMainNode().saveToNBT(tag);
     }
 
