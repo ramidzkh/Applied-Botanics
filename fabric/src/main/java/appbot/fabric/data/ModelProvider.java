@@ -1,5 +1,7 @@
 package appbot.fabric.data;
 
+import static appbot.AppliedBotanics.id;
+
 import java.util.Locale;
 import java.util.Optional;
 
@@ -10,7 +12,6 @@ import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.model.*;
 import net.minecraft.resources.ResourceLocation;
 
-import appbot.AB;
 import appbot.fabric.ABBlocks;
 import appbot.fabric.ABItems;
 import vazkii.botania.common.block.BotaniaBlocks;
@@ -59,14 +60,14 @@ public class ModelProvider extends FabricModelProvider {
                     TextureMapping.layer0(portableCell).put(LAYER1, PORTABLE_CELL_LED), generator.output);
 
             var path = "mana_storage_cell" + tier.toString().toLowerCase(Locale.ROOT);
-            DRIVE_CELL.create(AB.id("block/drive/cells/" + path),
-                    new TextureMapping().put(CELL, AB.id("block/drive/cells/" + path)), generator.output);
+            DRIVE_CELL.create(id("block/drive/cells/" + path),
+                    new TextureMapping().put(CELL, id("block/drive/cells/" + path)), generator.output);
         }
 
-        P2P_TUNNEL_BASE_ITEM.create(AB.id("item/mana_p2p_tunnel"),
+        P2P_TUNNEL_BASE_ITEM.create(id("item/mana_p2p_tunnel"),
                 new TextureMapping().put(TYPE, ModelLocationUtils.getModelLocation(BotaniaBlocks.manasteelBlock)),
                 generator.output);
-        P2P_TUNNEL_BASE_PART.create(AB.id("part/mana_p2p_tunnel"),
+        P2P_TUNNEL_BASE_PART.create(id("part/mana_p2p_tunnel"),
                 new TextureMapping().put(TYPE, ModelLocationUtils.getModelLocation(BotaniaBlocks.manasteelBlock)),
                 generator.output);
     }

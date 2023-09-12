@@ -1,5 +1,7 @@
 package appbot.fabric;
 
+import static appbot.AppliedBotanics.id;
+
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
@@ -7,12 +9,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import appbot.AB;
-import appbot.common.ae2.ManaKeyType;
-import appbot.common.item.CreativeManaCellItem;
-import appbot.common.item.ManaCellItem;
-import appbot.common.item.PortableManaCellItem;
+import appbot.ae2.ManaKeyType;
 import appbot.fabric.ae2.ManaP2PTunnelPart;
+import appbot.item.CreativeManaCellItem;
+import appbot.item.ManaCellItem;
+import appbot.item.PortableManaCellItem;
 import vazkii.botania.common.item.BotaniaItems;
 
 import appeng.api.client.StorageCellModels;
@@ -34,47 +35,47 @@ import appeng.menu.me.common.MEStorageMenu;
 
 public class ABItems {
 
-    public static final CreativeModeTab CREATIVE_TAB = FabricItemGroupBuilder.build(AB.id("tab"),
+    public static final CreativeModeTab CREATIVE_TAB = FabricItemGroupBuilder.build(id("tab"),
             () -> new ItemStack(ABItems.MANA_P2P_TUNNEL));
 
     private static Item.Properties properties() {
         return new Item.Properties().tab(CREATIVE_TAB);
     }
 
-    public static final Item FLUIX_MANA_POOL = Registry.register(Registry.ITEM, AB.id("fluix_mana_pool"),
+    public static final Item FLUIX_MANA_POOL = Registry.register(Registry.ITEM, id("fluix_mana_pool"),
             new BlockItem(ABBlocks.FLUIX_MANA_POOL, BotaniaItems.defaultBuilder().tab(CREATIVE_TAB)));
 
-    public static final Item MANA_CELL_HOUSING = Registry.register(Registry.ITEM, AB.id("mana_cell_housing"),
+    public static final Item MANA_CELL_HOUSING = Registry.register(Registry.ITEM, id("mana_cell_housing"),
             new Item(properties()));
 
-    public static final Item MANA_CELL_CREATIVE = Registry.register(Registry.ITEM, AB.id("creative_mana_cell"),
+    public static final Item MANA_CELL_CREATIVE = Registry.register(Registry.ITEM, id("creative_mana_cell"),
             new CreativeManaCellItem(properties()));
 
-    public static final Item MANA_CELL_1K = Registry.register(Registry.ITEM, AB.id("mana_storage_cell_1k"),
+    public static final Item MANA_CELL_1K = Registry.register(Registry.ITEM, id("mana_storage_cell_1k"),
             new ManaCellItem(properties(), AEItems.CELL_COMPONENT_1K, 1, 0.5f));
-    public static final Item MANA_CELL_4K = Registry.register(Registry.ITEM, AB.id("mana_storage_cell_4k"),
+    public static final Item MANA_CELL_4K = Registry.register(Registry.ITEM, id("mana_storage_cell_4k"),
             new ManaCellItem(properties(), AEItems.CELL_COMPONENT_4K, 4, 1.0f));
-    public static final Item MANA_CELL_16K = Registry.register(Registry.ITEM, AB.id("mana_storage_cell_16k"),
+    public static final Item MANA_CELL_16K = Registry.register(Registry.ITEM, id("mana_storage_cell_16k"),
             new ManaCellItem(properties(), AEItems.CELL_COMPONENT_16K, 16, 1.5f));
-    public static final Item MANA_CELL_64K = Registry.register(Registry.ITEM, AB.id("mana_storage_cell_64k"),
+    public static final Item MANA_CELL_64K = Registry.register(Registry.ITEM, id("mana_storage_cell_64k"),
             new ManaCellItem(properties(), AEItems.CELL_COMPONENT_64K, 64, 2.0f));
-    public static final Item MANA_CELL_256K = Registry.register(Registry.ITEM, AB.id("mana_storage_cell_256k"),
+    public static final Item MANA_CELL_256K = Registry.register(Registry.ITEM, id("mana_storage_cell_256k"),
             new ManaCellItem(properties(), AEItems.CELL_COMPONENT_256K, 256, 2.5f));
 
     public static final Item PORTABLE_MANA_CELL_1K = Registry.register(Registry.ITEM,
-            AB.id("portable_mana_storage_cell_1k"), new PortableManaCellItem(properties().stacksTo(1), 1, 0.5));
+            id("portable_mana_storage_cell_1k"), new PortableManaCellItem(properties().stacksTo(1), 1, 0.5));
     public static final Item PORTABLE_MANA_CELL_4K = Registry.register(Registry.ITEM,
-            AB.id("portable_mana_storage_cell_4k"), new PortableManaCellItem(properties().stacksTo(1), 4, 1.0));
+            id("portable_mana_storage_cell_4k"), new PortableManaCellItem(properties().stacksTo(1), 4, 1.0));
     public static final Item PORTABLE_MANA_CELL_16K = Registry.register(Registry.ITEM,
-            AB.id("portable_mana_storage_cell_16k"), new PortableManaCellItem(properties().stacksTo(1), 16, 1.5));
+            id("portable_mana_storage_cell_16k"), new PortableManaCellItem(properties().stacksTo(1), 16, 1.5));
     public static final Item PORTABLE_MANA_CELL_64K = Registry.register(Registry.ITEM,
-            AB.id("portable_mana_storage_cell_64k"), new PortableManaCellItem(properties().stacksTo(1), 64, 2.0));
+            id("portable_mana_storage_cell_64k"), new PortableManaCellItem(properties().stacksTo(1), 64, 2.0));
     public static final Item PORTABLE_MANA_CELL_256K = Registry.register(Registry.ITEM,
-            AB.id("portable_mana_storage_cell_256k"), new PortableManaCellItem(properties().stacksTo(1), 256, 2.5));
+            id("portable_mana_storage_cell_256k"), new PortableManaCellItem(properties().stacksTo(1), 256, 2.5));
 
     public static final PartItem<?> MANA_P2P_TUNNEL = Util.make(() -> {
         PartModels.registerModels(PartModelsHelper.createModels(ManaP2PTunnelPart.class));
-        return Registry.register(Registry.ITEM, AB.id("mana_p2p_tunnel"),
+        return Registry.register(Registry.ITEM, id("mana_p2p_tunnel"),
                 new PartItem<>(properties(), ManaP2PTunnelPart.class, ManaP2PTunnelPart::new));
     });
 
@@ -102,9 +103,9 @@ public class ABItems {
             Upgrades.add(AEItems.ENERGY_CARD, portable, 2, GuiText.PortableCells.getTranslationKey());
 
             String path1 = "block/drive/cells/" + Registry.ITEM.getKey(cell).getPath();
-            StorageCellModels.registerModel(cell, AB.id(path1));
+            StorageCellModels.registerModel(cell, id(path1));
             String path = "block/drive/cells/" + Registry.ITEM.getKey(cell).getPath();
-            StorageCellModels.registerModel(portable, AB.id(path));
+            StorageCellModels.registerModel(portable, id(path));
         }
     }
 

@@ -9,12 +9,12 @@
     "minecraft": "1.19.2"
   },
   "entrypoints": {
-    "ae2": ["appbot.fabric.AppliedBotanics::initialize"],
+    "ae2": ["appbot.fabric.AppliedBotanicsFabric::initialize"],
     "ae2:client": ["appbot.fabric.client.AppliedBotanicsClient::initialize"],
     "fabric-datagen": ["appbot.fabric.data.ABDataGenerator"],
-    "rei_client": ["appbot.common.integration.rei.ABREIPlugin"],
-    "jei_mod_plugin": ["appbot.common.integration.jei.ABJEIPlugin"],
-    "emi": ["appbot.common.integration.emi.ABEMIPlugin"]
+    "rei_client": ["appbot.integration.rei.ABREIPlugin"],
+    "jei_mod_plugin": ["appbot.integration.jei.ABJEIPlugin"],
+    "emi": ["appbot.integration.emi.ABEMIPlugin"]
   },
   "name": "Applied Botanics",
   "description": "mana through ae2, what could go wrong",

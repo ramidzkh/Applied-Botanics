@@ -2,9 +2,9 @@ package appbot.fabric.client;
 
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 
-import appbot.common.ae2.ManaKey;
-import appbot.common.ae2.ManaKeyType;
-import appbot.common.client.ManaRenderer;
+import appbot.ae2.ManaKey;
+import appbot.ae2.ManaKeyType;
+import appbot.client.ManaRenderer;
 import appbot.fabric.ABItems;
 import appbot.fabric.ABMenus;
 

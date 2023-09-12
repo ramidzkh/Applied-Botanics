@@ -4,9 +4,9 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import appbot.common.ae2.ManaKey;
-import appbot.common.ae2.ManaKeyType;
-import appbot.common.client.ManaRenderer;
+import appbot.ae2.ManaKey;
+import appbot.ae2.ManaKeyType;
+import appbot.client.ManaRenderer;
 import appbot.forge.ABItems;
 import appbot.forge.ABMenus;
 

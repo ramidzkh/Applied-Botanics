@@ -16,8 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-import appbot.AB;
-import appbot.common.ae2.ManaHelper;
+import appbot.AppliedBotanics;
+import appbot.ae2.ManaHelper;
 import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
@@ -33,7 +33,7 @@ import appeng.parts.p2p.P2PModels;
 
 public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart, ManaReceiver> {
 
-    private static final P2PModels MODELS = new P2PModels(AB.id("part/mana_p2p_tunnel"));
+    private static final P2PModels MODELS = new P2PModels(AppliedBotanics.id("part/mana_p2p_tunnel"));
     private final SparkAttachable sparkAttachable = new P2PSparkAttachable();
 
     public ManaP2PTunnelPart(IPartItem<?> partItem) {

@@ -10,12 +10,12 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import appbot.AB;
-import appbot.common.ae2.ManaKeyType;
-import appbot.common.item.CreativeManaCellItem;
-import appbot.common.item.ManaCellItem;
-import appbot.common.item.PortableManaCellItem;
+import appbot.AppliedBotanics;
+import appbot.ae2.ManaKeyType;
 import appbot.forge.ae2.ManaP2PTunnelPart;
+import appbot.item.CreativeManaCellItem;
+import appbot.item.ManaCellItem;
+import appbot.item.PortableManaCellItem;
 import vazkii.botania.common.item.BotaniaItems;
 
 import appeng.api.client.StorageCellModels;
@@ -38,7 +38,7 @@ import appeng.menu.me.common.MEStorageMenu;
 public class ABItems {
 
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS,
-            AB.MOD_ID);
+            AppliedBotanics.MOD_ID);
 
     public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab("appbot.tab") {
         @Override
@@ -119,8 +119,7 @@ public class ABItems {
 
                 Upgrades.add(AEItems.ENERGY_CARD, portable.get(), 2, GuiText.PortableCells.getTranslationKey());
 
-                String path = "block/drive/cells/" + cell.getId().getPath();
-                var id = AB.id(path);
+                var id = AppliedBotanics.id("block/drive/cells/" + cell.getId().getPath());
                 StorageCellModels.registerModel(cell.get(), id);
                 StorageCellModels.registerModel(portable.get(), id);
             }

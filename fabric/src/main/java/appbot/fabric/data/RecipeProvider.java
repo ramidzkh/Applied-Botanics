@@ -1,5 +1,7 @@
 package appbot.fabric.data;
 
+import static appbot.AppliedBotanics.id;
+
 import java.util.Locale;
 import java.util.function.Consumer;
 
@@ -9,7 +11,6 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 
-import appbot.AB;
 import appbot.fabric.ABItems;
 import vazkii.botania.common.block.BotaniaBlocks;
 import vazkii.botania.common.item.BotaniaItems;
@@ -29,7 +30,7 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .requires(BotaniaBlocks.fabulousPool)
                 .requires(AEBlocks.INTERFACE)
                 .unlockedBy("has_interface", has(AEBlocks.INTERFACE))
-                .save(exporter, AB.id("fluix_mana_pool"));
+                .save(exporter, id("fluix_mana_pool"));
 
         ShapedRecipeBuilder.shaped(ABItems.MANA_CELL_HOUSING)
                 .pattern("QSQ")
@@ -39,7 +40,7 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .define('S', BotaniaItems.lifeEssence)
                 .define('I', BotaniaItems.manaSteel)
                 .unlockedBy("has_life_essence", has(BotaniaItems.lifeEssence))
-                .save(exporter, AB.id("mana_cell_housing"));
+                .save(exporter, id("mana_cell_housing"));
 
         for (var tier : ABItems.Tier.values()) {
             var cellComponent = switch (tier) {
