@@ -41,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: appbot
-          path: build/libs/
+          path: build/distributions/
