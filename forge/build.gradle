@@ -24,11 +24,15 @@ configurations {
 }
 
 repositories {
-    maven {
-        name = "Modmaven"
-        url = uri("https://modmaven.dev/")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modmaven"
+                url = uri("https://modmaven.dev/")
+            }
+        }
 
-        content {
+        filter {
             includeGroup("appeng")
             includeGroup("vazkii.botania")
             includeGroup("vazkii.patchouli")
@@ -36,11 +40,15 @@ repositories {
         }
     }
 
-    maven {
-        name = "theillusivec4"
-        url = uri("https://maven.theillusivec4.top/")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "theillusivec4"
+                url = uri("https://maven.theillusivec4.top/")
+            }
+        }
 
-        content {
+        filter {
             includeGroup("top.theillusivec4.curios")
         }
     }
@@ -70,10 +78,12 @@ dependencies {
     modRuntimeOnly("top.theillusivec4.curios:curios-forge:${rootProject.minecraft_version}-${rootProject.curios_version}")
 
     // dev: choose runtime xei mod(s)
-    def xei = ["emi"]
+    def xei = ["jei", "emi"]
 
     if (xei.remove("jei")) {
-        modRuntimeOnly("mezz.jei:jei-${rootProject.minecraft_version}-forge:${rootProject.jei_version}")
+        modRuntimeOnly("mezz.jei:jei-${rootProject.minecraft_version}-forge:${rootProject.jei_version}") {
+            transitive = false
+        }
     }
 
     if (xei.remove("rei")) {

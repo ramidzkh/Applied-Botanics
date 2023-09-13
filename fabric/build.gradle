@@ -152,7 +152,9 @@ dependencies {
     }
 
     if (xei.remove("rei")) {
-        modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}")
+        modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${rootProject.rei_version}") {
+            exclude(group: "net.fabricmc", module: "fabric-loader")
+        }
     }
 
     if (xei.remove("emi")) {
