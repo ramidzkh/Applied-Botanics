@@ -102,10 +102,8 @@ public class ABItems {
 
             Upgrades.add(AEItems.ENERGY_CARD, portable, 2, GuiText.PortableCells.getTranslationKey());
 
-            String path1 = "block/drive/cells/" + Registry.ITEM.getKey(cell).getPath();
-            StorageCellModels.registerModel(cell, id(path1));
-            String path = "block/drive/cells/" + Registry.ITEM.getKey(cell).getPath();
-            StorageCellModels.registerModel(portable, id(path));
+            StorageCellModels.registerModel(cell, id("block/drive/cells/" + Registry.ITEM.getKey(cell).getPath()));
+            StorageCellModels.registerModel(portable, id("block/drive/cells/" + Registry.ITEM.getKey(cell).getPath()));
         }
     }
 
