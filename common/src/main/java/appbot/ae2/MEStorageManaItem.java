@@ -12,55 +12,59 @@ import vazkii.botania.api.mana.ManaItem;
 import appeng.api.config.Actionable;
 import appeng.api.networking.energy.IEnergySource;
 import appeng.api.networking.security.IActionSource;
+import appeng.api.storage.MEStorage;
 import appeng.api.storage.StorageCells;
 import appeng.api.storage.StorageHelper;
-import appeng.api.storage.cells.StorageCell;
 import appeng.items.tools.powered.AbstractPortableCell;
 
 public class MEStorageManaItem implements ManaItem {
 
-    private final StorageCell storage;
+    private final MEStorage storage;
     private final IEnergySource energy;
     private final IActionSource source;
 
-    public MEStorageManaItem(StorageCell storage, IEnergySource energy, IActionSource source) {
+    public MEStorageManaItem(MEStorage storage, IEnergySource energy, IActionSource source) {
         this.storage = storage;
         this.energy = energy;
         this.source = source;
     }
 
     @Nullable
-    public static ManaItem forPortable(ItemStack stack) {
-        if (!(stack.getItem()instanceof AbstractPortableCell item)) {
-            return null;
-        }
+    public static ManaItem forItem(ItemStack stack) {
+        if (stack.getItem()instanceof AbstractPortableCell item) {
+            var storage = StorageCells.getCellInventory(stack, null);
 
-        var storage = StorageCells.getCellInventory(stack, null);
-
-        if (storage == null) {
-            return null;
-        }
-
-        return new MEStorageManaItem(storage, (amount, mode, multiplier) -> {
-            amount = multiplier.multiply(amount);
-
-            if (mode == Actionable.SIMULATE) {
-                return multiplier.divide(Math.min(amount, item.getAECurrentPower(stack)));
+            if (storage == null) {
+                return null;
             }
 
-            return multiplier.divide(item.extractAEPower(stack, amount, Actionable.MODULATE));
-        }, IActionSource.empty());
+            return new MEStorageManaItem(storage, (amount, mode, multiplier) -> {
+                amount = multiplier.multiply(amount);
+
+                if (mode == Actionable.SIMULATE) {
+                    return multiplier.divide(Math.min(amount, item.getAECurrentPower(stack)));
+                }
+
+                return multiplier.divide(item.extractAEPower(stack, amount, Actionable.MODULATE));
+            }, IActionSource.empty());
+        }
+
+        // we could also add wireless terminal support, but no player
+        return null;
     }
 
     @Override
     public int getMana() {
-        return (int) storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, source);
+        return (int) StorageHelper.poweredExtraction(energy, storage, ManaKey.KEY, Integer.MAX_VALUE, source,
+                Actionable.SIMULATE);
     }
 
     @Override
     public int getMaxMana() {
-        return Ints.saturatedCast(storage.extract(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, source)
-                + storage.insert(ManaKey.KEY, Integer.MAX_VALUE, Actionable.SIMULATE, source));
+        return Ints.saturatedCast(StorageHelper.poweredExtraction(energy, storage, ManaKey.KEY, Integer.MAX_VALUE,
+                source, Actionable.SIMULATE)
+                + StorageHelper.poweredInsert(energy, storage, ManaKey.KEY, Integer.MAX_VALUE, source,
+                        Actionable.SIMULATE));
     }
 
     @Override

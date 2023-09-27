@@ -96,7 +96,7 @@ public interface AppliedBotanicsFabric {
         });
 
         BotaniaFabricCapabilities.MANA_ITEM.registerFallback((stack, context) -> {
-            return MEStorageManaItem.forPortable(stack);
+            return MEStorageManaItem.forItem(stack);
         });
     }
 }

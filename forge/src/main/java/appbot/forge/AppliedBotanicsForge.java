@@ -86,7 +86,7 @@ public class AppliedBotanicsForge {
             });
         });
         MinecraftForge.EVENT_BUS.addGenericListener(ItemStack.class, (AttachCapabilitiesEvent<ItemStack> event) -> {
-            var item = MEStorageManaItem.forPortable(event.getObject());
+            var item = MEStorageManaItem.forItem(event.getObject());
 
             if (item != null) {
                 event.addCapability(AppliedBotanics.id("mana_item"), new ICapabilityProvider() {
