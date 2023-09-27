@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -83,6 +84,23 @@ public class AppliedBotanicsForge {
                     return LazyOptional.empty();
                 }
             });
+        });
+        MinecraftForge.EVENT_BUS.addGenericListener(ItemStack.class, (AttachCapabilitiesEvent<ItemStack> event) -> {
+            var item = MEStorageManaItem.forPortable(event.getObject());
+
+            if (item != null) {
+                event.addCapability(AppliedBotanics.id("mana_item"), new ICapabilityProvider() {
+                    @Override
+                    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability,
+                            @Nullable Direction arg) {
+                        if (capability == BotaniaForgeCapabilities.MANA_ITEM) {
+                            return LazyOptional.of(() -> item).cast();
+                        }
+
+                        return LazyOptional.empty();
+                    }
+                });
+            }
         });
 
         StackWorldBehaviors.registerImportStrategy(ManaKeyType.TYPE, ManaStorageImportStrategy::new);
