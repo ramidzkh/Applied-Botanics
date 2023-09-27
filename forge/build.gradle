@@ -198,6 +198,7 @@ modrinth {
 
     uploadFile.set(remapJar)
     gameVersions.add(minecraft_version)
+    loaders.add("forge")
 
     dependencies {
         required.project("ae2")

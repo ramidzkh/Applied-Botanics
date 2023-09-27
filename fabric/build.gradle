@@ -268,6 +268,7 @@ modrinth {
 
     uploadFile.set(remapJar)
     gameVersions.add(minecraft_version)
+    loaders.add("fabric")
 
     dependencies {
         required.project("ae2")
