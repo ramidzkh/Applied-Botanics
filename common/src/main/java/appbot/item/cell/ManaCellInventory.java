@@ -1,7 +1,8 @@
 package appbot.item.cell;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -22,38 +23,17 @@ public class ManaCellInventory implements StorageCell {
 
     private final IManaCellItem cellType;
     private final ItemStack i;
+    @Nullable
     private final ISaveProvider container;
 
     private long storedMana;
     private boolean isPersisted = true;
 
-    public ManaCellInventory(IManaCellItem cellType, ItemStack o, ISaveProvider container) {
+    public ManaCellInventory(IManaCellItem cellType, ItemStack o, @Nullable ISaveProvider container) {
         this.cellType = cellType;
         this.i = o;
         this.container = container;
-
         this.storedMana = getTag().getLong(AMOUNT);
-
-        // Only migration for <=1.19.2 releases
-        var ITEM_COUNT_TAG = "ic";
-        var STACK_KEYS = "keys";
-        var STACK_AMOUNTS = "amts";
-
-        if (getTag().contains(ITEM_COUNT_TAG)) {
-            var amounts = getTag().getLongArray(STACK_AMOUNTS);
-            var tags = getTag().getList(STACK_KEYS, Tag.TAG_COMPOUND);
-
-            for (var i = 0; i < amounts.length; i++) {
-                if (AEKey.fromTagGeneric(tags.getCompound(i)) == ManaKey.KEY) {
-                    this.storedMana += amounts[i];
-                }
-            }
-
-            getTag().remove(ITEM_COUNT_TAG);
-            getTag().remove(STACK_KEYS);
-            getTag().remove(STACK_AMOUNTS);
-            saveChanges();
-        }
     }
 
     private CompoundTag getTag() {
