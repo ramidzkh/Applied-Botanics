@@ -3,7 +3,11 @@
   "minVersion": "0.8",
   "package": "appbot.mixins",
   "compatibilityLevel": "JAVA_17",
-  "mixins": ["BotaniaBlockEntitiesMixin", "ManaPoolBlockEntityAccessor"],
+  "mixins": [
+    "BotaniaBlockEntitiesMixin",
+    "ManaPoolBlockEntityAccessor",
+    "ManaPoolBlockEntityRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

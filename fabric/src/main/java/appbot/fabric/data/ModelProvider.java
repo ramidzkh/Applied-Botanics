@@ -5,7 +5,7 @@ import static appbot.AppliedBotanics.id;
 import java.util.Locale;
 import java.util.Optional;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
@@ -36,7 +36,7 @@ public class ModelProvider extends FabricModelProvider {
     private static final ModelTemplate DRIVE_CELL = new ModelTemplate(
             Optional.of(AppEng.makeId("block/drive/drive_cell")), Optional.empty(), CELL);
 
-    public ModelProvider(FabricDataGenerator dataGenerator) {
+    public ModelProvider(FabricDataOutput dataGenerator) {
         super(dataGenerator);
     }
 

@@ -4,9 +4,9 @@
   "version": "${version}",
   "mixins": ["appbot.mixins.json"],
   "depends": {
-    "ae2": ">=12.9.1",
+    "ae2": ">=15.0.14",
     "botania": "*",
-    "minecraft": "1.19.2"
+    "minecraft": "1.20.1"
   },
   "entrypoints": {
     "ae2": ["appbot.fabric.AppliedBotanicsFabric::initialize"],

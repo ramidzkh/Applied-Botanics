@@ -1,6 +1,8 @@
 package appbot.forge;
 
 import net.minecraft.Util;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -40,61 +42,77 @@ public class ABItems {
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS,
             AppliedBotanics.MOD_ID);
 
-    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab("appbot.tab") {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(ABItems.MANA_P2P_TUNNEL.get());
-        }
-    };
-
-    private static Item.Properties properties() {
-        return new Item.Properties().tab(CREATIVE_TAB);
-    }
+    private static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(
+            BuiltInRegistries.CREATIVE_MODE_TAB.key(),
+            AppliedBotanics.MOD_ID);
 
     public static final RegistryObject<Item> FLUIX_MANA_POOL = ITEMS.register("fluix_mana_pool",
-            () -> new BlockItem(ABBlocks.FLUIX_MANA_POOL.get(), BotaniaItems.defaultBuilder().tab(CREATIVE_TAB)));
+            () -> new BlockItem(ABBlocks.FLUIX_MANA_POOL.get(), BotaniaItems.defaultBuilder()));
 
     public static final RegistryObject<Item> MANA_CELL_HOUSING = ITEMS.register("mana_cell_housing",
-            () -> new Item(properties()));
+            () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> MANA_CELL_CREATIVE = ITEMS.register("creative_mana_cell",
-            () -> new CreativeManaCellItem(properties().stacksTo(1).rarity(Rarity.EPIC)));
+            () -> new CreativeManaCellItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 
     public static final RegistryObject<Item> MANA_CELL_1K = ITEMS.register("mana_storage_cell_1k",
-            () -> new ManaCellItem(properties().stacksTo(1), AEItems.CELL_COMPONENT_1K,
+            () -> new ManaCellItem(new Item.Properties().stacksTo(1), AEItems.CELL_COMPONENT_1K,
                     1, 0.5f));
     public static final RegistryObject<Item> MANA_CELL_4K = ITEMS.register("mana_storage_cell_4k",
-            () -> new ManaCellItem(properties().stacksTo(1), AEItems.CELL_COMPONENT_4K,
+            () -> new ManaCellItem(new Item.Properties().stacksTo(1), AEItems.CELL_COMPONENT_4K,
                     4, 1.0f));
     public static final RegistryObject<Item> MANA_CELL_16K = ITEMS.register("mana_storage_cell_16k",
-            () -> new ManaCellItem(properties().stacksTo(1), AEItems.CELL_COMPONENT_16K,
+            () -> new ManaCellItem(new Item.Properties().stacksTo(1), AEItems.CELL_COMPONENT_16K,
                     16, 1.5f));
     public static final RegistryObject<Item> MANA_CELL_64K = ITEMS.register("mana_storage_cell_64k",
-            () -> new ManaCellItem(properties().stacksTo(1), AEItems.CELL_COMPONENT_64K,
+            () -> new ManaCellItem(new Item.Properties().stacksTo(1), AEItems.CELL_COMPONENT_64K,
                     64, 2.0f));
     public static final RegistryObject<Item> MANA_CELL_256K = ITEMS.register("mana_storage_cell_256k",
-            () -> new ManaCellItem(properties().stacksTo(1), AEItems.CELL_COMPONENT_256K,
+            () -> new ManaCellItem(new Item.Properties().stacksTo(1), AEItems.CELL_COMPONENT_256K,
                     256, 2.5f));
 
     public static final RegistryObject<Item> PORTABLE_MANA_CELL_1K = ITEMS.register("portable_mana_storage_cell_1k",
-            () -> new PortableManaCellItem(properties().stacksTo(1), 1, 0.5));
+            () -> new PortableManaCellItem(new Item.Properties().stacksTo(1), 1, 0.5));
     public static final RegistryObject<Item> PORTABLE_MANA_CELL_4K = ITEMS.register("portable_mana_storage_cell_4k",
-            () -> new PortableManaCellItem(properties().stacksTo(1), 4, 1.0));
+            () -> new PortableManaCellItem(new Item.Properties().stacksTo(1), 4, 1.0));
     public static final RegistryObject<Item> PORTABLE_MANA_CELL_16K = ITEMS.register("portable_mana_storage_cell_16k",
-            () -> new PortableManaCellItem(properties().stacksTo(1), 16, 1.5));
+            () -> new PortableManaCellItem(new Item.Properties().stacksTo(1), 16, 1.5));
     public static final RegistryObject<Item> PORTABLE_MANA_CELL_64K = ITEMS.register("portable_mana_storage_cell_64k",
-            () -> new PortableManaCellItem(properties().stacksTo(1), 64, 2.0));
+            () -> new PortableManaCellItem(new Item.Properties().stacksTo(1), 64, 2.0));
     public static final RegistryObject<Item> PORTABLE_MANA_CELL_256K = ITEMS.register("portable_mana_storage_cell_256k",
-            () -> new PortableManaCellItem(properties().stacksTo(1), 256, 2.5));
+            () -> new PortableManaCellItem(new Item.Properties().stacksTo(1), 256, 2.5));
 
     public static final RegistryObject<PartItem<ManaP2PTunnelPart>> MANA_P2P_TUNNEL = Util.make(() -> {
         PartModels.registerModels(PartModelsHelper.createModels(ManaP2PTunnelPart.class));
         return ITEMS.register("mana_p2p_tunnel",
-                () -> new PartItem<>(properties(), ManaP2PTunnelPart.class, ManaP2PTunnelPart::new));
+                () -> new PartItem<>(new Item.Properties(), ManaP2PTunnelPart.class, ManaP2PTunnelPart::new));
     });
+
+    public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_MODE_TABS.register("tab",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.appbot.tab"))
+                    .icon(() -> new ItemStack(ABItems.MANA_P2P_TUNNEL.get()))
+                    .displayItems((context, entries) -> {
+                        entries.accept(FLUIX_MANA_POOL.get());
+                        entries.accept(MANA_CELL_HOUSING.get());
+                        entries.accept(MANA_CELL_CREATIVE.get());
+                        entries.accept(MANA_CELL_1K.get());
+                        entries.accept(MANA_CELL_4K.get());
+                        entries.accept(MANA_CELL_16K.get());
+                        entries.accept(MANA_CELL_64K.get());
+                        entries.accept(MANA_CELL_256K.get());
+                        entries.accept(PORTABLE_MANA_CELL_1K.get());
+                        entries.accept(PORTABLE_MANA_CELL_4K.get());
+                        entries.accept(PORTABLE_MANA_CELL_16K.get());
+                        entries.accept(PORTABLE_MANA_CELL_64K.get());
+                        entries.accept(PORTABLE_MANA_CELL_256K.get());
+                        entries.accept(MANA_P2P_TUNNEL.get());
+                    })
+                    .build());
 
     public static void initialize(IEventBus bus) {
         ITEMS.register(bus);
+        CREATIVE_MODE_TABS.register(bus);
 
         StorageCells.addCellGuiHandler(new ICellGuiHandler() {
             @Override
@@ -105,7 +123,7 @@ public class ABItems {
 
             @Override
             public void openChestGui(Player player, IChestOrDrive chest, ICellHandler cellHandler, ItemStack cell) {
-                chest.getUp();
+                chest.isPowered();
                 MenuOpener.open(MEStorageMenu.TYPE, player, MenuLocators.forBlockEntity((BlockEntity) chest));
             }
         });

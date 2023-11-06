@@ -1,10 +1,11 @@
 package appbot.forge;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
 import appbot.AppliedBotanics;
@@ -50,7 +52,7 @@ public class AppliedBotanicsForge {
         ABMenus.initialize(bus);
 
         bus.addListener((RegisterEvent event) -> {
-            if (!event.getRegistryKey().equals(Registry.BLOCK_REGISTRY)) {
+            if (!Objects.equals(event.getForgeRegistry(), ForgeRegistries.BLOCKS)) {
                 return;
             }
 

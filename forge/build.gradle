@@ -74,8 +74,8 @@ dependencies {
     modImplementation("appeng:appliedenergistics2-forge:${rootProject.ae2_version}")
     modImplementation("vazkii.botania:Botania:${rootProject.minecraft_version}-${rootProject.botania_version_forge}")
 
-    modRuntimeOnly("vazkii.patchouli:Patchouli:${rootProject.minecraft_version}-${rootProject.patchouli_version}")
-    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${rootProject.minecraft_version}-${rootProject.curios_version}")
+    modRuntimeOnly("vazkii.patchouli:Patchouli:${rootProject.minecraft_version}-${rootProject.patchouli_version}-FORGE")
+    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}+${rootProject.minecraft_version}")
 
     // dev: choose runtime xei mod(s)
     def xei = ["jei", "emi"]
