@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.Block;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import vazkii.botania.api.mana.ManaReceiver;
 
-import appeng.api.storage.IStorageMonitorableAccessor;
+import appeng.api.storage.MEStorage;
 
 public interface AppliedBotanics {
 
@@ -26,7 +26,7 @@ public interface AppliedBotanics {
         return getInstance();
     }
 
-    Lookup<IStorageMonitorableAccessor, Direction> meStorage(ServerLevel level, BlockPos pos);
+    Lookup<MEStorage, Direction> meStorage(ServerLevel level, BlockPos pos);
 
     Lookup<ManaReceiver, Direction> manaReceiver(ServerLevel level, BlockPos pos);
 

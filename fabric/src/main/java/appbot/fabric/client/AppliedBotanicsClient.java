@@ -8,7 +8,7 @@ import appbot.client.ManaRenderer;
 import appbot.fabric.ABItems;
 import appbot.fabric.ABMenus;
 
-import appeng.api.client.AEStackRendering;
+import appeng.api.client.AEKeyRendering;
 import appeng.client.gui.me.common.MEStorageScreen;
 import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
@@ -18,7 +18,7 @@ import appeng.menu.me.common.MEStorageMenu;
 public interface AppliedBotanicsClient {
 
     static void initialize() {
-        AEStackRendering.register(ManaKeyType.TYPE, ManaKey.class, new ManaRenderer());
+        AEKeyRendering.register(ManaKeyType.TYPE, ManaKey.class, new ManaRenderer());
 
         for (var tier : ABItems.Tier.values()) {
             ColorProviderRegistry.ITEM.register(BasicStorageCell::getColor, ABItems.get(tier));

@@ -1,6 +1,7 @@
 package appbot.fabric;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
 
 import appeng.api.implementations.menuobjects.IPortableTerminal;
@@ -14,6 +15,6 @@ public class ABMenus {
             .create(MEStorageMenu::new, IPortableTerminal.class).build("portable_mana_cell");
 
     public static void register() {
-        Registry.register(Registry.MENU, AppEng.makeId("portable_mana_cell"), PORTABLE_MANA_CELL_TYPE);
+        Registry.register(BuiltInRegistries.MENU, AppEng.makeId("portable_mana_cell"), PORTABLE_MANA_CELL_TYPE);
     }
 }

@@ -1,6 +1,7 @@
 package appbot.forge;
 
-import net.minecraft.core.Registry;
+import java.util.Objects;
+
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -18,7 +19,7 @@ public class ABMenus {
 
     public static void initialize(IEventBus bus) {
         bus.addListener((RegisterEvent event) -> {
-            if (!event.getRegistryKey().equals(Registry.BLOCK_REGISTRY)) {
+            if (!Objects.equals(event.getForgeRegistry(), ForgeRegistries.BLOCKS)) {
                 return;
             }
 

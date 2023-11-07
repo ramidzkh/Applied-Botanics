@@ -13,7 +13,7 @@ import appbot.Lookup;
 import vazkii.botania.api.BotaniaFabricCapabilities;
 import vazkii.botania.api.mana.ManaReceiver;
 
-import appeng.api.storage.IStorageMonitorableAccessor;
+import appeng.api.storage.MEStorage;
 
 public enum AppliedBotanicsImpl implements AppliedBotanics {
 
@@ -24,8 +24,8 @@ public enum AppliedBotanicsImpl implements AppliedBotanics {
     }
 
     @Override
-    public Lookup<IStorageMonitorableAccessor, Direction> meStorage(ServerLevel level, BlockPos pos) {
-        return context -> IStorageMonitorableAccessor.SIDED.find(level, pos, context);
+    public Lookup<MEStorage, Direction> meStorage(ServerLevel level, BlockPos pos) {
+        return context -> MEStorage.SIDED.find(level, pos, context);
     }
 
     @Override

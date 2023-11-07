@@ -23,6 +23,7 @@ import appeng.api.networking.security.IActionSource;
 import appeng.api.storage.StorageHelper;
 import appeng.api.util.AECableType;
 import appeng.hooks.ticking.TickHandler;
+import appeng.me.InWorldGridNode;
 import appeng.me.helpers.BlockEntityNodeListener;
 import appeng.me.helpers.IGridConnectedBlockEntity;
 
@@ -149,7 +150,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
     @Override
     public IGridNode getGridNode(Direction dir) {
         var node = this.getMainNode().getNode();
-        return node != null && node.isExposedOnSide(dir) ? node : null;
+        return node instanceof InWorldGridNode inWorldNode && inWorldNode.isExposedOnSide(dir) ? node : null;
     }
 
     @Override
@@ -160,11 +161,6 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
     @Override
     public IManagedGridNode getMainNode() {
         return mainNode;
-    }
-
-    @Override
-    public void securityBreak() {
-        this.level.destroyBlock(this.worldPosition, true);
     }
 
     @Override

@@ -23,16 +23,15 @@ import vazkii.botania.common.impl.corporea.AbstractCorporeaNode;
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
-import appeng.api.storage.IStorageMonitorableAccessor;
 import appeng.api.storage.MEStorage;
 
 public class MECorporeaNode extends AbstractCorporeaNode {
 
-    private final IStorageMonitorableAccessor accessor;
+    private final MEStorage storage;
 
-    public MECorporeaNode(Level level, BlockPos pos, CorporeaSpark spark, IStorageMonitorableAccessor accessor) {
+    public MECorporeaNode(Level level, BlockPos pos, CorporeaSpark spark, MEStorage storage) {
         super(level, pos, spark);
-        this.accessor = accessor;
+        this.storage = storage;
     }
 
     @Nullable
@@ -41,11 +40,7 @@ public class MECorporeaNode extends AbstractCorporeaNode {
                 .find(Direction.UP);
 
         if (accessor != null) {
-            var storage = accessor.getInventory(IActionSource.empty());
-
-            if (storage != null) {
-                return new MECorporeaNode(level, spark.getAttachPos(), spark, accessor);
-            }
+            return new MECorporeaNode(level, spark.getAttachPos(), spark, accessor);
         }
 
         return null;
@@ -63,13 +58,12 @@ public class MECorporeaNode extends AbstractCorporeaNode {
 
     protected List<ItemStack> work(CorporeaRequest request, boolean execute) {
         var list = new ArrayList<ItemStack>();
-        MEStorage storage;
         IActionSource source;
 
         if (request.getEntity()instanceof Player player) {
-            storage = accessor.getInventory(source = IActionSource.ofPlayer(player));
+            source = IActionSource.ofPlayer(player);
         } else {
-            storage = accessor.getInventory(source = IActionSource.empty());
+            source = IActionSource.empty();
         }
 
         if (storage == null) {

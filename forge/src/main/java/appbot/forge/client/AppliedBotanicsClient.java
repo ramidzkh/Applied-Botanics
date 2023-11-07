@@ -10,7 +10,7 @@ import appbot.client.ManaRenderer;
 import appbot.forge.ABItems;
 import appbot.forge.ABMenus;
 
-import appeng.api.client.AEStackRendering;
+import appeng.api.client.AEKeyRendering;
 import appeng.client.gui.me.common.MEStorageScreen;
 import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
@@ -30,7 +30,7 @@ public interface AppliedBotanicsClient {
         });
 
         bus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(() -> {
-            AEStackRendering.register(ManaKeyType.TYPE, ManaKey.class, new ManaRenderer());
+            AEKeyRendering.register(ManaKeyType.TYPE, ManaKey.class, new ManaRenderer());
             InitScreens.<MEStorageMenu, MEStorageScreen<MEStorageMenu>>register(ABMenus.PORTABLE_MANA_CELL_TYPE,
                     MEStorageScreen::new, "/screens/terminals/portable_mana_cell.json");
         }));

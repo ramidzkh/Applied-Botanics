@@ -12,7 +12,7 @@ import appbot.Lookup;
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.ManaReceiver;
 
-import appeng.api.storage.IStorageMonitorableAccessor;
+import appeng.api.storage.MEStorage;
 import appeng.capabilities.Capabilities;
 import appeng.util.BlockApiCache;
 
@@ -25,8 +25,8 @@ public enum AppliedBotanicsImpl implements AppliedBotanics {
     }
 
     @Override
-    public Lookup<IStorageMonitorableAccessor, Direction> meStorage(ServerLevel level, BlockPos pos) {
-        return BlockApiCache.create(Capabilities.STORAGE_MONITORABLE_ACCESSOR, level, pos)::find;
+    public Lookup<MEStorage, Direction> meStorage(ServerLevel level, BlockPos pos) {
+        return BlockApiCache.create(Capabilities.STORAGE, level, pos)::find;
     }
 
     @Override

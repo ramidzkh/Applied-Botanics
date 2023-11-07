@@ -21,7 +21,7 @@ public class PortableManaCellItem extends AbstractPortableCell implements IManaC
     private final double idleDrain;
 
     public PortableManaCellItem(Properties props, int kilobytes, double idleDrain) {
-        super(AppliedBotanics.getInstance().portableCellMenu(), props);
+        super(AppliedBotanics.getInstance().portableCellMenu(), props, 0x67b9ee);
         this.totalBytes = kilobytes * 1000;
         this.idleDrain = idleDrain;
     }
