@@ -7,7 +7,7 @@ public class ABDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator dataGenerator) {
-        FabricDataGenerator.Pack pack = dataGenerator.createPack();
+        var pack = dataGenerator.createPack();
         pack.addProvider(BlockTagsProvider::new);
         pack.addProvider(ItemTagsProvider::new);
         pack.addProvider(RecipeProvider::new);

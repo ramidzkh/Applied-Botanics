@@ -31,7 +31,7 @@ public class MEStorageManaItem implements ManaItem {
 
     @Nullable
     public static ManaItem forItem(ItemStack stack) {
-        if (stack.getItem()instanceof AbstractPortableCell item) {
+        if (stack.getItem() instanceof AbstractPortableCell item) {
             var storage = StorageCells.getCellInventory(stack, null);
 
             if (storage == null) {

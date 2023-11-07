@@ -36,7 +36,12 @@ public class MECorporeaNode extends AbstractCorporeaNode {
 
     @Nullable
     public static CorporeaNode getNode(Level level, CorporeaSpark spark) {
-        var accessor = AppliedBotanics.getInstance().meStorage((ServerLevel) level, spark.getAttachPos())
+        if (!(level instanceof ServerLevel serverLevel)) {
+            // todo: client-side animation?
+            return null;
+        }
+
+        var accessor = AppliedBotanics.getInstance().meStorage(serverLevel, spark.getAttachPos())
                 .find(Direction.UP);
 
         if (accessor != null) {
@@ -60,7 +65,7 @@ public class MECorporeaNode extends AbstractCorporeaNode {
         var list = new ArrayList<ItemStack>();
         IActionSource source;
 
-        if (request.getEntity()instanceof Player player) {
+        if (request.getEntity() instanceof Player player) {
             source = IActionSource.ofPlayer(player);
         } else {
             source = IActionSource.empty();
@@ -73,7 +78,7 @@ public class MECorporeaNode extends AbstractCorporeaNode {
         for (var entry : storage.getAvailableStacks()) {
             var amount = Ints.saturatedCast(entry.getLongValue());
 
-            if (entry.getKey()instanceof AEItemKey itemKey) {
+            if (entry.getKey() instanceof AEItemKey itemKey) {
                 var stack = itemKey.toStack();
 
                 if (request.getMatcher().test(stack)) {

@@ -29,7 +29,7 @@ public class FluixPool extends ManaPoolBlock {
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity,
             ItemStack itemStack) {
         if (livingEntity instanceof Player player
-                && level.getBlockEntity(blockPos)instanceof FluixPoolBlockEntity blockEntity) {
+                && level.getBlockEntity(blockPos) instanceof FluixPoolBlockEntity blockEntity) {
             blockEntity.getMainNode().setOwningPlayer(player);
         }
     }

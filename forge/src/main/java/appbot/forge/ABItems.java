@@ -117,7 +117,7 @@ public class ABItems {
         StorageCells.addCellGuiHandler(new ICellGuiHandler() {
             @Override
             public boolean isSpecializedFor(ItemStack cell) {
-                return cell.getItem()instanceof IBasicCellItem basicCellItem
+                return cell.getItem() instanceof IBasicCellItem basicCellItem
                         && basicCellItem.getKeyType() == ManaKeyType.TYPE;
             }
 
