@@ -37,7 +37,12 @@ public class MECorporeaNode extends AbstractCorporeaNode {
 
     @Nullable
     public static CorporeaNode getNode(Level level, CorporeaSpark spark) {
-        var accessor = AppliedBotanics.getInstance().meStorage((ServerLevel) level, spark.getAttachPos())
+        if (!(level instanceof ServerLevel serverLevel)) {
+            // todo: client-side animation?
+            return null;
+        }
+
+        var accessor = AppliedBotanics.getInstance().meStorage(serverLevel, spark.getAttachPos())
                 .find(Direction.UP);
 
         if (accessor != null) {
