@@ -1,0 +1,32 @@
+{
+  "gui.appbot.mana": "Mana",
+
+  "itemGroup.appbot.tab": "Applied Botanics",
+
+  "block.appbot.fluix_mana_pool": "Fluix Manapool",
+
+  "item.appbot.mana_cell_housing": "ME Mana Zellengehäuse",
+  "item.appbot.creative_mana_cell": "Creative ME Mana Zelle",
+
+  "item.appbot.mana_storage_cell_1k": "1k ME Manaspeicherzelle",
+  "item.appbot.mana_storage_cell_4k": "4k ME Manaspeicherzelle",
+  "item.appbot.mana_storage_cell_16k": "16k ME Manaspeicherzelle",
+  "item.appbot.mana_storage_cell_64k": "64k ME Manaspeicherzelle",
+  "item.appbot.mana_storage_cell_256k": "256k ME Manaspeicherzelle",
+
+  "item.appbot.portable_mana_storage_cell_1k": "1k portable Manazelle",
+  "item.appbot.portable_mana_storage_cell_4k": "4k portable Manazelle",
+  "item.appbot.portable_mana_storage_cell_16k": "16k portable Manazelle",
+  "item.appbot.portable_mana_storage_cell_64k": "64k portable Manazelle",
+  "item.appbot.portable_mana_storage_cell_256k": "256k portable Manazelle",
+
+  "item.appbot.mana_p2p_tunnel": "Mana P2P Tunnel",
+
+  "appbot.entry.fluix_mana_pool": "Fluix Manapool",
+  "appbot.page.fluix_mana_pool0": "Der $(item)Fluix Manapool$(0) arbeitet mit $(thing)Mana$(0) vom angeschlossenen ME System",
+  "appbot.page.fluix_mana_pool1": "ist doch gar nicht so schlimm",
+
+  "appbot.entry.mana_drives": "Manalaufwerk",
+  "appbot.page.mana_drives0": "Wolltest du etwa mit Magie aufhören und realistisch werden? Schäm dich.",
+  "appbot.page.mana_drives1": "genau das, was Vazkii nie wollte"
+}
