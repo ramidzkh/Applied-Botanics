@@ -1,0 +1,32 @@
+{
+  "gui.appbot.mana": "マナ",
+
+  "itemGroup.appbot.tab": "Applied Botanics",
+
+  "block.appbot.fluix_mana_pool": "フルーシュマナプール",
+
+  "item.appbot.mana_cell_housing": "MEマナセル筐体",
+  "item.appbot.creative_mana_cell": "クリエイティブMEマナセル",
+
+  "item.appbot.mana_storage_cell_1k": "1k MEマナストレージセル",
+  "item.appbot.mana_storage_cell_4k": "4k MEマナストレージセル",
+  "item.appbot.mana_storage_cell_16k": "16k MEマナストレージセル",
+  "item.appbot.mana_storage_cell_64k": "64k MEマナストレージセル",
+  "item.appbot.mana_storage_cell_256k": "256k MEマナストレージセル",
+
+  "item.appbot.portable_mana_storage_cell_1k": "1k ポータブルマナセル",
+  "item.appbot.portable_mana_storage_cell_4k": "4k ポータブルマナセル",
+  "item.appbot.portable_mana_storage_cell_16k": "16k ポータブルマナセル",
+  "item.appbot.portable_mana_storage_cell_64k": "64k ポータブルマナセル",
+  "item.appbot.portable_mana_storage_cell_256k": "256k ポータブルマナセル",
+
+  "item.appbot.mana_p2p_tunnel": "マナP2Pトンネル",
+
+  "appbot.entry.fluix_mana_pool": "フルーシュマナプール",
+  "appbot.page.fluix_mana_pool0": "$(item)フルーシュマナプール$(0)は接続されたMEシステムからの$(thing)マナ$(0)で動作します",
+  "appbot.page.fluix_mana_pool1": "これはそれほど悪くない",
+
+  "appbot.entry.mana_drives": "マナドライブ",
+  "appbot.page.mana_drives0": "バスの下に魔法を投げて数字になりたいと思ったことはありませんか？恥ずかしい",
+  "appbot.page.mana_drives1": "vazkiiが決して望んでいなかったもの"
+}
