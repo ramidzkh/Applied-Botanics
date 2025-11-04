@@ -1,0 +1,12 @@
+{
+}
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "ae2:interface" },
+    { "item": "botania:fabulous_pool" }
+  ],
+  "result": { "item": "appbot:fluix_mana_pool" }
+}pool" }
+}
+

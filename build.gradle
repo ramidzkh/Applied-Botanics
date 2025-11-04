@@ -63,10 +63,14 @@ subprojects {
             importOrderFile(rootProject.file("codeformat/ae2.importorder"))
         }
 
-        format("json") {
-            target("src/main/resources/**/*.json")
-            prettier().config(parser: "json")
-        }
+        // JSON formatting with Prettier is disabled to avoid requiring npm/prettier
+        // on the build environment. If you want automatic JSON formatting, install
+        // npm and ensure it's available on PATH, or re-enable this block and
+        // configure Spotless to use a specific npmExecutable.
+        // format("json") {
+        //     target("src/main/resources/**/*.json")
+        //     prettier().config(parser: "json")
+        // }
     }
 }
 

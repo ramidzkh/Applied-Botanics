@@ -4,7 +4,6 @@ import java.util.EnumSet;
 
 import com.google.common.primitives.Ints;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -43,7 +42,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
     // work-around for saveAdditional querying the grid
     private boolean saving;
 
-    public FluixPoolBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    public FluixPoolBlockEntity(BlockPos pos, BlockState state) {
         super(pos, state);
     }
 
@@ -142,7 +141,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
+    public void load(CompoundTag tag) {
         super.load(tag);
         this.getMainNode().loadFromNBT(tag);
     }

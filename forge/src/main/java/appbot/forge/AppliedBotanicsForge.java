@@ -1,6 +1,5 @@
 package appbot.forge;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.Direction;
@@ -61,9 +60,8 @@ public class AppliedBotanicsForge {
             var blockEntity = event.getObject();
 
             event.addCapability(AppliedBotanics.id("generic_inv_wrapper"), new ICapabilityProvider() {
-                @NotNull
                 @Override
-                public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction side) {
+                public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction side) {
                     if (capability == BotaniaForgeCapabilities.SPARK_ATTACHABLE && blockEntity instanceof IPartHost host
                             && host.getPart(side) instanceof ManaP2PTunnelPart p2p) {
                         var sparkAttachable = p2p.getSparkAttachable();
@@ -91,7 +89,7 @@ public class AppliedBotanicsForge {
             if (item != null) {
                 event.addCapability(AppliedBotanics.id("mana_item"), new ICapabilityProvider() {
                     @Override
-                    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability,
+                    public <T> LazyOptional<T> getCapability(Capability<T> capability,
                             @Nullable Direction arg) {
                         if (capability == BotaniaForgeCapabilities.MANA_ITEM) {
                             return LazyOptional.of(() -> item).cast();

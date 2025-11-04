@@ -28,7 +28,7 @@ public interface IManaCellItem extends ICellWorkbenchItem {
 
     @Override
     default FuzzyMode getFuzzyMode(ItemStack is) {
-        return null;
+        return FuzzyMode.IGNORE_ALL;
     }
 
     @Override

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "appbot:item/portable_mana_storage_cell_256k",
+    "layer1": "ae2:item/portable_cell_led"
+  }
+}
+

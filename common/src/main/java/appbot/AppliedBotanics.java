@@ -23,7 +23,7 @@ public interface AppliedBotanics {
 
     @ExpectPlatform
     static AppliedBotanics getInstance() {
-        return getInstance();
+        throw new AssertionError();
     }
 
     Lookup<MEStorage, Direction> meStorage(ServerLevel level, BlockPos pos);

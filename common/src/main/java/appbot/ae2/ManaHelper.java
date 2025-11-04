@@ -15,7 +15,9 @@ public class ManaHelper {
         } else if (receiver instanceof SparkAttachable sparkAttachable) {
             return receiver.getCurrentMana() + sparkAttachable.getAvailableSpaceForMana();
         } else if (!receiver.isFull()) {
-            return receiver.getCurrentMana() + 1000;
+            // Conservative fallback: avoid large optimistic capacity guesses which can
+            // lead to simulate/actual mismatch and cause mana to appear "voided".
+            return receiver.getCurrentMana() + 1;
         }
 
         return 0;

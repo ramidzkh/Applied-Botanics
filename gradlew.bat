@@ -37,11 +37,13 @@ for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
 @rem Find java.exe
-if defined JAVA_HOME goto findJavaFromJavaHome
-
+rem Prefer PATH java if available; this helps when JAVA_HOME points to a different JDK
 set JAVA_EXE=java.exe
 %JAVA_EXE% -version >NUL 2>&1
 if %ERRORLEVEL% equ 0 goto execute
+
+rem If PATH java not found or failed, fall back to JAVA_HOME if it's defined
+if defined JAVA_HOME goto findJavaFromJavaHome
 
 echo.
 echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.

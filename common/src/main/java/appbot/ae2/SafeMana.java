@@ -58,21 +58,49 @@ class Fail {
         return new SafeMana() {
             @Override
             public int insert(int amount, Actionable mode) {
+                int capacity = ManaHelper.getCapacity(be);
+                int canAccept = Math.max(0, capacity - be.getCurrentMana());
+
                 if (mode == Actionable.SIMULATE) {
-                    return Math.min(amount, ManaHelper.getCapacity(be) - be.getCurrentMana());
+                    return Math.min(amount, canAccept);
                 }
 
-                if (be.isFull()) {
+                int toInsert = Math.min(amount, canAccept);
+                if (toInsert <= 0) {
                     return 0;
                 }
 
-                be.receiveMana(amount);
-                return amount;
+                int old = be.getCurrentMana();
+                try {
+                    be.receiveMana(toInsert);
+                } catch (Throwable t) {
+                    return 0;
+                }
+
+                int inserted = be.getCurrentMana() - old;
+                return Math.max(0, inserted);
             }
 
             @Override
             public int extract(int amount, Actionable mode) {
-                return 0;
+                if (mode == Actionable.SIMULATE) {
+                    return Math.min(amount, be.getCurrentMana());
+                }
+
+                int old = be.getCurrentMana();
+                int toExtract = Math.min(amount, old);
+                if (toExtract <= 0) {
+                    return 0;
+                }
+
+                try {
+                    be.receiveMana(-toExtract);
+                } catch (Throwable t) {
+                    return 0;
+                }
+
+                int removed = old - be.getCurrentMana();
+                return Math.max(0, removed);
             }
         };
     }

@@ -1,6 +1,5 @@
 package appbot.block;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -19,9 +18,8 @@ public class FluixPool extends ManaPoolBlock {
         super(v, builder);
     }
 
-    @NotNull
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FluixPoolBlockEntity(pos, state);
     }
 
