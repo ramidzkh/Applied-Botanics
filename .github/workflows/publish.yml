@@ -37,7 +37,7 @@ jobs:
           files: build/distributions/*.jar
           tag_name: ${{ github.event.release.tag_name }}
       - name: Upload to external sites
-        run: ./gradlew curseforge modrinth
+        run: ./gradlew modrinth
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
           CURSEFORGE: ${{ secrets.CURSEFORGE }}
