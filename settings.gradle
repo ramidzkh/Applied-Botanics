@@ -8,6 +8,3 @@ pluginManagement {
 }
 
 rootProject.name = 'applied-botanics'
-
-include 'common'
-include 'forge'
