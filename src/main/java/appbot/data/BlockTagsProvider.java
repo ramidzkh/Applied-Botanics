@@ -1,4 +1,4 @@
-package appbot.fabric.data;
+package appbot.data;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -9,8 +9,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import appbot.ABBlocks;
 import appbot.AppliedBotanics;
-import appbot.forge.ABBlocks;
 
 public class BlockTagsProvider extends net.minecraftforge.common.data.BlockTagsProvider {
 

@@ -11,7 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 
-import appbot.AppliedBotanics;
+import appbot.ABBlocks;
 import appbot.ae2.ManaKey;
 import appbot.ae2.SafeMana;
 import appbot.mixins.ManaPoolBlockEntityAccessor;
@@ -33,7 +33,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
     private final ManaPoolBlockEntityAccessor mana = (ManaPoolBlockEntityAccessor) this;
     private final IManagedGridNode mainNode = GridHelper.createManagedNode(this, BlockEntityNodeListener.INSTANCE)
             .setFlags(GridFlags.REQUIRE_CHANNEL)
-            .setVisualRepresentation(AppliedBotanics.getInstance().fluixManaPool())
+            .setVisualRepresentation(ABBlocks.FLUIX_MANA_POOL.get())
             .setInWorldNode(true)
             .setExposedOnSides(EnumSet.complementOf(EnumSet.of(Direction.UP)))
             .setTagName("proxy");

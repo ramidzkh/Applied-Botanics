@@ -14,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import appbot.AppliedBotanics;
 import vazkii.botania.api.corporea.CorporeaNode;
 import vazkii.botania.api.corporea.CorporeaRequest;
 import vazkii.botania.api.corporea.CorporeaSpark;
@@ -24,6 +23,8 @@ import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.MEStorage;
+import appeng.capabilities.Capabilities;
+import appeng.util.BlockApiCache;
 
 public class MECorporeaNode extends AbstractCorporeaNode {
 
@@ -41,7 +42,7 @@ public class MECorporeaNode extends AbstractCorporeaNode {
             return null;
         }
 
-        var accessor = AppliedBotanics.getInstance().meStorage(serverLevel, spark.getAttachPos())
+        var accessor = BlockApiCache.create(Capabilities.STORAGE, serverLevel, spark.getAttachPos())
                 .find(Direction.UP);
 
         if (accessor != null) {

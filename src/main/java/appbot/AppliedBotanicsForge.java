@@ -1,4 +1,4 @@
-package appbot.forge;
+package appbot;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -18,12 +18,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegisterEvent;
 
-import appbot.AppliedBotanics;
 import appbot.ae2.*;
+import appbot.ae2.ManaP2PTunnelPart;
 import appbot.botania.MECorporeaNode;
-import appbot.fabric.data.ABDataGenerator;
-import appbot.forge.ae2.ManaP2PTunnelPart;
-import appbot.forge.client.AppliedBotanicsClient;
+import appbot.client.AppliedBotanicsClient;
+import appbot.data.ABDataGenerator;
 import appbot.item.cell.CreativeManaCellHandler;
 import appbot.item.cell.ManaCellHandler;
 import vazkii.botania.api.BotaniaForgeCapabilities;

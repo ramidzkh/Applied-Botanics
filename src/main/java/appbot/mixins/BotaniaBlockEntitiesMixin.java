@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import appbot.AppliedBotanics;
+import appbot.ABBlocks;
 import appbot.block.FluixPoolBlockEntity;
 import vazkii.botania.common.block.block_entity.BotaniaBlockEntities;
 import vazkii.botania.common.lib.LibBlockNames;
@@ -29,7 +29,7 @@ public class BotaniaBlockEntitiesMixin {
             Block... blocks) {
         if (id.equals(prefix(LibBlockNames.POOL))) {
             return (blockPos, blockState) -> {
-                if (blockState.is(AppliedBotanics.getInstance().fluixManaPool())) {
+                if (blockState.is(ABBlocks.FLUIX_MANA_POOL.get())) {
                     // noinspection unchecked
                     return (T) new FluixPoolBlockEntity(blockPos, blockState);
                 } else {
@@ -46,7 +46,7 @@ public class BotaniaBlockEntitiesMixin {
     private static <T extends BlockEntity> Block[] add(ResourceLocation id, BiFunction<BlockPos, BlockState, T> func,
             Block... blocks) {
         if (id.equals(prefix(LibBlockNames.POOL))) {
-            blocks = ArrayUtils.add(blocks, AppliedBotanics.getInstance().fluixManaPool());
+            blocks = ArrayUtils.add(blocks, ABBlocks.FLUIX_MANA_POOL.get());
         }
 
         return blocks;

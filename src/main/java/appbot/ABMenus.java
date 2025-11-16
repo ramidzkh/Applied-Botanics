@@ -1,4 +1,4 @@
-package appbot.forge;
+package appbot;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;

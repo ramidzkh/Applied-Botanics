@@ -1,6 +1,6 @@
 package appbot.integration.emi;
 
-import appbot.AppliedBotanics;
+import appbot.ABBlocks;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.stack.EmiStack;
@@ -11,6 +11,6 @@ public class ABEMIPlugin implements EmiPlugin {
     @Override
     public void register(EmiRegistry registry) {
         registry.addWorkstation(BotaniaEmiPlugin.MANA_INFUSION,
-                EmiStack.of(AppliedBotanics.getInstance().fluixManaPool()));
+                EmiStack.of(ABBlocks.FLUIX_MANA_POOL.get()));
     }
 }

@@ -1,4 +1,4 @@
-package appbot.fabric.data;
+package appbot.data;
 
 import java.util.List;
 import java.util.Set;

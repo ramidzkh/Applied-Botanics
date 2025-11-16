@@ -20,7 +20,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 
-import appbot.AppliedBotanics;
+import appbot.ABItems;
 import appbot.item.cell.IManaCellItem;
 
 import appeng.api.storage.StorageCells;
@@ -89,8 +89,7 @@ public class ManaCellItem extends Item implements IManaCellItem, AEToolItem {
                     }
 
                     // drop empty storage cell case
-                    playerInventory
-                            .placeItemBackInInventory(new ItemStack(AppliedBotanics.getInstance().manaCellHousing()));
+                    playerInventory.placeItemBackInInventory(new ItemStack(ABItems.MANA_CELL_HOUSING.get()));
 
                     return true;
                 } else {

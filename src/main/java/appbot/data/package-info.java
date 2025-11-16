@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package appbot.forge.ae2;
+package appbot.data;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

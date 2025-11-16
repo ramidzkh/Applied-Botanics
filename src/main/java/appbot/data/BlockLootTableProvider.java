@@ -1,4 +1,4 @@
-package appbot.fabric.data;
+package appbot.data;
 
 import java.util.List;
 import java.util.Set;
@@ -7,7 +7,7 @@ import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 
-import appbot.forge.ABBlocks;
+import appbot.ABBlocks;
 
 public class BlockLootTableProvider extends BlockLootSubProvider {
 

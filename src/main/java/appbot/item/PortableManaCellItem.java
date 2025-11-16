@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import appbot.ABMenus;
 import appbot.AppliedBotanics;
 import appbot.item.cell.IManaCellItem;
 
@@ -23,7 +24,7 @@ public class PortableManaCellItem extends AbstractPortableCell implements IManaC
     private final double idleDrain;
 
     public PortableManaCellItem(Properties props, int kilobytes, double idleDrain) {
-        super(AppliedBotanics.getInstance().portableCellMenu(), props, 0x67b9ee);
+        super(ABMenus.PORTABLE_MANA_CELL_TYPE, props, 0x67b9ee);
         this.totalBytes = kilobytes * 1000;
         this.idleDrain = idleDrain;
     }

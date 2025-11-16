@@ -1,4 +1,4 @@
-package appbot.fabric.data;
+package appbot.data;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -10,8 +10,8 @@ import net.minecraft.tags.TagManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import appbot.ABItems;
 import appbot.AppliedBotanics;
-import appbot.forge.ABItems;
 import vazkii.botania.common.lib.BotaniaTags;
 
 import appeng.api.features.P2PTunnelAttunement;

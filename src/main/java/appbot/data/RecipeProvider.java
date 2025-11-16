@@ -1,4 +1,4 @@
-package appbot.fabric.data;
+package appbot.data;
 
 import static appbot.AppliedBotanics.id;
 
@@ -11,7 +11,7 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 
-import appbot.forge.ABItems;
+import appbot.ABItems;
 import vazkii.botania.common.block.BotaniaBlocks;
 import vazkii.botania.common.item.BotaniaItems;
 

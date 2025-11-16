@@ -1,4 +1,4 @@
-package appbot.forge;
+package appbot;
 
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,9 +12,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import appbot.AppliedBotanics;
 import appbot.ae2.ManaKeyType;
-import appbot.forge.ae2.ManaP2PTunnelPart;
+import appbot.ae2.ManaP2PTunnelPart;
 import appbot.item.CreativeManaCellItem;
 import appbot.item.ManaCellItem;
 import appbot.item.PortableManaCellItem;

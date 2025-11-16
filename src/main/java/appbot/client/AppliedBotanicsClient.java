@@ -1,14 +1,13 @@
-package appbot.forge.client;
+package appbot.client;
 
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import appbot.ABItems;
+import appbot.ABMenus;
 import appbot.ae2.ManaKey;
 import appbot.ae2.ManaKeyType;
-import appbot.client.ManaRenderer;
-import appbot.forge.ABItems;
-import appbot.forge.ABMenus;
 
 import appeng.api.client.AEKeyRendering;
 import appeng.client.gui.me.common.MEStorageScreen;

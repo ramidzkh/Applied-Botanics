@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+import appbot.ABBlocks;
 import appbot.AppliedBotanics;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -16,7 +17,7 @@ public class ABJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(AppliedBotanics.getInstance().fluixManaPool()),
+        registration.addRecipeCatalyst(new ItemStack(ABBlocks.FLUIX_MANA_POOL.get()),
                 ManaPoolRecipeCategory.TYPE);
     }
 
