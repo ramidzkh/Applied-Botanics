@@ -8,7 +8,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
+import appbot.forge.AppliedBotanicsImpl;
 import vazkii.botania.api.mana.ManaReceiver;
 
 import appeng.api.storage.MEStorage;
@@ -21,9 +21,8 @@ public interface AppliedBotanics {
         return new ResourceLocation(MOD_ID, path);
     }
 
-    @ExpectPlatform
     static AppliedBotanics getInstance() {
-        throw new AssertionError();
+        return AppliedBotanicsImpl.getInstance();
     }
 
     Lookup<MEStorage, Direction> meStorage(ServerLevel level, BlockPos pos);

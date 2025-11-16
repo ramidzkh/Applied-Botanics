@@ -10,5 +10,4 @@ pluginManagement {
 rootProject.name = 'applied-botanics'
 
 include 'common'
-include 'fabric'
 include 'forge'

@@ -21,6 +21,7 @@ import net.minecraftforge.registries.RegisterEvent;
 import appbot.AppliedBotanics;
 import appbot.ae2.*;
 import appbot.botania.MECorporeaNode;
+import appbot.fabric.data.ABDataGenerator;
 import appbot.forge.ae2.ManaP2PTunnelPart;
 import appbot.forge.client.AppliedBotanicsClient;
 import appbot.item.cell.CreativeManaCellHandler;
@@ -47,6 +48,8 @@ public class AppliedBotanicsForge {
         ABBlocks.initialize(bus);
         ABItems.initialize(bus);
         ABMenus.initialize(bus);
+
+        bus.addListener(ABDataGenerator::onInitializeDataGenerator);
 
         bus.addListener((RegisterEvent event) -> {
             if (!event.getRegistryKey().equals(Registries.BLOCK)) {

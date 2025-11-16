@@ -13,6 +13,15 @@ loom {
     forge {
         mixinConfig("appbot.mixins.json")
     }
+
+    runs {
+        data {
+            data()
+            programArgs "--all", "--mod", "appbot"
+            programArgs "--output", file("src/generated/resources").absolutePath
+            programArgs "--existing", file("src/main/resources").absolutePath
+        }
+    }
 }
 
 configurations {
@@ -74,14 +83,33 @@ repositories {
             includeGroup("dev.emi")
         }
     }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "shedaniel"
+                url = uri("https://maven.shedaniel.me/")
+            }
+        }
+
+        filter {
+            includeGroup("me.shedaniel")
+        }
+    }
 }
 
 dependencies {
+    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
     forge("net.minecraftforge:forge:${rootProject.forge_version}")
 
     modImplementation("appeng:appliedenergistics2-forge:${rootProject.ae2_version}")
     modImplementation("vazkii.botania:Botania:${rootProject.minecraft_version}-${rootProject.botania_version_forge}")
 
+    modCompileOnly("mezz.jei:jei-${rootProject.minecraft_version}-common-api:${rootProject.jei_version}")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${rootProject.rei_version}")
+    modCompileOnly("dev.emi:emi-forge:${rootProject.emi_version}:api")
+
+    modRuntimeOnly("org.appliedenergistics:guideme:${rootProject.guideme_version}")
     modRuntimeOnly("vazkii.patchouli:Patchouli:${rootProject.minecraft_version}-${rootProject.patchouli_version}-FORGE")
     modRuntimeOnly("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}+${rootProject.minecraft_version}")
 
@@ -105,15 +133,12 @@ dependencies {
     if (!xei.isEmpty()) {
         throw new GradleException("Unknown xei mods: $xei")
     }
-
-    common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
-    shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 }
 
 sourceSets {
     main {
         resources {
-            srcDir(project(":fabric").file("src/generated/resources"))
+            srcDir(file("src/generated/resources"))
         }
     }
 }

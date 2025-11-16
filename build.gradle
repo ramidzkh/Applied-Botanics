@@ -71,7 +71,6 @@ subprojects {
 }
 
 def copyOutputs = tasks.register('copyOutputs', Copy) {
-    from(project(":fabric").remapJar)
     from(project(":forge").remapJar)
     into(layout.buildDirectory.dir('distributions'))
 }
