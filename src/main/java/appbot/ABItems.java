@@ -38,40 +38,40 @@ public class ABItems {
     public static final DeferredItem<Item> MANA_CELL_HOUSING = ITEMS.register("mana_cell_housing",
             () -> new Item(new Item.Properties()));
 
-    public static final DeferredItem<Item> MANA_CELL_1K = ITEMS.register("mana_storage_cell_1k",
+    public static final DeferredItem<Item> MANA_CELL_1K = ITEMS.register("mana_cell_1k",
             () -> new ManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     AEItems.CELL_COMPONENT_1K,
                     1, 0.5f));
-    public static final DeferredItem<Item> MANA_CELL_4K = ITEMS.register("mana_storage_cell_4k",
+    public static final DeferredItem<Item> MANA_CELL_4K = ITEMS.register("mana_cell_4k",
             () -> new ManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     AEItems.CELL_COMPONENT_4K,
                     4, 1.0f));
-    public static final DeferredItem<Item> MANA_CELL_16K = ITEMS.register("mana_storage_cell_16k",
+    public static final DeferredItem<Item> MANA_CELL_16K = ITEMS.register("mana_cell_16k",
             () -> new ManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     AEItems.CELL_COMPONENT_16K,
                     16, 1.5f));
-    public static final DeferredItem<Item> MANA_CELL_64K = ITEMS.register("mana_storage_cell_64k",
+    public static final DeferredItem<Item> MANA_CELL_64K = ITEMS.register("mana_cell_64k",
             () -> new ManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     AEItems.CELL_COMPONENT_64K,
                     64, 2.0f));
-    public static final DeferredItem<Item> MANA_CELL_256K = ITEMS.register("mana_storage_cell_256k",
+    public static final DeferredItem<Item> MANA_CELL_256K = ITEMS.register("mana_cell_256k",
             () -> new ManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     AEItems.CELL_COMPONENT_256K,
                     256, 2.5f));
 
-    public static final DeferredItem<Item> PORTABLE_MANA_CELL_1K = ITEMS.register("portable_mana_storage_cell_1k",
+    public static final DeferredItem<Item> PORTABLE_MANA_CELL_1K = ITEMS.register("portable_mana_cell_1k",
             () -> new PortableManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     1, 0.5));
-    public static final DeferredItem<Item> PORTABLE_MANA_CELL_4K = ITEMS.register("portable_mana_storage_cell_4k",
+    public static final DeferredItem<Item> PORTABLE_MANA_CELL_4K = ITEMS.register("portable_mana_cell_4k",
             () -> new PortableManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     4, 1.0));
-    public static final DeferredItem<Item> PORTABLE_MANA_CELL_16K = ITEMS.register("portable_mana_storage_cell_16k",
+    public static final DeferredItem<Item> PORTABLE_MANA_CELL_16K = ITEMS.register("portable_mana_cell_16k",
             () -> new PortableManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     16, 1.5));
-    public static final DeferredItem<Item> PORTABLE_MANA_CELL_64K = ITEMS.register("portable_mana_storage_cell_64k",
+    public static final DeferredItem<Item> PORTABLE_MANA_CELL_64K = ITEMS.register("portable_mana_cell_64k",
             () -> new PortableManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     64, 2.0));
-    public static final DeferredItem<Item> PORTABLE_MANA_CELL_256K = ITEMS.register("portable_mana_storage_cell_256k",
+    public static final DeferredItem<Item> PORTABLE_MANA_CELL_256K = ITEMS.register("portable_mana_cell_256k",
             () -> new PortableManaCellItem(new Item.Properties().stacksTo(1).component(AppliedBotanicsForge.MANA, 0L),
                     256, 2.5));
 

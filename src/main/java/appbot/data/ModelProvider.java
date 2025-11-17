@@ -18,7 +18,6 @@ import appeng.core.AppEng;
 
 public class ModelProvider extends BlockStateProvider {
 
-    private static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
     private static final ResourceLocation P2P_TUNNEL_BASE_ITEM = AppEng.makeId("item/p2p_tunnel_base");
     private static final ResourceLocation P2P_TUNNEL_BASE_PART = AppEng.makeId("part/p2p/p2p_tunnel_base");
     private static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
@@ -35,7 +34,6 @@ public class ModelProvider extends BlockStateProvider {
     public ModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, AppliedBotanics.MOD_ID, existingFileHelper);
 
-        existingFileHelper.trackGenerated(DRIVE_CELL, MODEL);
         existingFileHelper.trackGenerated(P2P_TUNNEL_BASE_ITEM, MODEL);
         existingFileHelper.trackGenerated(P2P_TUNNEL_BASE_PART, MODEL);
         existingFileHelper.trackGenerated(STORAGE_CELL_LED, TEXTURE);
@@ -54,10 +52,11 @@ public class ModelProvider extends BlockStateProvider {
             var cell = ABItems.get(tier);
             var portableCell = ABItems.getPortableCell(tier);
             itemModels().basicItem(cell.get()).texture("layer1", STORAGE_CELL_LED);
-            itemModels().basicItem(portableCell.get()).texture("layer1", PORTABLE_CELL_LED);
-
-            var path = "block/drive/cells/mana_storage_cell" + tier.toString().toLowerCase(Locale.ROOT);
-            models().singleTexture(path, DRIVE_CELL, "cell", AppliedBotanics.id(path));
+            itemModels().withExistingParent(portableCell.getId().getPath(), mcLoc("item/generated"))
+                    .texture("layer0", "item/portable_mana_cell_housing")
+                    .texture("layer1", PORTABLE_CELL_LED)
+                    .texture("layer2", "item/portable_cell_screen")
+                    .texture("layer3", "item/portable_mana_cell" + tier.toString().toLowerCase(Locale.ROOT));
         }
 
         itemModels().withExistingParent("item/mana_p2p_tunnel", P2P_TUNNEL_BASE_ITEM)

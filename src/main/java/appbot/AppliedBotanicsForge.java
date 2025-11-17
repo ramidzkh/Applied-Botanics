@@ -1,12 +1,12 @@
 package appbot;
 
+import static appbot.AppliedBotanics.id;
+
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -27,6 +27,7 @@ import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 import appeng.api.AECapabilities;
 import appeng.api.behaviors.ContainerItemStrategy;
 import appeng.api.behaviors.GenericSlotCapacities;
+import appeng.api.client.StorageCellModels;
 import appeng.api.features.P2PTunnelAttunement;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.parts.RegisterPartCapabilitiesEvent;
@@ -44,7 +45,6 @@ public class AppliedBotanicsForge {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> MANA = DATA_COMPONENTS
             .registerComponentType("mana", builder -> builder
                     .persistent(Codec.LONG)
-                    .networkSynchronized(StreamCodec.of(FriendlyByteBuf::writeVarLong, FriendlyByteBuf::readVarLong))
                     .cacheEncoding());
 
     public AppliedBotanicsForge(IEventBus bus) {
@@ -87,13 +87,28 @@ public class AppliedBotanicsForge {
         ContainerItemStrategy.register(ManaKeyType.TYPE, ManaKey.class, new ManaContainerItemStrategy());
         GenericSlotCapacities.register(ManaKeyType.TYPE, (long) ManaPoolBlock.MAX_MANA_DILUTED);
 
-        StorageCells.addCellHandler(ManaCellHandler.INSTANCE);
-
         bus.addListener((FMLCommonSetupEvent event) -> {
             CorporeaNodeDetectors.register(MECorporeaNode::getNode);
 
             event.enqueueWork(() -> {
                 P2PTunnelAttunement.registerAttunementTag(ABItems.MANA_P2P_TUNNEL.get());
+
+                StorageCells.addCellHandler(ManaCellHandler.INSTANCE);
+                StorageCellModels.registerModel(ABItems.MANA_CELL_1K.get(), id("block/drive/cells/1k_mana_cell"));
+                StorageCellModels.registerModel(ABItems.PORTABLE_MANA_CELL_1K.get(),
+                        id("block/drive/cells/1k_mana_cell"));
+                StorageCellModels.registerModel(ABItems.MANA_CELL_4K.get(), id("block/drive/cells/4k_mana_cell"));
+                StorageCellModels.registerModel(ABItems.PORTABLE_MANA_CELL_4K.get(),
+                        id("block/drive/cells/4k_mana_cell"));
+                StorageCellModels.registerModel(ABItems.MANA_CELL_16K.get(), id("block/drive/cells/16k_mana_cell"));
+                StorageCellModels.registerModel(ABItems.PORTABLE_MANA_CELL_16K.get(),
+                        id("block/drive/cells/16k_mana_cell"));
+                StorageCellModels.registerModel(ABItems.MANA_CELL_64K.get(), id("block/drive/cells/64k_mana_cell"));
+                StorageCellModels.registerModel(ABItems.PORTABLE_MANA_CELL_64K.get(),
+                        id("block/drive/cells/64k_mana_cell"));
+                StorageCellModels.registerModel(ABItems.MANA_CELL_256K.get(), id("block/drive/cells/256k_mana_cell"));
+                StorageCellModels.registerModel(ABItems.PORTABLE_MANA_CELL_256K.get(),
+                        id("block/drive/cells/256k_mana_cell"));
             });
         });
     }

@@ -16,23 +16,23 @@
     },
     {
       "type": "crafting",
-      "recipe": "appbot:mana_storage_cell_1k"
+      "recipe": "appbot:mana_cell_1k"
     },
     {
       "type": "crafting",
-      "recipe": "appbot:mana_storage_cell_4k"
+      "recipe": "appbot:mana_cell_4k"
     },
     {
       "type": "crafting",
-      "recipe": "appbot:mana_storage_cell_16k"
+      "recipe": "appbot:mana_cell_16k"
     },
     {
       "type": "crafting",
-      "recipe": "appbot:mana_storage_cell_64k"
+      "recipe": "appbot:mana_cell_64k"
     },
     {
       "type": "crafting",
-      "recipe": "appbot:mana_storage_cell_256k"
+      "recipe": "appbot:mana_cell_256k"
     }
   ]
 }

@@ -8,17 +8,17 @@
   "item.appbot.mana_cell_housing": "Boitier de cellule de mana ME",
   "item.appbot.creative_mana_cell": "Disque de stockage de mana créatif",
 
-  "item.appbot.mana_storage_cell_1k": "Disque de stockage de mana 1k",
-  "item.appbot.mana_storage_cell_4k": "Disque de stockage de mana 4k",
-  "item.appbot.mana_storage_cell_16k": "Disque de stockage de mana 16k",
-  "item.appbot.mana_storage_cell_64k": "Disque de stockage de mana 64k",
-  "item.appbot.mana_storage_cell_256k": "Disque de stockage de mana 256k",
+  "item.appbot.mana_cell_1k": "Disque de stockage de mana 1k",
+  "item.appbot.mana_cell_4k": "Disque de stockage de mana 4k",
+  "item.appbot.mana_cell_16k": "Disque de stockage de mana 16k",
+  "item.appbot.mana_cell_64k": "Disque de stockage de mana 64k",
+  "item.appbot.mana_cell_256k": "Disque de stockage de mana 256k",
 
-  "item.appbot.portable_mana_storage_cell_1k": "Disque de mana portable 1k",
-  "item.appbot.portable_mana_storage_cell_4k": "Disque de mana portable 4k",
-  "item.appbot.portable_mana_storage_cell_16k": "Disque de mana portable 16k",
-  "item.appbot.portable_mana_storage_cell_64k": "Disque de mana portable 64k",
-  "item.appbot.portable_mana_storage_cell_256k": "Disque de mana portable 256k",
+  "item.appbot.portable_mana_cell_1k": "Disque de mana portable 1k",
+  "item.appbot.portable_mana_cell_4k": "Disque de mana portable 4k",
+  "item.appbot.portable_mana_cell_16k": "Disque de mana portable 16k",
+  "item.appbot.portable_mana_cell_64k": "Disque de mana portable 64k",
+  "item.appbot.portable_mana_cell_256k": "Disque de mana portable 256k",
 
   "item.appbot.mana_p2p_tunnel": "Tunnel de mana P2P",
 
