@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -19,12 +18,11 @@ import vazkii.botania.api.corporea.CorporeaRequest;
 import vazkii.botania.api.corporea.CorporeaSpark;
 import vazkii.botania.common.impl.corporea.AbstractCorporeaNode;
 
+import appeng.api.AECapabilities;
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.MEStorage;
-import appeng.capabilities.Capabilities;
-import appeng.util.BlockApiCache;
 
 public class MECorporeaNode extends AbstractCorporeaNode {
 
@@ -37,13 +35,7 @@ public class MECorporeaNode extends AbstractCorporeaNode {
 
     @Nullable
     public static CorporeaNode getNode(Level level, CorporeaSpark spark) {
-        if (!(level instanceof ServerLevel serverLevel)) {
-            // todo: client-side animation?
-            return null;
-        }
-
-        var accessor = BlockApiCache.create(Capabilities.STORAGE, serverLevel, spark.getAttachPos())
-                .find(Direction.UP);
+        var accessor = level.getCapability(AECapabilities.ME_STORAGE, spark.getAttachPos(), Direction.UP);
 
         if (accessor != null) {
             return new MECorporeaNode(level, spark.getAttachPos(), spark, accessor);

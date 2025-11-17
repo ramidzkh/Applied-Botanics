@@ -1,52 +1,57 @@
 package appbot;
 
-import org.jetbrains.annotations.Nullable;
+import com.mojang.serialization.Codec;
 
-import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegisterEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 import appbot.ae2.*;
-import appbot.ae2.ManaP2PTunnelPart;
 import appbot.botania.MECorporeaNode;
-import appbot.client.AppliedBotanicsClient;
 import appbot.data.ABDataGenerator;
-import appbot.item.cell.CreativeManaCellHandler;
 import appbot.item.cell.ManaCellHandler;
 import vazkii.botania.api.BotaniaForgeCapabilities;
+import vazkii.botania.common.block.mana.ManaPoolBlock;
 import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 
+import appeng.api.AECapabilities;
 import appeng.api.behaviors.ContainerItemStrategy;
 import appeng.api.behaviors.GenericSlotCapacities;
 import appeng.api.features.P2PTunnelAttunement;
-import appeng.api.parts.IPartHost;
+import appeng.api.networking.IInWorldGridNodeHost;
+import appeng.api.parts.RegisterPartCapabilitiesEvent;
 import appeng.api.stacks.AEKeyTypes;
 import appeng.api.storage.StorageCells;
-import appeng.capabilities.Capabilities;
+import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.parts.automation.StackWorldBehaviors;
 
 @Mod(AppliedBotanics.MOD_ID)
 @SuppressWarnings("UnstableApiUsage")
 public class AppliedBotanicsForge {
 
-    public AppliedBotanicsForge() {
-        var bus = FMLJavaModLoadingContext.get().getModEventBus();
+    private static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister
+            .createDataComponents(Registries.DATA_COMPONENT_TYPE, AppliedBotanics.MOD_ID);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> MANA = DATA_COMPONENTS
+            .registerComponentType("mana", builder -> builder
+                    .persistent(Codec.LONG)
+                    .networkSynchronized(StreamCodec.of(FriendlyByteBuf::writeVarLong, FriendlyByteBuf::readVarLong))
+                    .cacheEncoding());
 
+    public AppliedBotanicsForge(IEventBus bus) {
         ABBlocks.initialize(bus);
         ABItems.initialize(bus);
         ABMenus.initialize(bus);
+        DATA_COMPONENTS.register(bus);
 
         bus.addListener(ABDataGenerator::onInitializeDataGenerator);
 
@@ -58,49 +63,21 @@ public class AppliedBotanicsForge {
             AEKeyTypes.register(ManaKeyType.TYPE);
         });
 
-        MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, (AttachCapabilitiesEvent<BlockEntity> event) -> {
-            var blockEntity = event.getObject();
-
-            event.addCapability(AppliedBotanics.id("generic_inv_wrapper"), new ICapabilityProvider() {
-                @Override
-                public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction side) {
-                    if (capability == BotaniaForgeCapabilities.SPARK_ATTACHABLE && blockEntity instanceof IPartHost host
-                            && host.getPart(side) instanceof ManaP2PTunnelPart p2p) {
-                        var sparkAttachable = p2p.getSparkAttachable();
-
-                        if (sparkAttachable != null) {
-                            return LazyOptional.of(() -> sparkAttachable).cast();
-                        }
-                    }
-
-                    if (capability == BotaniaForgeCapabilities.MANA_RECEIVER
-                            || capability == BotaniaForgeCapabilities.SPARK_ATTACHABLE) {
-                        return blockEntity.getCapability(Capabilities.GENERIC_INTERNAL_INV, side)
-                                .lazyMap(inventory -> new ManaGenericStackInvStorage(inventory, blockEntity.getLevel(),
-                                        blockEntity.getBlockPos()))
-                                .cast();
-                    }
-
-                    return LazyOptional.empty();
+        bus.addListener((RegisterCapabilitiesEvent event) -> {
+            event.registerBlock(AECapabilities.IN_WORLD_GRID_NODE_HOST, ($1, $2, $3, be, $4) -> {
+                if (be instanceof IInWorldGridNodeHost a) {
+                    return a;
+                } else {
+                    return null;
                 }
-            });
+            }, ABBlocks.FLUIX_MANA_POOL.get());
         });
-        MinecraftForge.EVENT_BUS.addGenericListener(ItemStack.class, (AttachCapabilitiesEvent<ItemStack> event) -> {
-            var item = MEStorageManaItem.forItem(event.getObject());
-
-            if (item != null) {
-                event.addCapability(AppliedBotanics.id("mana_item"), new ICapabilityProvider() {
-                    @Override
-                    public <T> LazyOptional<T> getCapability(Capability<T> capability,
-                            @Nullable Direction arg) {
-                        if (capability == BotaniaForgeCapabilities.MANA_ITEM) {
-                            return LazyOptional.of(() -> item).cast();
-                        }
-
-                        return LazyOptional.empty();
-                    }
-                });
-            }
+        bus.addListener(EventPriority.LOWEST, this::registerGenericAdapters);
+        bus.addListener((RegisterPartCapabilitiesEvent event) -> {
+            event.register(BotaniaForgeCapabilities.MANA_RECEIVER, (object, context) -> object.getExposedApi(),
+                    ManaP2PTunnelPart.class);
+            event.register(BotaniaForgeCapabilities.SPARK_ATTACHABLE, (object, context) -> object.getSparkAttachable(),
+                    ManaP2PTunnelPart.class);
         });
 
         StackWorldBehaviors.registerImportStrategy(ManaKeyType.TYPE, ManaStorageImportStrategy::new);
@@ -108,10 +85,9 @@ public class AppliedBotanicsForge {
         StackWorldBehaviors.registerExternalStorageStrategy(ManaKeyType.TYPE, ManaExternalStorageStrategy::new);
 
         ContainerItemStrategy.register(ManaKeyType.TYPE, ManaKey.class, new ManaContainerItemStrategy());
-        GenericSlotCapacities.register(ManaKeyType.TYPE, 500000L);
+        GenericSlotCapacities.register(ManaKeyType.TYPE, (long) ManaPoolBlock.MAX_MANA_DILUTED);
 
         StorageCells.addCellHandler(ManaCellHandler.INSTANCE);
-        StorageCells.addCellHandler(new CreativeManaCellHandler());
 
         bus.addListener((FMLCommonSetupEvent event) -> {
             CorporeaNodeDetectors.register(MECorporeaNode::getNode);
@@ -120,7 +96,41 @@ public class AppliedBotanicsForge {
                 P2PTunnelAttunement.registerAttunementTag(ABItems.MANA_P2P_TUNNEL.get());
             });
         });
+    }
 
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> AppliedBotanicsClient::initialize);
+    private void registerGenericAdapters(RegisterCapabilitiesEvent event) {
+        for (var block : BuiltInRegistries.BLOCK) {
+            if (!event.isBlockRegistered(AECapabilities.GENERIC_INTERNAL_INV, block)) {
+                continue;
+            }
+
+            event.registerBlock(BotaniaForgeCapabilities.MANA_RECEIVER, (level, pos, state, blockEntity, context) -> {
+                var genericInv = level.getCapability(AECapabilities.GENERIC_INTERNAL_INV, pos, state, blockEntity,
+                        context);
+                if (genericInv != null) {
+                    return new ManaGenericStackInvStorage(genericInv, level, pos);
+                }
+                return null;
+            }, block);
+            event.registerBlock(BotaniaForgeCapabilities.SPARK_ATTACHABLE,
+                    (level, pos, state, blockEntity, context) -> {
+                        var genericInv = level.getCapability(AECapabilities.GENERIC_INTERNAL_INV, pos, state,
+                                blockEntity, context);
+                        if (genericInv != null) {
+                            return new ManaGenericStackInvStorage(genericInv, level, pos);
+                        }
+                        return null;
+                    }, block);
+        }
+
+        for (var item : BuiltInRegistries.ITEM) {
+            if (!(item instanceof AbstractPortableCell)) {
+                continue;
+            }
+
+            event.registerItem(BotaniaForgeCapabilities.MANA_ITEM, (object, context) -> {
+                return MEStorageManaItem.forItem(object);
+            }, item);
+        }
     }
 }

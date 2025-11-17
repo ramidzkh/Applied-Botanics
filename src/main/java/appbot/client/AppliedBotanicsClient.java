@@ -1,37 +1,37 @@
 package appbot.client;
 
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.util.FastColor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
 import appbot.ABItems;
-import appbot.ABMenus;
-import appbot.ae2.ManaKey;
-import appbot.ae2.ManaKeyType;
+import appbot.AppliedBotanics;
 
-import appeng.api.client.AEKeyRendering;
-import appeng.client.gui.me.common.MEStorageScreen;
-import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.tools.powered.PortableCellItem;
-import appeng.menu.me.common.MEStorageMenu;
 
-public interface AppliedBotanicsClient {
+@Mod(value = AppliedBotanics.MOD_ID, dist = Dist.CLIENT)
+public class AppliedBotanicsClient {
 
-    static void initialize() {
-        var bus = FMLJavaModLoadingContext.get().getModEventBus();
+    public AppliedBotanicsClient(IEventBus bus) {
+        bus.addListener(this::registerItemColors);
+        ManaRenderer.initialize(bus);
+    }
 
-        bus.addListener((RegisterColorHandlersEvent.Item event) -> {
-            for (var tier : ABItems.Tier.values()) {
-                event.register(BasicStorageCell::getColor, ABItems.get(tier).get());
-                event.register(PortableCellItem::getColor, ABItems.getPortable(tier).get());
-            }
-        });
+    private void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        ItemColor cells = (stack, tintIndex) -> {
+            return FastColor.ARGB32.opaque(BasicStorageCell.getColor(stack, tintIndex));
+        };
+        ItemColor portableCells = (stack, tintIndex) -> {
+            return FastColor.ARGB32.opaque(PortableCellItem.getColor(stack, tintIndex));
+        };
 
-        bus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(() -> {
-            AEKeyRendering.register(ManaKeyType.TYPE, ManaKey.class, new ManaRenderer());
-            InitScreens.<MEStorageMenu, MEStorageScreen<MEStorageMenu>>register(ABMenus.PORTABLE_MANA_CELL_TYPE,
-                    MEStorageScreen::new, "/screens/terminals/portable_mana_cell.json");
-        }));
+        for (var tier : ABItems.Tier.values()) {
+            event.register(cells, ABItems.get(tier)::get);
+            event.register(portableCells, ABItems.getPortableCell(tier)::get);
+        }
     }
 }

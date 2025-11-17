@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import appbot.ABMenus;
 import appbot.AppliedBotanics;
@@ -45,8 +44,9 @@ public class PortableManaCellItem extends AbstractPortableCell implements IManaC
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> lines, TooltipFlag advancedTooltips) {
-        super.appendHoverText(stack, level, lines, advancedTooltips);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines,
+            TooltipFlag advancedTooltips) {
+        super.appendHoverText(stack, context, lines, advancedTooltips);
         addCellInformationToTooltip(stack, lines);
     }
 

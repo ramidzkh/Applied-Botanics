@@ -8,14 +8,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
+import vazkii.botania.common.block.BotaniaBlocks;
 import vazkii.botania.common.block.mana.ManaPoolBlock;
 
 public class FluixPool extends ManaPoolBlock {
 
-    public FluixPool(Variant v, Properties builder) {
-        super(v, builder);
+    public FluixPool() {
+        super(ManaPoolBlock.MAX_MANA, true, false, ManaPoolBlock.NORMAL_SHAPE_VARIANT, null,
+                BlockBehaviour.Properties.ofFullCopy(BotaniaBlocks.livingrock));
     }
 
     @Override
@@ -36,5 +40,10 @@ public class FluixPool extends ManaPoolBlock {
     public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
         var pool = (FluixPoolBlockEntity) world.getBlockEntity(pos);
         return pool != null ? pool.calculateComparatorLevel() : 0;
+    }
+
+    @Override
+    public VoxelShape getInnerShape(BlockState state) {
+        return box(1, 1, 1, 15, 6, 15);
     }
 }

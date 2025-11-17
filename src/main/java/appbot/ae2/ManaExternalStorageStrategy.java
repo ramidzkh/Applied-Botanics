@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.ManaReceiver;
@@ -19,23 +20,20 @@ import appeng.api.stacks.AEKey;
 import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.MEStorage;
 import appeng.core.localization.GuiText;
-import appeng.util.BlockApiCache;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
 
-    private final BlockApiCache<ManaReceiver> apiCache;
-    private final Direction fromSide;
+    private final BlockCapabilityCache<ManaReceiver, Direction> apiCache;
 
     public ManaExternalStorageStrategy(ServerLevel level, BlockPos fromPos, Direction fromSide) {
-        this.apiCache = BlockApiCache.create(BotaniaForgeCapabilities.MANA_RECEIVER, level, fromPos);
-        this.fromSide = fromSide;
+        this.apiCache = BlockCapabilityCache.create(BotaniaForgeCapabilities.MANA_RECEIVER, level, fromPos, fromSide);
     }
 
     @Nullable
     @Override
     public MEStorage createWrapper(boolean extractableOnly, Runnable injectOrExtractCallback) {
-        var receiver = apiCache.find(fromSide);
+        var receiver = apiCache.getCapability();
 
         if (receiver == null) {
             // If storage is absent, never query again until the next update.

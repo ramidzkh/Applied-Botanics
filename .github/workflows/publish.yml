@@ -34,11 +34,11 @@ jobs:
       - name: Upload Release Artifact
         uses: softprops/action-gh-release@v1
         with:
-          files: build/distributions/*.jar
+          files: build/libs/*.jar
           tag_name: ${{ github.event.release.tag_name }}
       - name: Upload to external sites
-        run: ./gradlew modrinth
+        run: ./gradlew publishMods
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
-          CURSEFORGE: ${{ secrets.CURSEFORGE }}
-          MODRINTH: ${{ secrets.MODRINTH }}
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}

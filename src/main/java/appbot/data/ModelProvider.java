@@ -6,8 +6,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import appbot.ABBlocks;
 import appbot.ABItems;
@@ -49,11 +49,10 @@ public class ModelProvider extends BlockStateProvider {
                 models().getExistingFile(AppliedBotanics.id("fluix_mana_pool")));
 
         itemModels().basicItem(ABItems.MANA_CELL_HOUSING.get());
-        itemModels().basicItem(ABItems.MANA_CELL_CREATIVE.get());
 
         for (var tier : ABItems.Tier.values()) {
             var cell = ABItems.get(tier);
-            var portableCell = ABItems.getPortable(tier);
+            var portableCell = ABItems.getPortableCell(tier);
             itemModels().basicItem(cell.get()).texture("layer1", STORAGE_CELL_LED);
             itemModels().basicItem(portableCell.get()).texture("layer1", PORTABLE_CELL_LED);
 

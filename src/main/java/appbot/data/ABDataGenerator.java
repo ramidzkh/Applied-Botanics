@@ -5,7 +5,7 @@ import java.util.Set;
 
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public class ABDataGenerator {
 
@@ -19,9 +19,13 @@ public class ABDataGenerator {
                 new BlockTagsProvider(output, lookupProvider, existingFileHelper));
         gen.addProvider(event.includeServer(),
                 new ItemTagsProvider(output, lookupProvider, blockTagsProvider.contentsGetter(), existingFileHelper));
-        gen.addProvider(event.includeServer(), new RecipeProvider(output));
-        gen.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(), List
-                .of(new LootTableProvider.SubProviderEntry(BlockLootTableProvider::new, LootContextParamSets.BLOCK))));
+        gen.addProvider(event.includeServer(), new RecipeProvider(output, lookupProvider));
+        gen.addProvider(event.includeServer(), new LootTableProvider(
+                output,
+                Set.of(),
+                List.of(new LootTableProvider.SubProviderEntry(BlockLootTableProvider::new,
+                        LootContextParamSets.BLOCK)),
+                lookupProvider));
 
         gen.addProvider(event.includeClient(), new ModelProvider(output, existingFileHelper));
     }

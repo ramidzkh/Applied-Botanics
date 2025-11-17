@@ -7,12 +7,12 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import appbot.ABBlocks;
 import appbot.AppliedBotanics;
 
-public class BlockTagsProvider extends net.minecraftforge.common.data.BlockTagsProvider {
+public class BlockTagsProvider extends net.neoforged.neoforge.common.data.BlockTagsProvider {
 
     public BlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
             @Nullable ExistingFileHelper existingFileHelper) {

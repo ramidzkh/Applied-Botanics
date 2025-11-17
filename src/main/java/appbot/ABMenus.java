@@ -1,28 +1,26 @@
 package appbot;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import appeng.api.implementations.menuobjects.IPortableTerminal;
-import appeng.core.AppEng;
+import appeng.client.gui.me.common.MEStorageScreen;
+import appeng.init.client.InitScreens;
 import appeng.menu.implementations.MenuTypeBuilder;
 import appeng.menu.me.common.MEStorageMenu;
 
 public class ABMenus {
 
     public static final MenuType<MEStorageMenu> PORTABLE_MANA_CELL_TYPE = MenuTypeBuilder
-            .create(MEStorageMenu::new, IPortableTerminal.class).build("portable_mana_cell");
+            .create(MEStorageMenu::new, IPortableTerminal.class)
+            .build(AppliedBotanics.id("portable_mana_cell"));
 
+    @SuppressWarnings("RedundantTypeArguments")
     public static void initialize(IEventBus bus) {
-        bus.addListener((RegisterEvent event) -> {
-            if (!event.getRegistryKey().equals(Registries.BLOCK)) {
-                return;
-            }
-
-            ForgeRegistries.MENU_TYPES.register(AppEng.makeId("portable_mana_cell"), PORTABLE_MANA_CELL_TYPE);
+        bus.addListener((RegisterMenuScreensEvent event) -> {
+            InitScreens.<MEStorageMenu, MEStorageScreen<MEStorageMenu>>register(event, PORTABLE_MANA_CELL_TYPE,
+                    MEStorageScreen::new, "/screens/terminals/portable_mana_cell.json");
         });
     }
 }

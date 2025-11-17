@@ -1,0 +1,38 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+issueTrackerURL = "https://github.com/ramidzkh/Applied-Botanics/issues"
+license = "See GitHub repository for details"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "Applied Botanics"
+description = "mana through ae2, what could go wrong"
+updateJSONURL = "https://api.modrinth.com/updates/applied-botanics/forge_updates.json?neoforge=only"
+displayURL = "https://github.com/ramidzkh/Applied-Botanics#readme"
+logoFile = "logo.png"
+authors = "ramidzkh"
+
+[[mixins]]
+config = "appbot.mixins.json"
+
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neo_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "ae2"
+type = "required"
+versionRange = "[19.2.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "botania"
+mandatory = true
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"

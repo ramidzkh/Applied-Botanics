@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -108,9 +106,9 @@ public class ManaCellItem extends Item implements IManaCellItem, AEToolItem {
     }
 
     @Override
-    @ParametersAreNonnullByDefault
-    public void appendHoverText(ItemStack is, @Nullable Level level, List<Component> lines, TooltipFlag tooltipFlag) {
-        addCellInformationToTooltip(is, lines);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
+            TooltipFlag tooltipFlag) {
+        addCellInformationToTooltip(stack, tooltipComponents);
     }
 
     @Override

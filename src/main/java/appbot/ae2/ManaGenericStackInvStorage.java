@@ -1,20 +1,15 @@
 package appbot.ae2;
 
-import java.util.Optional;
-
-import com.google.common.base.Predicates;
 import com.google.common.primitives.Ints;
 
+import org.jetbrains.annotations.UnknownNullability;
+
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
-import vazkii.botania.api.mana.spark.ManaSpark;
 import vazkii.botania.api.mana.spark.SparkAttachable;
 
 import appeng.api.behaviors.GenericInternalInventory;
@@ -34,7 +29,7 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
     }
 
     @Override
-    public Level getManaReceiverLevel() {
+    public @UnknownNullability Level getManaReceiverLevel() {
         return level;
     }
 
@@ -88,15 +83,6 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
     }
 
     @Override
-    public Optional<DyeColor> getColor() {
-        return Optional.of(DyeColor.PURPLE);
-    }
-
-    @Override
-    public void setColor(Optional<DyeColor> color) {
-    }
-
-    @Override
     public boolean canAttachSpark(ItemStack stack) {
         return true;
     }
@@ -107,20 +93,7 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
     }
 
     @Override
-    public ManaSpark getAttachedSpark() {
-        var sparkPos = pos.above();
-        var sparks = level.getEntitiesOfClass(Entity.class, new AABB(sparkPos, sparkPos.offset(1, 1, 1)),
-                Predicates.instanceOf(ManaSpark.class));
-
-        if (sparks.size() == 1) {
-            return (ManaSpark) sparks.get(0);
-        }
-
-        return null;
-    }
-
-    @Override
-    public boolean areIncomingTranfersDone() {
+    public boolean areIncomingTransfersDone() {
         return !isFull();
     }
 

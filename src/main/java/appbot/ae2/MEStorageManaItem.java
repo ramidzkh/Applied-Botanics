@@ -82,17 +82,22 @@ public class MEStorageManaItem implements ManaItem {
     }
 
     @Override
-    public boolean canReceiveManaFromItem(ItemStack otherStack) {
+    public boolean acceptDispatchedManaFromItem(ItemStack otherStack) {
         return true;
     }
 
     @Override
-    public boolean canExportManaToPool(BlockEntity pool) {
+    public boolean refuseRequestedManaFromItem(ItemStack otherStack) {
+        return false;
+    }
+
+    @Override
+    public boolean canDrainManaToPool(BlockEntity pool) {
         return true;
     }
 
     @Override
-    public boolean canExportManaToItem(ItemStack otherStack) {
+    public boolean canSendRequestedManaToItem(ItemStack otherStack) {
         return true;
     }
 

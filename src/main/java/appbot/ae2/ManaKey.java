@@ -4,8 +4,9 @@ import java.text.NumberFormat;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +23,7 @@ public class ManaKey extends AEKey {
 
     public static final AEKey KEY = new ManaKey();
 
-    private static final ResourceLocation ID = new ResourceLocation("botania", "mana");
+    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("botania", "mana");
 
     private ManaKey() {
     }
@@ -38,7 +39,7 @@ public class ManaKey extends AEKey {
     }
 
     @Override
-    public CompoundTag toTag() {
+    public CompoundTag toTag(HolderLookup.Provider registries) {
         return new CompoundTag();
     }
 
@@ -50,10 +51,6 @@ public class ManaKey extends AEKey {
     @Override
     public ResourceLocation getId() {
         return ID;
-    }
-
-    @Override
-    public void writeToPacket(FriendlyByteBuf data) {
     }
 
     @Override
@@ -78,6 +75,15 @@ public class ManaKey extends AEKey {
     @Override
     protected Component computeDisplayName() {
         return ManaKeyType.MANA;
+    }
+
+    @Override
+    public void writeToPacket(RegistryFriendlyByteBuf data) {
+    }
+
+    @Override
+    public boolean hasComponents() {
+        return false;
     }
 
     @Override

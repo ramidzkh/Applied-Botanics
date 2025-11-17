@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -129,10 +130,10 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         try {
             saving = true;
-            super.saveAdditional(tag);
+            super.saveAdditional(tag, registries);
         } finally {
             saving = false;
         }
@@ -141,8 +142,8 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         this.getMainNode().loadFromNBT(tag);
     }
 

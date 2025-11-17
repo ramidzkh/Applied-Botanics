@@ -2,10 +2,10 @@ package appbot.item.cell;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
+import appbot.AppliedBotanicsForge;
 import appbot.ae2.ManaKey;
 import appbot.ae2.ManaKeyType;
 
@@ -20,8 +20,6 @@ import appeng.core.definitions.AEItems;
 
 public class ManaCellInventory implements StorageCell {
 
-    private static final String AMOUNT = "amount";
-
     private final IManaCellItem cellType;
     private final ItemStack i;
     @Nullable
@@ -35,12 +33,8 @@ public class ManaCellInventory implements StorageCell {
         this.cellType = cellType;
         this.i = o;
         this.container = container;
-        this.storedMana = getTag().getLong(AMOUNT);
+        this.storedMana = this.i.getOrDefault(AppliedBotanicsForge.MANA.get(), 0L);
         this.hasVoidUpgrade = cellType.getUpgrades(o).isInstalled(AEItems.VOID_CARD);
-    }
-
-    private CompoundTag getTag() {
-        return this.i.getOrCreateTag();
     }
 
     @Override
@@ -123,12 +117,7 @@ public class ManaCellInventory implements StorageCell {
             return;
         }
 
-        if (this.storedMana <= 0) {
-            this.getTag().remove(AMOUNT);
-        } else {
-            this.getTag().putLong(AMOUNT, this.storedMana);
-        }
-
+        this.i.set(AppliedBotanicsForge.MANA, this.storedMana);
         this.isPersisted = true;
     }
 

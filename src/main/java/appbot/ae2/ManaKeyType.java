@@ -1,13 +1,14 @@
 package appbot.ae2;
 
+import com.mojang.serialization.MapCodec;
+
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 import appbot.AppliedBotanics;
-import vazkii.botania.common.block.block_entity.mana.ManaPoolBlockEntity;
+import vazkii.botania.common.block.mana.ManaPoolBlock;
 
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.AEKeyType;
@@ -17,21 +18,15 @@ public class ManaKeyType extends AEKeyType {
     public static final Component MANA = Component.translatable("gui." + AppliedBotanics.MOD_ID + ".mana");
 
     public static final AEKeyType TYPE = new ManaKeyType();
+    private static final MapCodec<? extends AEKey> CODEC = MapCodec.unit(ManaKey.KEY);
 
     private ManaKeyType() {
         super(AppliedBotanics.id("mana"), ManaKey.class, MANA);
     }
 
-    @Nullable
     @Override
-    public AEKey readFromPacket(FriendlyByteBuf input) {
-        return ManaKey.KEY;
-    }
-
-    @Nullable
-    @Override
-    public AEKey loadKeyFromTag(CompoundTag tag) {
-        return ManaKey.KEY;
+    public MapCodec<? extends AEKey> codec() {
+        return CODEC;
     }
 
     @Override
@@ -45,8 +40,13 @@ public class ManaKeyType extends AEKeyType {
     }
 
     @Override
+    public @Nullable AEKey readFromPacket(RegistryFriendlyByteBuf input) {
+        return ManaKey.KEY;
+    }
+
+    @Override
     public int getAmountPerUnit() {
-        return ManaPoolBlockEntity.MAX_MANA;
+        return ManaPoolBlock.MAX_MANA;
     }
 
     @Override

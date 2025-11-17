@@ -2,25 +2,18 @@ package appbot.ae2;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.google.common.base.Predicates;
 
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 
 import appbot.AppliedBotanics;
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
-import vazkii.botania.api.mana.spark.ManaSpark;
 import vazkii.botania.api.mana.spark.SparkAttachable;
 
 import appeng.api.config.Actionable;
@@ -38,7 +31,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
     public ManaP2PTunnelPart(IPartItem<?> partItem) {
         super(partItem, BotaniaForgeCapabilities.MANA_RECEIVER);
         inputHandler = new InputHandler();
-        outputHandler = emptyHandler = new EmptyHandler();
+        emptyHandler = new EmptyHandler();
     }
 
     @PartModels
@@ -78,20 +71,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         }
 
         @Override
-        public ManaSpark getAttachedSpark() {
-            var sparkPos = getHost().getLocation().getPos().above();
-            var sparks = getLevel().getEntitiesOfClass(Entity.class, new AABB(sparkPos, sparkPos.offset(1, 1, 1)),
-                    Predicates.instanceOf(ManaSpark.class));
-
-            if (sparks.size() == 1) {
-                return (ManaSpark) sparks.get(0);
-            }
-
-            return null;
-        }
-
-        @Override
-        public boolean areIncomingTranfersDone() {
+        public boolean areIncomingTransfersDone() {
             for (var output : getOutputs()) {
                 try (var guard = output.getAdjacentCapability()) {
                     var receiver = guard.get();
@@ -201,15 +181,6 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         }
 
         @Override
-        public Optional<DyeColor> getColor() {
-            return Optional.of(DyeColor.PURPLE);
-        }
-
-        @Override
-        public void setColor(Optional<DyeColor> color) {
-        }
-
-        @Override
         public int insert(int amount, Actionable mode) {
             var inserted = 0;
 
@@ -228,7 +199,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         }
     }
 
-    private class EmptyHandler implements ManaReceiver, SafeMana {
+    private class EmptyHandler implements ManaReceiver {
 
         @Override
         public Level getManaReceiverLevel() {
@@ -257,16 +228,6 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         @Override
         public boolean canReceiveManaFromBursts() {
             return false;
-        }
-
-        @Override
-        public int insert(int amount, Actionable mode) {
-            return 0;
-        }
-
-        @Override
-        public int extract(int amount, Actionable mode) {
-            return 0;
         }
     }
 }

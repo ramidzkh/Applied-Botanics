@@ -1,156 +1,177 @@
 plugins {
-    id 'dev.architectury.loom' version '1.11-SNAPSHOT'
-    id 'com.diffplug.spotless' version '8.0.0'
+    id "java-library"
+    id "net.neoforged.moddev" version "2.0.116"
+    id "idea"
+    id "com.diffplug.spotless" version "8.0.0"
+    id "me.modmuss50.mod-publish-plugin" version "1.0.0"
 }
 
 group = "me.ramidzkh"
 version = System.getenv("APPBOT_VERSION") ?: "0.0.0"
 
 base {
-    archivesName = "$project.name"
+    archivesName = mod_id
 }
 
-loom {
-    silentMojangMappingsLicense()
+// Mojang ships Java 21 to end users in 1.21.10, so mods should target Java 21.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-    forge {
-        mixinConfig("appbot.mixins.json")
+neoForge {
+    // Specify the version of NeoForge to use.
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
     }
 
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
     runs {
+        client {
+            client()
+        }
+
+        server {
+            server()
+            programArgument "--nogui"
+        }
+
         data {
             data()
-            programArgs "--all", "--mod", "appbot"
-            programArgs "--output", file("src/generated/resources").absolutePath
-            programArgs "--existing", file("src/main/resources").absolutePath
+
+            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+            // gameDirectory = project.file("run-data")
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            programArguments.addAll "--mod", project.mod_id, "--all", "--output", file("src/generated/resources/").getAbsolutePath(), "--existing", file("src/main/resources/").getAbsolutePath()
+        }
+
+        // applies to all the run configs above
+        configureEach {
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            systemProperty "forge.logging.markers", "REGISTRIES"
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        // define mod <-> source bindings
+        // these are used to tell the game which sources are for which mod
+        // multi mod projects should define one per mod
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
         }
     }
 }
 
 repositories {
+    maven {
+        url = "https://maven.blamejared.com"
+    }
+
     exclusiveContent {
         forRepository {
             maven {
-                name = "Modmaven"
-                url = uri("https://modmaven.dev/")
+                url = "https://maven.theillusivec4.top/"
             }
         }
 
         filter {
-            includeGroup("appeng")
-            includeGroup("vazkii.botania")
-            includeGroup("vazkii.patchouli")
-            includeGroup("mezz.jei")
+            includeGroup "top.theillusivec4.curios"
         }
     }
 
     exclusiveContent {
         forRepository {
             maven {
-                name = "theillusivec4"
-                url = uri("https://maven.theillusivec4.top/")
+                url = "https://maven.terraformersmc.com/"
             }
         }
 
         filter {
-            includeGroup("top.theillusivec4.curios")
+            includeGroup "dev.emi"
         }
     }
 
     exclusiveContent {
         forRepository {
             maven {
-                name = "TerraformersMC"
-                url = uri("https://maven.terraformersmc.com/")
+                url = "https://cursemaven.com/"
             }
         }
 
         filter {
-            includeGroup("dev.emi")
-        }
-    }
-
-    exclusiveContent {
-        forRepository {
-            maven {
-                name = "shedaniel"
-                url = uri("https://maven.shedaniel.me/")
-            }
-        }
-
-        filter {
-            includeGroup("me.shedaniel")
-            includeGroup("me.shedaniel.cloth")
+            includeGroup "curse.maven"
         }
     }
 }
 
 dependencies {
-    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
+    implementation("org.appliedenergistics:appliedenergistics2:${ae2_version}")
+    implementation("vazkii.botania:botania-neoforge-${minecraft_version}:${botania_version}")
 
-    minecraft("net.minecraft:minecraft:$minecraft_version")
-    mappings(loom.officialMojangMappings())
-    forge("net.minecraftforge:forge:$forge_version")
+    compileOnly("mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}")
+    compileOnly("dev.emi:emi-neoforge:${emi_version}")
 
-    modImplementation("appeng:appliedenergistics2-forge:$ae2_version")
-    modImplementation("vazkii.botania:Botania:$minecraft_version-$botania_version_forge")
-
-    modCompileOnly("mezz.jei:jei-$minecraft_version-common-api:$jei_version")
-    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:$rei_version")
-    modCompileOnly("dev.emi:emi-forge:$emi_version:api")
-
-    modRuntimeOnly("org.appliedenergistics:guideme:$guideme_version")
-    modRuntimeOnly("vazkii.patchouli:Patchouli:$minecraft_version-$patchouli_version-FORGE")
-    modRuntimeOnly("top.theillusivec4.curios:curios-forge:$curios_version+$minecraft_version")
-
-    // dev: choose runtime xei mod(s)
-    def xei = ["jei", "emi"]
+    // dev: choose dev runtime xei mod(s)
+    def xei = ["emi"]
 
     if (xei.remove("jei")) {
-        modRuntimeOnly("mezz.jei:jei-$minecraft_version-forge:$jei_version") {
-            transitive = false
-        }
-    }
-
-    if (xei.remove("rei")) {
-        modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-forge:$rei_version")
+        runtimeOnly("mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}")
+        runtimeOnly("curse.maven:ae2-jei-integration-1074338:${jei_ae2_integration_id}")
     }
 
     if (xei.remove("emi")) {
-        modRuntimeOnly("dev.emi:emi-forge:$emi_version")
+        runtimeOnly("dev.emi:emi-neoforge:${emi_version}")
     }
 
     if (!xei.isEmpty()) {
         throw new GradleException("Unknown xei mods: $xei")
     }
+
+    runtimeOnly("curse.maven:jade-324717:${jade_id}")
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDir(file("src/generated/resources"))
-        }
-    }
-}
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir "src/generated/resources" }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            neo_version            : neo_version,
+            mod_id                 : mod_id,
+            mod_version            : project.version,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
 }
+// Include the output of "generateModMetadata" as an input directory for the build
+// this works with both building through Gradle and the IDE.
+sourceSets.main.resources.srcDir generateModMetadata
+// To avoid having to run "generateModMetadata" manually, make it run on every project reload
+neoForge.ideSyncTask generateModMetadata
 
 tasks.withType(JavaCompile).configureEach {
-    options.release = 17
-    options.encoding = "UTF-8"
+    options.encoding = "UTF-8" // Use the UTF-8 charset for Java compilation
 }
 
-processResources {
-    inputs.property 'version', project.version
-
-    from file('LICENSE')
-    exclude '.cache'
-
-    filesMatching('META-INF/mods.toml') {
-        expand version: inputs.properties.version
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
     }
 }
 
@@ -171,5 +192,35 @@ spotless {
     format("json") {
         target("src/main/resources/**/*.json")
         prettier().config(parser: "json")
+    }
+}
+
+////////////////
+// mod-publish-plugin
+publishMods {
+    displayName = project.version
+    changelog = "View changelog at [the release page](https://github.com/ramidzkh/Applied-Botanics/releases/tag/$project.version)"
+
+    if (project.version.contains("alpha")) {
+        type = ALPHA
+    } else if (project.version.contains("beta")) {
+        type = BETA
+    } else {
+        type = STABLE
+    }
+
+    file = jar.archiveFile
+    modLoaders.add("neoforge")
+
+    curseforge {
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        projectId = "610632"
+        minecraftVersions.add(minecraft_version)
+    }
+
+    modrinth {
+        accessToken = providers.environmentVariable("MODRINTH_API_KEY")
+        projectId = "545hUrw9"
+        minecraftVersions.add(minecraft_version)
     }
 }

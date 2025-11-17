@@ -3,11 +3,12 @@ package appbot.data;
 import static appbot.AppliedBotanics.id;
 
 import java.util.Locale;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 
@@ -17,21 +18,20 @@ import vazkii.botania.common.item.BotaniaItems;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
-import appeng.datagen.providers.recipes.AE2RecipeProvider;
 
-public class RecipeProvider extends AE2RecipeProvider {
+public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
-    public RecipeProvider(PackOutput output) {
-        super(output);
+    public RecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries);
     }
 
     @Override
-    public void buildRecipes(Consumer<FinishedRecipe> exporter) {
+    protected void buildRecipes(RecipeOutput recipeOutput) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ABItems.FLUIX_MANA_POOL.get())
                 .requires(BotaniaBlocks.fabulousPool)
                 .requires(AEBlocks.INTERFACE)
                 .unlockedBy("has_interface", has(AEBlocks.INTERFACE))
-                .save(exporter, id("fluix_mana_pool"));
+                .save(recipeOutput, id("fluix_mana_pool"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ABItems.MANA_CELL_HOUSING.get())
                 .pattern("QSQ")
@@ -41,7 +41,7 @@ public class RecipeProvider extends AE2RecipeProvider {
                 .define('S', BotaniaItems.lifeEssence)
                 .define('I', BotaniaItems.manaSteel)
                 .unlockedBy("has_life_essence", has(BotaniaItems.lifeEssence))
-                .save(exporter, id("mana_cell_housing"));
+                .save(recipeOutput, id("mana_cell_housing"));
 
         for (var tier : ABItems.Tier.values()) {
             var cellComponent = switch (tier) {
@@ -58,15 +58,15 @@ public class RecipeProvider extends AE2RecipeProvider {
                     .requires(ABItems.MANA_CELL_HOUSING.get())
                     .requires(cellComponent)
                     .unlockedBy("has_cell_component" + tierName, has(cellComponent))
-                    .save(exporter);
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ABItems.getPortable(tier).get())
-                    .requires(AEBlocks.CHEST)
+                    .save(recipeOutput);
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ABItems.getPortableCell(tier).get())
+                    .requires(AEBlocks.ME_CHEST)
                     .requires(cellComponent)
                     .requires(AEBlocks.ENERGY_CELL)
                     .requires(ABItems.MANA_CELL_HOUSING.get())
                     .unlockedBy("has_mana_cell_housing", has(ABItems.MANA_CELL_HOUSING.get()))
                     .unlockedBy("has_energy_cell", has(AEBlocks.ENERGY_CELL))
-                    .save(exporter);
+                    .save(recipeOutput);
         }
     }
 }

@@ -25,14 +25,13 @@ class Pool implements SafeMana {
     @Override
     public int extract(int amount, Actionable mode) {
         var be = (ManaPoolBlockEntity) (Object) this;
+        amount = Math.min(amount, be.getCurrentMana());
 
-        if (mode == Actionable.SIMULATE) {
-            return Math.min(amount, be.getCurrentMana());
+        if (mode == Actionable.MODULATE) {
+            be.receiveMana(-amount);
         }
 
-        var old = be.getCurrentMana();
-        be.receiveMana(-amount);
-        return old - be.getCurrentMana();
+        return amount;
     }
 }
 

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 
 import vazkii.botania.api.BotaniaForgeCapabilities;
 import vazkii.botania.api.mana.ManaReceiver;
@@ -17,21 +18,18 @@ import appeng.api.behaviors.StackTransferContext;
 import appeng.api.config.Actionable;
 import appeng.api.stacks.AEKey;
 import appeng.api.storage.StorageHelper;
-import appeng.util.BlockApiCache;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ManaStorageExportStrategy implements StackExportStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ManaStorageExportStrategy.class);
 
-    private final BlockApiCache<ManaReceiver> apiCache;
-    private final Direction fromSide;
+    private final BlockCapabilityCache<ManaReceiver, Direction> apiCache;
 
     public ManaStorageExportStrategy(ServerLevel level,
             BlockPos fromPos,
             Direction fromSide) {
-        this.apiCache = BlockApiCache.create(BotaniaForgeCapabilities.MANA_RECEIVER, level, fromPos);
-        this.fromSide = fromSide;
+        this.apiCache = BlockCapabilityCache.create(BotaniaForgeCapabilities.MANA_RECEIVER, level, fromPos, fromSide);
     }
 
     @Override
@@ -40,7 +38,7 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
             return 0;
         }
 
-        var receiver = SafeMana.conv(apiCache.find(fromSide));
+        var receiver = SafeMana.conv(apiCache.getCapability());
 
         if (receiver == null) {
             return 0;
@@ -93,7 +91,7 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
             return 0;
         }
 
-        var receiver = SafeMana.conv(apiCache.find(fromSide));
+        var receiver = SafeMana.conv(apiCache.getCapability());
 
         if (receiver == null) {
             return 0;
