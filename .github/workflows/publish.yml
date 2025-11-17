@@ -40,5 +40,5 @@ jobs:
         run: ./gradlew publishMods
         env:
           APPBOT_VERSION: ${{ github.event.release.tag_name }}
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}

@@ -221,7 +221,7 @@ publishMods {
     }
 
     modrinth {
-        accessToken = providers.environmentVariable("MODRINTH_API_KEY")
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         projectId = "545hUrw9"
         minecraftVersions.add(minecraft_version)
         requires("ae2")
