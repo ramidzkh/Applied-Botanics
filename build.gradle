@@ -216,11 +216,15 @@ publishMods {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         projectId = "610632"
         minecraftVersions.add(minecraft_version)
+        requires("applied-energistics-2")
+        requires("botania")
     }
 
     modrinth {
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         projectId = "545hUrw9"
         minecraftVersions.add(minecraft_version)
+        requires("ae2")
+        requires("botania")
     }
 }
