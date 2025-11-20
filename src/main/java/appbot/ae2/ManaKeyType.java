@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
@@ -41,6 +43,11 @@ public class ManaKeyType extends AEKeyType {
 
     @Override
     public @Nullable AEKey readFromPacket(RegistryFriendlyByteBuf input) {
+        return ManaKey.KEY;
+    }
+
+    @Override
+    public @Nullable AEKey loadKeyFromTag(HolderLookup.Provider registries, CompoundTag tag) {
         return ManaKey.KEY;
     }
 

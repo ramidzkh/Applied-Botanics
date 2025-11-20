@@ -33,6 +33,9 @@ import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.parts.RegisterPartCapabilitiesEvent;
 import appeng.api.stacks.AEKeyTypes;
 import appeng.api.storage.StorageCells;
+import appeng.api.upgrades.Upgrades;
+import appeng.core.definitions.AEItems;
+import appeng.core.localization.GuiText;
 import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.parts.automation.StackWorldBehaviors;
 
@@ -91,6 +94,12 @@ public class AppliedBotanicsForge {
             CorporeaNodeDetectors.register(MECorporeaNode::getNode);
 
             event.enqueueWork(() -> {
+                for (var tier : ABItems.Tier.values()) {
+                    Upgrades.add(AEItems.VOID_CARD, ABItems.get(tier), 1, GuiText.StorageCells.getTranslationKey());
+                    Upgrades.add(AEItems.VOID_CARD, ABItems.getPortableCell(tier), 1,
+                            GuiText.StorageCells.getTranslationKey());
+                }
+
                 P2PTunnelAttunement.registerAttunementTag(ABItems.MANA_P2P_TUNNEL.get());
 
                 StorageCells.addCellHandler(ManaCellHandler.INSTANCE);
