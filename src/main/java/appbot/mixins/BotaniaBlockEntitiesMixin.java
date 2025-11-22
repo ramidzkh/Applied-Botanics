@@ -16,7 +16,7 @@ import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.common.block.block_entity.BotaniaBlockEntities;
 import vazkii.botania.common.lib.LibBlockNames;
 
-@Mixin(value = BotaniaBlockEntities.class, remap = false)
+@Mixin(value = BotaniaBlockEntities.class)
 public abstract class BotaniaBlockEntitiesMixin {
 
     @ModifyVariable(method = "type(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", at = @At("HEAD"), index = 1, argsOnly = true)

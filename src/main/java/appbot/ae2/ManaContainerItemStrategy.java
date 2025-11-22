@@ -20,10 +20,6 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
 
     @Override
     public @Nullable GenericStack getContainedStack(ItemStack stack) {
-        if (stack.isEmpty()) {
-            return null;
-        }
-
         var item = XplatAbstractions.INSTANCE.findManaItem(stack);
 
         if (item != null) {

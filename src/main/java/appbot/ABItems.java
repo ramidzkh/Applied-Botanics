@@ -22,7 +22,6 @@ import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.parts.PartModels;
 import appeng.core.definitions.AEItems;
 import appeng.items.parts.PartItem;
-import appeng.items.parts.PartModelsHelper;
 
 public class ABItems {
 
@@ -76,7 +75,7 @@ public class ABItems {
                     256, 2.5));
 
     public static final DeferredItem<PartItem<ManaP2PTunnelPart>> MANA_P2P_TUNNEL = Util.make(() -> {
-        PartModels.registerModels(PartModelsHelper.createModels(ManaP2PTunnelPart.class));
+        PartModels.registerModels(ManaP2PTunnelPart.getModels().stream().flatMap(x -> x.getModels().stream()).toList());
         return ITEMS.register("mana_p2p_tunnel",
                 () -> new PartItem<>(new Item.Properties(), ManaP2PTunnelPart.class, ManaP2PTunnelPart::new));
     });

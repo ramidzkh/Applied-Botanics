@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import vazkii.botania.common.block.block_entity.mana.ManaPoolBlockEntity;
 
-@Mixin(value = ManaPoolBlockEntity.class, remap = false)
+@Mixin(ManaPoolBlockEntity.class)
 public interface ManaPoolBlockEntityAccessor {
 
     @Accessor

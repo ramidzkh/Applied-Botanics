@@ -16,7 +16,7 @@ public class ManaCellHandler implements ICellHandler {
 
     @Override
     public boolean isCell(ItemStack is) {
-        return !is.isEmpty() && is.getItem() instanceof IManaCellItem;
+        return is.getItem() instanceof IManaCellItem;
     }
 
     @Nullable
