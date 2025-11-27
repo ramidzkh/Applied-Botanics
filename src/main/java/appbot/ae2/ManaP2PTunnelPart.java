@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.UnknownNullability;
 import org.joml.Matrix3d;
+import org.joml.Vector3f;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -157,16 +158,11 @@ public class ManaP2PTunnelPart extends P2PTunnelPart<ManaP2PTunnelPart> implemen
         float xrot, yrot;
 
         {
-            var sideInput = input.getSide();
-            var sideOutput = output.getSide();
+            var originInput = getFaceCentre(input.getBlockEntity().getBlockPos(), input.getSide());
+            var originOutput = getFaceCentre(output.getBlockEntity().getBlockPos(), output.getSide());
 
-            var originInput = Vec3.atCenterOf(input.getBlockEntity().getBlockPos())
-                    .add(Vec3.atLowerCornerOf(sideInput.getNormal()).scale(0.5)).toVector3f();
-            var originOutput = Vec3.atCenterOf(output.getBlockEntity().getBlockPos())
-                    .add(Vec3.atLowerCornerOf(sideOutput.getNormal()).scale(0.5)).toVector3f();
-
-            var r = onb(sideOutput, output.getOrientation())
-                    .mul(onb(sideInput, input.getOrientation()).transpose());
+            var r = onb(output.getSide(), output.getOrientation())
+                    .mul(onb(input.getSide(), input.getOrientation()).transpose());
 
             moveTo = new Vec3(hit.getLocation().toVector3f().sub(originInput).mul(r).add(originOutput));
             directionTo = new Vec3(burst.getDeltaMovement().toVector3f().mul(r)).scale(-1);
@@ -208,10 +204,16 @@ public class ManaP2PTunnelPart extends P2PTunnelPart<ManaP2PTunnelPart> implemen
         burst.getBurstSourcePosition().ifPresent(newBurst::setBurstSourcePosition);
         newBurst.setSourceLens(burst.getSourceLens());
         newBurst.setTicksExisted(burst.getTicksExisted() + ManaP2PTunnelPart.EXTRA_TICKS_EXISTED);
+        newBurst.setShooterUUID(burst.getShooterUUID());
 
         level.addFreshEntity(newBurst);
         level.playSound(null, moveTo.x, moveTo.y, moveTo.z, BotaniaSounds.spreaderFire, SoundSource.BLOCKS, 0.05F,
                 0.7F + 0.3F * (float) Math.random());
+    }
+
+    private static Vector3f getFaceCentre(BlockPos pos, Direction dir) {
+        return new Vector3f(pos.getX() + (float) (1 + dir.getStepX()) / 2,
+                pos.getY() + (float) (1 + dir.getStepY()) / 2, pos.getZ() + (float) (1 + dir.getStepZ()) / 2);
     }
 
     private static Matrix3d onb(Direction a, Direction b) {
