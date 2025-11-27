@@ -1,42 +1,60 @@
 package appbot.ae2;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
+import org.joml.Matrix3d;
+import org.joml.Vector3f;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import appbot.AppliedBotanics;
-import vazkii.botania.api.BotaniaForgeCapabilities;
-import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
-import vazkii.botania.api.mana.spark.SparkAttachable;
+import vazkii.botania.common.entity.BotaniaEntities;
+import vazkii.botania.common.entity.ManaBurstEntity;
+import vazkii.botania.common.handler.BotaniaSounds;
 
 import appeng.api.config.Actionable;
+import appeng.api.config.PowerMultiplier;
+import appeng.api.orientation.BlockOrientation;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
-import appeng.items.parts.PartModels;
-import appeng.parts.p2p.CapabilityP2PTunnelPart;
+import appeng.core.AEConfig;
+import appeng.parts.AEBasePart;
 import appeng.parts.p2p.P2PModels;
+import appeng.parts.p2p.P2PTunnelPart;
+import appeng.util.InteractionUtil;
 
-public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart, ManaReceiver> {
+public class ManaP2PTunnelPart extends P2PTunnelPart<ManaP2PTunnelPart> implements ManaReceiver, SafeMana {
+
+    private static final double MANA_RETAINED = 0.95;
+    private static final int EXTRA_TICKS_EXISTED = 1;
 
     private static final P2PModels MODELS = new P2PModels(AppliedBotanics.id("part/mana_p2p_tunnel"));
-    private final SparkAttachable sparkAttachable = new P2PSparkAttachable();
+
+    private byte spin;
 
     public ManaP2PTunnelPart(IPartItem<?> partItem) {
-        super(partItem, BotaniaForgeCapabilities.MANA_RECEIVER);
-        inputHandler = new InputHandler();
-        emptyHandler = new EmptyHandler();
+        super(partItem);
     }
 
-    @PartModels
     public static List<IPartModel> getModels() {
         return MODELS.getModels();
+    }
+
+    @Override
+    protected float getPowerDrainPerTick() {
+        return 2.0f;
     }
 
     @Override
@@ -44,190 +62,178 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
         return MODELS.getModel(this.isPowered(), this.isActive());
     }
 
-    @Nullable
-    public SparkAttachable getSparkAttachable() {
-        return isOutput() ? null : sparkAttachable;
+    @Override
+    public void readFromNBT(CompoundTag data, HolderLookup.Provider registries) {
+        super.readFromNBT(data, registries);
+        spin = data.getByte("spin");
     }
 
-    private class P2PSparkAttachable implements SparkAttachable {
+    @Override
+    public void writeToNBT(CompoundTag data, HolderLookup.Provider registries) {
+        super.writeToNBT(data, registries);
+        data.putByte("spin", spin);
+    }
 
-        @Override
-        public boolean canAttachSpark(ItemStack stack) {
+    @Override
+    public boolean onUseWithoutItem(Player player, Vec3 pos) {
+        if (InteractionUtil.canWrenchRotate(player.getInventory().getSelected())) {
+            if (!isClientSide()) {
+                this.spin = (byte) ((this.spin + 1) % 4);
+                this.getHost().markForUpdate();
+                this.getHost().markForSave();
+            }
             return true;
-        }
-
-        @Override
-        public int getAvailableSpaceForMana() {
-            var space = 0;
-
-            for (var output : getOutputs()) {
-                try (var guard = output.getAdjacentCapability()) {
-                    var receiver = guard.get();
-                    space += ManaHelper.getCapacity(receiver);
-                }
-            }
-
-            return space;
-        }
-
-        @Override
-        public boolean areIncomingTransfersDone() {
-            for (var output : getOutputs()) {
-                try (var guard = output.getAdjacentCapability()) {
-                    var receiver = guard.get();
-
-                    if (receiver.canReceiveManaFromBursts() && !receiver.isFull()) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+        } else {
+            return super.onUseWithoutItem(player, pos);
         }
     }
 
-    private class InputHandler implements ManaReceiver, ManaPool, SafeMana {
+    @Override
+    public void onPlacement(Player player) {
+        super.onPlacement(player);
 
-        @Override
-        public Level getManaReceiverLevel() {
-            return getLevel();
-        }
-
-        @Override
-        public BlockPos getManaReceiverPos() {
-            return getHost().getLocation().getPos();
-        }
-
-        @Override
-        public int getCurrentMana() {
-            return 0;
-        }
-
-        @Override
-        public boolean isFull() {
-            for (var output : getOutputs()) {
-                try (var guard = output.getAdjacentCapability()) {
-                    if (!guard.get().isFull()) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        @Override
-        public void receiveMana(int mana) {
-            if (mana <= 0) {
-                // if mana < 0, they're getting free mana...
-                return;
-            }
-
-            var outputs = getOutputStream()
-                    .filter(part -> {
-                        try (var guard = part.getAdjacentCapability()) {
-                            var receiver = guard.get();
-                            return receiver.canReceiveManaFromBursts() && !receiver.isFull();
-                        }
-                    })
-                    .collect(Collectors.toList());
-
-            if (outputs.isEmpty()) {
-                return;
-            }
-
-            Collections.shuffle(outputs);
-
-            deductTransportCost(mana / 100, ManaKeyType.TYPE);
-            var manaForEach = mana / outputs.size();
-            var spill = mana % outputs.size();
-
-            for (var output : outputs) {
-                try (var guard = output.getAdjacentCapability()) {
-                    guard.get().receiveMana(manaForEach + (spill-- > 0 ? 1 : 0));
-                }
-            }
-        }
-
-        @Override
-        public boolean canReceiveManaFromBursts() {
-            for (var output : getOutputs()) {
-                try (var guard = output.getAdjacentCapability()) {
-                    var result = guard.get();
-
-                    if (result.canReceiveManaFromBursts()) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        @Override
-        public boolean isOutputtingPower() {
-            return false;
-        }
-
-        @Override
-        public int getMaxMana() {
-            return getOutputStream()
-                    .map(part -> {
-                        try (var guard = part.getAdjacentCapability()) {
-                            return ManaHelper.getCapacity(guard.get());
-                        }
-                    })
-                    .reduce(0, Integer::sum);
-        }
-
-        @Override
-        public int insert(int amount, Actionable mode) {
-            var inserted = 0;
-
-            for (var output : getOutputs()) {
-                try (var guard = output.getAdjacentCapability()) {
-                    inserted += SafeMana.conv(guard.get()).insert(amount - inserted, mode);
-                }
-            }
-
-            return inserted;
-        }
-
-        @Override
-        public int extract(int amount, Actionable mode) {
-            return 0;
+        if (getSide().getAxis() == Direction.Axis.Y) {
+            this.spin = (byte) (Mth.floor(player.getYRot() * 4F / 360F + 2.5D) & 3);
         }
     }
 
-    private class EmptyHandler implements ManaReceiver {
+    // <editor-fold desc="Fake ManaReceiver">
+    @Override
+    public @UnknownNullability Level getManaReceiverLevel() {
+        return getLevel();
+    }
 
-        @Override
-        public Level getManaReceiverLevel() {
-            return getLevel();
+    @Override
+    public BlockPos getManaReceiverPos() {
+        return getBlockEntity().getBlockPos();
+    }
+
+    @Override
+    public int getCurrentMana() {
+        return 0;
+    }
+
+    @Override
+    public boolean isFull() {
+        return !isActive() || isOutput() || getOutputStream().noneMatch(AEBasePart::isActive);
+    }
+
+    @Override
+    public void receiveMana(int mana) {
+        // voids mana, we want bursts only
+    }
+
+    @Override
+    public boolean canReceiveManaFromBursts() {
+        return !isFull();
+    }
+
+    @Override
+    public int insert(int amount, Actionable mode) {
+        return 0;
+    }
+
+    @Override
+    public int extract(int amount, Actionable mode) {
+        return 0;
+    }
+    // </editor-fold>
+
+    public void receiveManaFromBurst(ManaBurstEntity burst, BlockHitResult hit) {
+        var node = getMainNode().getNode();
+        var mana = burst.getMana();
+
+        if (node == null || isFull() || mana <= 0) {
+            return;
         }
 
-        @Override
-        public BlockPos getManaReceiverPos() {
-            return getHost().getLocation().getPos();
+        var outputs = getOutputStream().filter(AEBasePart::isActive).toList();
+        if (outputs.isEmpty())
+            return;
+
+        var input = this;
+        var output = outputs.get(getLevel().getRandom().nextInt(outputs.size()));
+
+        Vec3 moveTo, directionTo;
+        float xrot, yrot;
+
+        {
+            var originInput = getFaceCentre(input.getBlockEntity().getBlockPos(), input.getSide());
+            var originOutput = getFaceCentre(output.getBlockEntity().getBlockPos(), output.getSide());
+
+            var r = onb(output.getSide(), output.getOrientation())
+                    .mul(onb(input.getSide(), input.getOrientation()).transpose());
+
+            moveTo = new Vec3(hit.getLocation().toVector3f().sub(originInput).mul(r).add(originOutput));
+            directionTo = new Vec3(burst.getDeltaMovement().toVector3f().mul(r)).scale(-1);
+
+            var xz = Math.sqrt(directionTo.x * directionTo.x + directionTo.z * directionTo.z);
+            xrot = Mth.wrapDegrees((float) -(Mth.atan2(directionTo.y, xz) * Mth.RAD_TO_DEG));
+            yrot = Mth.wrapDegrees((float) (Mth.atan2(directionTo.z, directionTo.x) * Mth.RAD_TO_DEG) - 90.0F);
         }
 
-        @Override
-        public int getCurrentMana() {
-            return 0;
+        var costFactor = AEConfig.instance().getP2PTunnelTransportTax();
+
+        if (costFactor > 0) {
+            var energised = node.getGrid().getEnergyService().extractAEPower(mana * costFactor, Actionable.MODULATE,
+                    PowerMultiplier.ONE) / costFactor;
+            mana = (int) (energised * MANA_RETAINED);
+        } else {
+            mana = (int) (mana * MANA_RETAINED);
         }
 
-        @Override
-        public boolean isFull() {
-            return true;
+        if (mana <= 0) {
+            return;
         }
 
-        @Override
-        public void receiveMana(int mana) {
-        }
+        var level = output.getLevel();
 
-        @Override
-        public boolean canReceiveManaFromBursts() {
-            return false;
-        }
+        var old = burst.getColor();
+        var rainbow = Mth.hsvToRgb(level.getGameTime() * 2 % 360 / 360F, 1F, 1F);
+        var newColor = FastColor.ARGB32.lerp(0.4f, old, rainbow);
+
+        var newBurst = new ManaBurstEntity(BotaniaEntities.MANA_BURST, level);
+        newBurst.moveTo(moveTo.x, moveTo.y, moveTo.z, yrot, xrot);
+        newBurst.setDeltaMovement(directionTo);
+        newBurst.setColor(newColor);
+        newBurst.setMana(mana);
+        newBurst.setStartingMana(burst.getStartingMana());
+        newBurst.setMinManaLoss(burst.getMinManaLoss());
+        newBurst.setManaLossPerTick(burst.getManaLossPerTick());
+        newBurst.setGravity(burst.getBurstGravity());
+        burst.getBurstSourcePosition().ifPresent(newBurst::setBurstSourcePosition);
+        newBurst.setSourceLens(burst.getSourceLens());
+        newBurst.setTicksExisted(burst.getTicksExisted() + ManaP2PTunnelPart.EXTRA_TICKS_EXISTED);
+        newBurst.setShooterUUID(burst.getShooterUUID());
+
+        level.addFreshEntity(newBurst);
+        level.playSound(null, moveTo.x, moveTo.y, moveTo.z, BotaniaSounds.spreaderFire, SoundSource.BLOCKS, 0.05F,
+                0.7F + 0.3F * (float) Math.random());
+    }
+
+    private static Vector3f getFaceCentre(BlockPos pos, Direction dir) {
+        return new Vector3f(pos.getX() + (float) (1 + dir.getStepX()) / 2,
+                pos.getY() + (float) (1 + dir.getStepY()) / 2, pos.getZ() + (float) (1 + dir.getStepZ()) / 2);
+    }
+
+    private static Matrix3d onb(Direction a, Direction b) {
+        var m = new Matrix3d();
+        var va = a.getNormal();
+        var vb = b.getNormal();
+        var vc = va.cross(vb);
+        m.m00 = va.getX();
+        m.m01 = va.getY();
+        m.m02 = va.getZ();
+        m.m10 = vb.getX();
+        m.m11 = vb.getY();
+        m.m12 = vb.getZ();
+        m.m20 = vc.getX();
+        m.m21 = vc.getY();
+        m.m22 = vc.getZ();
+        return m;
+    }
+
+    private Direction getOrientation() {
+        return BlockOrientation.get(getSide(), spin).rotate(Direction.UP);
     }
 }

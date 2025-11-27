@@ -77,9 +77,7 @@ public class AppliedBotanicsForge {
         });
         bus.addListener(EventPriority.LOWEST, this::registerGenericAdapters);
         bus.addListener((RegisterPartCapabilitiesEvent event) -> {
-            event.register(BotaniaForgeCapabilities.MANA_RECEIVER, (object, context) -> object.getExposedApi(),
-                    ManaP2PTunnelPart.class);
-            event.register(BotaniaForgeCapabilities.SPARK_ATTACHABLE, (object, context) -> object.getSparkAttachable(),
+            event.register(BotaniaForgeCapabilities.MANA_RECEIVER, (object, context) -> object,
                     ManaP2PTunnelPart.class);
         });
 
