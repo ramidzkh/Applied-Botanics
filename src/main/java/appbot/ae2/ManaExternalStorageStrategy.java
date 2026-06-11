@@ -27,7 +27,8 @@ public class ManaExternalStorageStrategy implements ExternalStorageStrategy {
     private final BlockCapabilityCache<ManaReceiver, Direction> apiCache;
 
     public ManaExternalStorageStrategy(ServerLevel level, BlockPos fromPos, Direction fromSide) {
-        this.apiCache = BlockCapabilityCache.create(BotaniaForgeCapabilities.MANA_RECEIVER, level, fromPos, fromSide);
+        this.apiCache = BlockCapabilityCache.create(
+                BotaniaForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP), level, fromPos, fromSide);
     }
 
     @Nullable

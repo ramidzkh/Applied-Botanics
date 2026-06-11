@@ -29,7 +29,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
     private final SparkAttachable sparkAttachable = new P2PSparkAttachable();
 
     public ManaP2PTunnelPart(IPartItem<?> partItem) {
-        super(partItem, BotaniaForgeCapabilities.MANA_RECEIVER);
+        super(partItem, BotaniaForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP));
         inputHandler = new InputHandler();
         emptyHandler = new EmptyHandler();
     }
