@@ -9,7 +9,6 @@ import net.minecraft.world.item.ItemStack;
 
 import vazkii.botania.api.mana.ManaItem;
 import vazkii.botania.common.handler.BotaniaSounds;
-import vazkii.botania.xplat.XplatAbstractions;
 
 import appeng.api.behaviors.ContainerItemStrategy;
 import appeng.api.config.Actionable;
@@ -24,7 +23,7 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
             return null;
         }
 
-        var item = XplatAbstractions.INSTANCE.findManaItem(stack);
+        var item = ManaItem.LOOKUP.find(stack);
 
         if (item != null) {
             return new GenericStack(ManaKey.KEY, item.getMana());
@@ -35,12 +34,12 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
 
     @Override
     public @Nullable ManaItem findCarriedContext(Player player, AbstractContainerMenu menu) {
-        return XplatAbstractions.INSTANCE.findManaItem(menu.getCarried());
+        return ManaItem.LOOKUP.find(menu.getCarried());
     }
 
     @Override
     public @Nullable ManaItem findPlayerSlotContext(Player player, int slot) {
-        return XplatAbstractions.INSTANCE.findManaItem(player.getInventory().getItem(slot));
+        return ManaItem.LOOKUP.find(player.getInventory().getItem(slot));
     }
 
     @Override

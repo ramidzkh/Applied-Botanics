@@ -4,6 +4,7 @@ import static appbot.AppliedBotanics.id;
 
 import com.mojang.serialization.Codec;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -21,6 +22,9 @@ import appbot.botania.MECorporeaNode;
 import appbot.data.ABDataGenerator;
 import appbot.item.cell.ManaCellHandler;
 import vazkii.botania.api.BotaniaForgeCapabilities;
+import vazkii.botania.api.mana.ManaItem;
+import vazkii.botania.api.mana.ManaReceiver;
+import vazkii.botania.api.mana.spark.SparkAttachable;
 import vazkii.botania.common.block.mana.ManaPoolBlock;
 import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 
@@ -77,9 +81,11 @@ public class AppliedBotanicsForge {
         });
         bus.addListener(EventPriority.LOWEST, this::registerGenericAdapters);
         bus.addListener((RegisterPartCapabilitiesEvent event) -> {
-            event.register(BotaniaForgeCapabilities.MANA_RECEIVER, (object, context) -> object.getExposedApi(),
+            event.register(BotaniaForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP),
+                    (object, context) -> object.getExposedApi(),
                     ManaP2PTunnelPart.class);
-            event.register(BotaniaForgeCapabilities.SPARK_ATTACHABLE, (object, context) -> object.getSparkAttachable(),
+            event.register(BotaniaForgeCapabilities.getBlockApiLookupById(SparkAttachable.LOOKUP),
+                    (object, context) -> object.getSparkAttachable(),
                     ManaP2PTunnelPart.class);
         });
 
@@ -128,18 +134,21 @@ public class AppliedBotanicsForge {
                 continue;
             }
 
-            event.registerBlock(BotaniaForgeCapabilities.MANA_RECEIVER, (level, pos, state, blockEntity, context) -> {
-                var genericInv = level.getCapability(AECapabilities.GENERIC_INTERNAL_INV, pos, state, blockEntity,
-                        context);
-                if (genericInv != null) {
-                    return new ManaGenericStackInvStorage(genericInv, level, pos);
-                }
-                return null;
-            }, block);
-            event.registerBlock(BotaniaForgeCapabilities.SPARK_ATTACHABLE,
+            event.registerBlock(BotaniaForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP),
                     (level, pos, state, blockEntity, context) -> {
                         var genericInv = level.getCapability(AECapabilities.GENERIC_INTERNAL_INV, pos, state,
-                                blockEntity, context);
+                                blockEntity,
+                                context);
+                        if (genericInv != null) {
+                            return new ManaGenericStackInvStorage(genericInv, level, pos);
+                        }
+                        return null;
+                    }, block);
+            event.registerBlock(BotaniaForgeCapabilities.getBlockApiLookupById(SparkAttachable.LOOKUP),
+                    (level, pos, state, blockEntity, context) -> {
+                        // assume the spark is accessing the up face (might not work with spark tinkerer)
+                        var genericInv = level.getCapability(AECapabilities.GENERIC_INTERNAL_INV, pos, state,
+                                blockEntity, Direction.UP);
                         if (genericInv != null) {
                             return new ManaGenericStackInvStorage(genericInv, level, pos);
                         }
@@ -152,7 +161,7 @@ public class AppliedBotanicsForge {
                 continue;
             }
 
-            event.registerItem(BotaniaForgeCapabilities.MANA_ITEM, (object, context) -> {
+            event.registerItem(BotaniaForgeCapabilities.getItemApiLookupById(ManaItem.LOOKUP), (object, context) -> {
                 return MEStorageManaItem.forItem(object);
             }, item);
         }
