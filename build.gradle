@@ -1,9 +1,9 @@
 plugins {
     id "java-library"
-    id "net.neoforged.moddev" version "2.0.116"
+    id "net.neoforged.moddev" version "2.0.141"
     id "idea"
-    id "com.diffplug.spotless" version "8.0.0"
-    id "me.modmuss50.mod-publish-plugin" version "1.0.0"
+    id "com.diffplug.spotless" version "8.7.0"
+    id "me.modmuss50.mod-publish-plugin" version "2.0.1"
 }
 
 group = "me.ramidzkh"
@@ -218,6 +218,8 @@ publishMods {
         minecraftVersions.add(minecraft_version)
         requires("applied-energistics-2")
         requires("botania")
+        client = true
+        server = true
     }
 
     modrinth {
