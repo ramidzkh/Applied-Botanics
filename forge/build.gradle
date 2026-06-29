@@ -81,7 +81,7 @@ dependencies {
 
     modImplementation("appeng:appliedenergistics2-forge:${rootProject.ae2_version}")
     modImplementation("vazkii.botania:Botania:${rootProject.minecraft_version}-${rootProject.botania_version_forge}")
-
+    modImplementation("org.appliedenergistics:guideme:${rootProject.guideme_version}")
     modRuntimeOnly("vazkii.patchouli:Patchouli:${rootProject.minecraft_version}-${rootProject.patchouli_version}-FORGE")
     modRuntimeOnly("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}+${rootProject.minecraft_version}")
 

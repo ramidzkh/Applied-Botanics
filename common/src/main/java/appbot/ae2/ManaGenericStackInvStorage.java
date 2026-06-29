@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
+import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
 import vazkii.botania.api.mana.spark.ManaSpark;
@@ -56,9 +57,18 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
     @Override
     public void receiveMana(int mana) {
         if (mana > 0) {
-            insert(mana, Actionable.MODULATE);
+            // Only insert up to the amount that actually fits.
+            int canInsert = insert(mana, Actionable.SIMULATE);
+            if (canInsert > 0) {
+                insert(canInsert, Actionable.MODULATE);
+            }
         } else if (mana < 0) {
-            extract(-mana, Actionable.MODULATE);
+            // Only extract up to the amount actually available.
+            int toExtract = -mana;
+            int available = extract(toExtract, Actionable.SIMULATE);
+            if (available > 0) {
+                extract(available, Actionable.MODULATE);
+            }
         }
     }
 
@@ -107,13 +117,13 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
     }
 
     @Override
-    public ManaSpark getAttachedSpark() {
+    public @Nullable ManaSpark getAttachedSpark() {
         var sparkPos = pos.above();
         var sparks = level.getEntitiesOfClass(Entity.class, new AABB(sparkPos, sparkPos.offset(1, 1, 1)),
                 Predicates.instanceOf(ManaSpark.class));
 
         if (sparks.size() == 1) {
-            return (ManaSpark) sparks.get(0);
+            return (ManaSpark) sparks.getFirst();
         }
 
         return null;

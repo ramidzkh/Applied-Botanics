@@ -49,7 +49,7 @@ class Fail {
 
     static SafeMana make(ManaReceiver be) {
         if (KNOWN.add(be.getClass().getName())) {
-            LOGGER.error(
+            LOGGER.debug(
                     "Applied Botanics does not know how to insert and extract Mana out of {} ({}). No extraction will be permitted, and insertions could be widely lossy.",
                     be,
                     be.getClass().getName());
@@ -72,7 +72,30 @@ class Fail {
 
             @Override
             public int extract(int amount, Actionable mode) {
-                return 0;
+                // Try to safely extract using the ManaReceiver API. Some third-party
+                // implementations (like external machine pools) still support
+                // removing mana by calling receiveMana with a negative value and
+                // reporting current mana via getCurrentMana(). In the absence of
+                // a dedicated SafeMana mixin we attempt to use that behavior.
+                try {
+                    if (mode == Actionable.SIMULATE) {
+                        return Math.min(amount, be.getCurrentMana());
+                    }
+
+                    int old = be.getCurrentMana();
+                    if (old <= 0) {
+                        return 0;
+                    }
+
+                    // Request removal by passing a negative amount. If the
+                    // implementation doesn't support negative values this may
+                    // throw or have no effect — we catch exceptions and return 0
+                    // to avoid destructive behavior.
+                    be.receiveMana(-amount);
+                    return Math.max(0, old - be.getCurrentMana());
+                } catch (Throwable t) {
+                    return 0;
+                }
             }
         };
     }

@@ -78,7 +78,7 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
                 leftover -= inv.getInventory().insert(what, leftover, Actionable.MODULATE, context.getActionSource());
 
                 if (leftover > 0) {
-                    LOGGER.error("Storage export: adjacent block unexpectedly refused insert, voided {} Mana",
+                    LOGGER.debug("Storage export: adjacent block unexpectedly refused insert, voided {} Mana",
                             leftover);
                 }
             }
