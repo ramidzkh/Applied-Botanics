@@ -23,7 +23,8 @@ public class ManaStorageImportStrategy implements StackImportStrategy {
     public ManaStorageImportStrategy(ServerLevel level,
             BlockPos fromPos,
             Direction fromSide) {
-        this.apiCache = BlockCapabilityCache.create(BotaniaForgeCapabilities.MANA_RECEIVER, level, fromPos, fromSide);
+        this.apiCache = BlockCapabilityCache.create(BotaniaForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP),
+                level, fromPos, fromSide);
     }
 
     @Override

@@ -23,7 +23,7 @@ public abstract class BotaniaBlockEntitiesMixin {
     private static <T extends BlockEntity> BlockEntityType.BlockEntitySupplier<T> k(
             BlockEntityType.BlockEntitySupplier<T> factory, ResourceLocation id,
             BlockEntityType.BlockEntitySupplier<T> $factory, Block[] blocks) {
-        if (BotaniaAPI.botaniaRL(LibBlockNames.POOL).equals(id)) {
+        if (BotaniaAPI.botaniaRL(LibBlockNames.MANA_POOL).equals(id)) {
             return (blockPos, blockState) -> {
                 if (blockState.is(ABBlocks.FLUIX_MANA_POOL.get())) {
                     // noinspection unchecked
@@ -40,7 +40,7 @@ public abstract class BotaniaBlockEntitiesMixin {
     @ModifyVariable(method = "type(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", at = @At("HEAD"), index = 2, argsOnly = true)
     private static <T extends BlockEntity> Block[] t(Block[] blocks, ResourceLocation id,
             BlockEntityType.BlockEntitySupplier<T> $factory, Block[] $blocks) {
-        if (BotaniaAPI.botaniaRL(LibBlockNames.POOL).equals(id)) {
+        if (BotaniaAPI.botaniaRL(LibBlockNames.MANA_POOL).equals(id)) {
             return ArrayUtils.add(blocks, ABBlocks.FLUIX_MANA_POOL.get());
         }
 

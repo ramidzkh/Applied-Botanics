@@ -19,7 +19,7 @@ public class FluixPool extends ManaPoolBlock {
 
     public FluixPool() {
         super(ManaPoolBlock.MAX_MANA, true, false, ManaPoolBlock.NORMAL_SHAPE_VARIANT, null,
-                BlockBehaviour.Properties.ofFullCopy(BotaniaBlocks.livingrock));
+                BlockBehaviour.Properties.ofFullCopy(BotaniaBlocks.LIVINGROCK));
     }
 
     @Override

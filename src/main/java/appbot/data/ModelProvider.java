@@ -23,7 +23,7 @@ public class ModelProvider extends BlockStateProvider {
     private static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     private static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
     private static final ResourceLocation MANASTEEL_BLOCK = ModelLocationUtils
-            .getModelLocation(BotaniaBlocks.manasteelBlock);
+            .getModelLocation(BotaniaBlocks.MANASTEEL_BLOCK);
 
     // copied from ItemModelProvider
     protected static final ExistingFileHelper.ResourceType TEXTURE = new ExistingFileHelper.ResourceType(

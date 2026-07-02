@@ -28,7 +28,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ABItems.FLUIX_MANA_POOL.get())
-                .requires(BotaniaBlocks.fabulousPool)
+                .requires(BotaniaBlocks.FABULOUS_MANA_POOL)
                 .requires(AEBlocks.INTERFACE)
                 .unlockedBy("has_interface", has(AEBlocks.INTERFACE))
                 .save(recipeOutput, id("fluix_mana_pool"));
@@ -38,9 +38,9 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .pattern("S S")
                 .pattern("III")
                 .define('Q', AEBlocks.QUARTZ_GLASS)
-                .define('S', BotaniaItems.lifeEssence)
-                .define('I', BotaniaItems.manaSteel)
-                .unlockedBy("has_life_essence", has(BotaniaItems.lifeEssence))
+                .define('S', BotaniaItems.GAIA_SPIRIT)
+                .define('I', BotaniaItems.MANASTEEL_INGOT)
+                .unlockedBy("has_life_essence", has(BotaniaItems.GAIA_SPIRIT))
                 .save(recipeOutput, id("mana_cell_housing"));
 
         for (var tier : ABItems.Tier.values()) {

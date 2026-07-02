@@ -51,7 +51,7 @@ class TAPBE implements SafeMana {
 }
 
 @Mixin({ ManaSpreaderBlockEntity.class, PowerGeneratorBlockEntity.class, LifeImbuerBlockEntity.class,
-        RunicAltarBlockEntity.class, AvatarBlockEntity.class, BreweryBlockEntity.class,
+        RunicAltarBlockEntity.class, AvatarBlockEntity.class, BotanicalBreweryBlockEntity.class,
         ManaEnchanterBlockEntity.class })
 class ClampedAboveInsertOnly implements SafeMana {
     @Override

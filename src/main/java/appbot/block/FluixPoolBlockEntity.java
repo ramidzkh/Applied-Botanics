@@ -79,7 +79,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
 
         if (changed) {
             setChanged();
-            markDispatchable();
+            markForPotentialSync();
         }
     }
 
@@ -123,7 +123,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
 
         if (oldMana != mana.getMana() || oldManaCap != manaCap) {
             setChanged();
-            markDispatchable();
+            markForPotentialSync();
         }
 
         return Ints.saturatedCast(manaCap);
@@ -250,7 +250,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
 
         if (inserted != 0 && mode == Actionable.MODULATE) {
             setChanged();
-            markDispatchable();
+            markForPotentialSync();
         }
 
         return Math.toIntExact(inserted);
@@ -270,7 +270,7 @@ public class FluixPoolBlockEntity extends ManaPoolBlockEntity
 
         if (extracted != 0 && mode == Actionable.MODULATE) {
             setChanged();
-            markDispatchable();
+            markForPotentialSync();
         }
 
         return Math.toIntExact(extracted);
