@@ -5,6 +5,8 @@ import java.util.Optional;
 import com.google.common.base.Predicates;
 import com.google.common.primitives.Ints;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
@@ -12,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-import org.jetbrains.annotations.Nullable;
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
 import vazkii.botania.api.mana.spark.ManaSpark;
@@ -123,7 +124,7 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
                 Predicates.instanceOf(ManaSpark.class));
 
         if (sparks.size() == 1) {
-            return (ManaSpark) sparks.getFirst();
+            return (ManaSpark) sparks.get(0);
         }
 
         return null;
