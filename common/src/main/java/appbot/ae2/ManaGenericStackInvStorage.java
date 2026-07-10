@@ -5,6 +5,8 @@ import java.util.Optional;
 import com.google.common.base.Predicates;
 import com.google.common.primitives.Ints;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
@@ -56,9 +58,18 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
     @Override
     public void receiveMana(int mana) {
         if (mana > 0) {
-            insert(mana, Actionable.MODULATE);
+            // Only insert up to the amount that actually fits.
+            int canInsert = insert(mana, Actionable.SIMULATE);
+            if (canInsert > 0) {
+                insert(canInsert, Actionable.MODULATE);
+            }
         } else if (mana < 0) {
-            extract(-mana, Actionable.MODULATE);
+            // Only extract up to the amount actually available.
+            int toExtract = -mana;
+            int available = extract(toExtract, Actionable.SIMULATE);
+            if (available > 0) {
+                extract(available, Actionable.MODULATE);
+            }
         }
     }
 
@@ -107,7 +118,7 @@ public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, Spark
     }
 
     @Override
-    public ManaSpark getAttachedSpark() {
+    public @Nullable ManaSpark getAttachedSpark() {
         var sparkPos = pos.above();
         var sparks = level.getEntitiesOfClass(Entity.class, new AABB(sparkPos, sparkPos.offset(1, 1, 1)),
                 Predicates.instanceOf(ManaSpark.class));
