@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import appbot.AppliedBotanics;
-import vazkii.botania.api.BotaniaForgeCapabilities;
+import appbot.botania.BotaniaCapabilityLookup;
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
 import vazkii.botania.api.mana.spark.SparkAttachable;
@@ -29,7 +29,7 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
     private final SparkAttachable sparkAttachable = new P2PSparkAttachable();
 
     public ManaP2PTunnelPart(IPartItem<?> partItem) {
-        super(partItem, BotaniaForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP));
+        super(partItem, BotaniaCapabilityLookup.MANA_RECEIVER);
         inputHandler = new InputHandler();
         emptyHandler = new EmptyHandler();
     }
