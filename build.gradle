@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "me.ramidzkh"
-version = System.getenv("APPBOT_VERSION") ?: "1.6.0-fix"
+version = System.getenv("APPBOT_VERSION") ?: "0.0.0"
 
 base {
     archivesName = mod_id
