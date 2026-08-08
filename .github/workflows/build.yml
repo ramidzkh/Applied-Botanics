@@ -1,60 +1,31 @@
 name: Build
 
 on:
-  workflow_dispatch: # 支持手动触发
-  push:
-  pull_request:
+  - pull_request
+  - push
 
 jobs:
   build:
-    # 过滤掉带有 [ci skip] 标记的提交，防止自动 Commit 引发的死循环
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
     runs-on: ubuntu-latest
-
-    # 赋予 Actions 写入代码库的权限（解决 403 报错）
-    permissions:
-      contents: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: false
-
       - name: Generate data
         run: ./gradlew runData
-
-      # 1. 自动格式化 Java/Json 代码
-      - name: Apply Spotless Formatting
-        run: ./gradlew spotlessApply
-
-      # 2. 若格式有修改，自动提交并推送回当前分支
-      - name: Commit Spotless Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "style: auto-fix spotless formatting [ci skip]"
-          file_pattern: "src/"
-
-      - name: Build JAR
-        run: ./gradlew build -x test
-
+      - name: Build
+        run: ./gradlew build
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: appbot-mod
-          path: |
-            build/libs/*.jar
-            !build/libs/*-sources.jar
-            !build/libs/*-shadow.jar
-            !build/libs/*-dev.jar
+          name: appbot
+          path: build/libs/
