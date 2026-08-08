@@ -11,10 +11,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import appbot.AppliedBotanics;
-import vazkii.botania.api.BotaniaForgeCapabilities;
+import appbot.botania.BotaniaCapabilityLookup;
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
-import vazkii.botania.api.mana.spark.SparkAttachable;
+import vazkii.botania.api.mana.spark.ManaSparkAttachable;
 
 import appeng.api.config.Actionable;
 import appeng.api.parts.IPartItem;
@@ -26,10 +26,10 @@ import appeng.parts.p2p.P2PModels;
 public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart, ManaReceiver> {
 
     private static final P2PModels MODELS = new P2PModels(AppliedBotanics.id("part/mana_p2p_tunnel"));
-    private final SparkAttachable sparkAttachable = new P2PSparkAttachable();
+    private final ManaSparkAttachable sparkAttachable = new P2PSparkAttachable();
 
     public ManaP2PTunnelPart(IPartItem<?> partItem) {
-        super(partItem, BotaniaForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP));
+        super(partItem, BotaniaCapabilityLookup.MANA_RECEIVER);
         inputHandler = new InputHandler();
         emptyHandler = new EmptyHandler();
     }
@@ -45,11 +45,11 @@ public class ManaP2PTunnelPart extends CapabilityP2PTunnelPart<ManaP2PTunnelPart
     }
 
     @Nullable
-    public SparkAttachable getSparkAttachable() {
+    public ManaSparkAttachable getSparkAttachable() {
         return isOutput() ? null : sparkAttachable;
     }
 
-    private class P2PSparkAttachable implements SparkAttachable {
+    private class P2PSparkAttachable implements ManaSparkAttachable {
 
         @Override
         public boolean canAttachSpark(ItemStack stack) {
