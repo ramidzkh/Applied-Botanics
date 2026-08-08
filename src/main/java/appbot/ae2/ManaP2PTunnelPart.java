@@ -11,10 +11,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import appbot.AppliedBotanics;
-import vazkii.botania.api.neoforge.BotaniaNeoForgeCapabilities;
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
 import vazkii.botania.api.mana.spark.ManaSparkAttachable;
+import vazkii.botania.api.neoforge.BotaniaNeoForgeCapabilities;
 
 import appeng.api.config.Actionable;
 import appeng.api.parts.IPartItem;

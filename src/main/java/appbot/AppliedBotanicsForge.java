@@ -21,10 +21,10 @@ import appbot.ae2.*;
 import appbot.botania.MECorporeaNode;
 import appbot.data.ABDataGenerator;
 import appbot.item.cell.ManaCellHandler;
-import vazkii.botania.api.neoforge.BotaniaNeoForgeCapabilities;
 import vazkii.botania.api.mana.ManaItem;
 import vazkii.botania.api.mana.ManaReceiver;
 import vazkii.botania.api.mana.spark.ManaSparkAttachable;
+import vazkii.botania.api.neoforge.BotaniaNeoForgeCapabilities;
 import vazkii.botania.common.block.mana.ManaPoolBlock;
 import vazkii.botania.common.integration.corporea.CorporeaNodeDetectors;
 
