@@ -27,6 +27,17 @@ jobs:
       - name: Generate data
         run: ./gradlew runData
 
+      # 1. 执行 Spotless 自动格式化修复
+      - name: Apply Spotless Formatting
+        run: ./gradlew spotlessApply
+
+      # 2. 如果格式被修改，自动 Commit 并 Push 回分支
+      - name: Commit Spotless Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style: auto-fix spotless formatting [ci skip]"
+          file_pattern: "src/"
+
       - name: Build JAR
         run: ./gradlew build -x test
 
