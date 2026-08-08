@@ -3,7 +3,7 @@ package appbot.ae2;
 import vazkii.botania.api.mana.ManaCollector;
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
-import vazkii.botania.api.mana.spark.SparkAttachable;
+import vazkii.botania.api.mana.spark.ManaSparkAttachable;
 
 public class ManaHelper {
 
@@ -12,8 +12,8 @@ public class ManaHelper {
             return pool.getMaxMana();
         } else if (receiver instanceof ManaCollector collector) {
             return collector.getMaxMana();
-        } else if (receiver instanceof SparkAttachable sparkAttachable) {
-            return receiver.getCurrentMana() + sparkAttachable.getAvailableSpaceForMana();
+        } else if (receiver instanceof ManaSparkAttachable ManaSparkAttachable) {
+            return receiver.getCurrentMana() + ManaSparkAttachable.getAvailableSpaceForMana();
         } else if (!receiver.isFull()) {
             return receiver.getCurrentMana() + 1000;
         }

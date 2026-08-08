@@ -10,7 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 
-import vazkii.botania.api.BotaniaForgeCapabilities;
+import vazkii.botania.api.neoforge.BotaniaNeoForgeCapabilities;
 import vazkii.botania.api.mana.ManaReceiver;
 
 import appeng.api.behaviors.StackExportStrategy;
@@ -29,7 +29,8 @@ public class ManaStorageExportStrategy implements StackExportStrategy {
     public ManaStorageExportStrategy(ServerLevel level,
             BlockPos fromPos,
             Direction fromSide) {
-        this.apiCache = BlockCapabilityCache.create(BotaniaForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP),
+        this.apiCache = BlockCapabilityCache.create(
+                BotaniaNeoForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP),
                 level, fromPos, fromSide);
     }
 
