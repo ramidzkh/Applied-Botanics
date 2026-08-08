@@ -81,7 +81,7 @@ public class AppliedBotanicsForge {
             event.register(BotaniaCapabilityLookup.MANA_RECEIVER,
                     (object, context) -> object.getExposedApi(),
                     ManaP2PTunnelPart.class);
-            event.register(BotaniaCapabilityLookup.SPARK_ATTACHABLE,
+            event.register(BotaniaCapabilityLookup.MANA_SPARK_ATTACHABLE,
                     (object, context) -> object.getSparkAttachable(),
                     ManaP2PTunnelPart.class);
         });
@@ -141,7 +141,7 @@ public class AppliedBotanicsForge {
                         }
                         return null;
                     }, block);
-            event.registerBlock(BotaniaCapabilityLookup.SPARK_ATTACHABLE,
+            event.registerBlock(BotaniaCapabilityLookup.MANA_SPARK_ATTACHABLE,
                     (level, pos, state, blockEntity, context) -> {
                         // assume the spark is accessing the up face (might not work with spark tinkerer)
                         var genericInv = level.getCapability(AECapabilities.GENERIC_INTERNAL_INV, pos, state,

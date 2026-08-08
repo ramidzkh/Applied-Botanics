@@ -10,13 +10,13 @@ import net.minecraft.world.level.Level;
 
 import vazkii.botania.api.mana.ManaPool;
 import vazkii.botania.api.mana.ManaReceiver;
-import vazkii.botania.api.mana.spark.SparkAttachable;
+import vazkii.botania.api.mana.spark.ManaSparkAttachable;
 
 import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.config.Actionable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, SparkAttachable, SafeMana {
+public class ManaGenericStackInvStorage implements ManaReceiver, ManaPool, ManaSparkAttachable, SafeMana {
 
     private final Level level;
     private final BlockPos pos;
