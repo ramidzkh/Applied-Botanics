@@ -1,17 +1,25 @@
 name: Build
 
 on:
-  workflow_dispatch: # 开启手动触发按钮
+  workflow_dispatch: # 支持手动触发
   push:
   pull_request:
 
 jobs:
   build:
-    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+    # 过滤掉带有 [ci skip] 标记的提交，防止自动 Commit 引发的死循环
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     runs-on: ubuntu-latest
+
+    # 赋予 Actions 写入代码库的权限（解决 403 报错）
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -27,11 +35,11 @@ jobs:
       - name: Generate data
         run: ./gradlew runData
 
-      # 1. 执行 Spotless 自动格式化修复
+      # 1. 自动格式化 Java/Json 代码
       - name: Apply Spotless Formatting
         run: ./gradlew spotlessApply
 
-      # 2. 如果格式被修改，自动 Commit 并 Push 回分支
+      # 2. 若格式有修改，自动提交并推送回当前分支
       - name: Commit Spotless Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
