@@ -70,8 +70,8 @@ public final class ManaP2PDataProvider
 
             if (name != null) {
                 serverData.put(TAG_P2P_FREQUENCY_NAME,
-                        ComponentSerialization.CODEC.encode(name,
-                                player.registryAccess().createSerializationContext(NbtOps.INSTANCE), new CompoundTag())
+                        ComponentSerialization.CODEC
+                                .encodeStart(player.registryAccess().createSerializationContext(NbtOps.INSTANCE), name)
                                 .getOrThrow());
             }
         }
