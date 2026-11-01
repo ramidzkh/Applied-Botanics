@@ -11,9 +11,11 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import appbot.ABItems;
 import vazkii.botania.common.block.BotaniaBlocks;
+import vazkii.botania.common.crafting.RunicAltarRecipe;
 import vazkii.botania.common.item.BotaniaItems;
 
 import appeng.core.definitions.AEBlocks;
@@ -27,6 +29,17 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
+        recipeOutput.accept(id("mana_p2p_tunnel"),
+                new RunicAltarRecipe(ABItems.MANA_P2P_TUNNEL.toStack(), Ingredient.of(BotaniaBlocks.LIVINGROCK), 12000,
+                        new Ingredient[] {
+                                Ingredient.of(AEItems.ANNIHILATION_CORE),
+                                Ingredient.of(AEItems.ENDER_DUST),
+                                Ingredient.of(AEItems.FORMATION_CORE),
+                                Ingredient.of(BotaniaItems.PIXIE_DUST),
+                                Ingredient.of(BotaniaItems.RUNE_OF_GREED),
+                        }, new Ingredient[0]),
+                null);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ABItems.FLUIX_MANA_POOL.get())
                 .requires(BotaniaBlocks.FABULOUS_MANA_POOL)
                 .requires(AEBlocks.INTERFACE)
