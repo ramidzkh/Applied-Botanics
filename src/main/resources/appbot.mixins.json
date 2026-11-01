@@ -4,6 +4,8 @@
   "package": "appbot.mixins",
   "mixins": [
     "BotaniaBlockEntitiesMixin",
+    "InteractionUtilMixin",
+    "ManaBurstEntityMixin",
     "ManaPoolBlockEntityAccessor",
     "Pool",
     "TAPBE",
