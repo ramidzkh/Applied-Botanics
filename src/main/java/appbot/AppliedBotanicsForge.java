@@ -32,7 +32,7 @@ import appeng.api.AECapabilities;
 import appeng.api.behaviors.ContainerItemStrategy;
 import appeng.api.behaviors.GenericSlotCapacities;
 import appeng.api.client.StorageCellModels;
-import appeng.api.features.P2PTunnelAttunement;
+import appeng.api.networking.GridServices;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.parts.RegisterPartCapabilitiesEvent;
 import appeng.api.stacks.AEKeyTypes;
@@ -82,10 +82,7 @@ public class AppliedBotanicsForge {
         bus.addListener(EventPriority.LOWEST, this::registerGenericAdapters);
         bus.addListener((RegisterPartCapabilitiesEvent event) -> {
             event.register(BotaniaNeoForgeCapabilities.getBlockApiLookupById(ManaReceiver.LOOKUP),
-                    (object, context) -> object.getExposedApi(),
-                    ManaP2PTunnelPart.class);
-            event.register(BotaniaNeoForgeCapabilities.getBlockApiLookupById(ManaSparkAttachable.LOOKUP),
-                    (object, context) -> object.getSparkAttachable(),
+                    (object, context) -> object,
                     ManaP2PTunnelPart.class);
         });
 
@@ -96,6 +93,8 @@ public class AppliedBotanicsForge {
         ContainerItemStrategy.register(ManaKeyType.TYPE, ManaKey.class, new ManaContainerItemStrategy());
         GenericSlotCapacities.register(ManaKeyType.TYPE, (long) ManaPoolBlock.MAX_MANA_DILUTED);
 
+        GridServices.register(ManaP2PService.class, ManaP2PService.class);
+
         bus.addListener((FMLCommonSetupEvent event) -> {
             CorporeaNodeDetectors.register(MECorporeaNode::getNode);
 
@@ -105,8 +104,6 @@ public class AppliedBotanicsForge {
                     Upgrades.add(AEItems.VOID_CARD, ABItems.getPortableCell(tier), 1,
                             GuiText.StorageCells.getTranslationKey());
                 }
-
-                P2PTunnelAttunement.registerAttunementTag(ABItems.MANA_P2P_TUNNEL.get());
 
                 StorageCells.addCellHandler(ManaCellHandler.INSTANCE);
                 StorageCellModels.registerModel(ABItems.MANA_CELL_1K.get(), id("block/drive/cells/1k_mana_cell"));
