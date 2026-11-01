@@ -48,6 +48,10 @@ public final class ManaP2PDataProvider
             }
 
             tooltip.addLine(InGameTooltip.P2PFrequency.text(freqTooltip));
+        } else if (nameTag != null) {
+            var freqName = ComponentSerialization.CODEC
+                    .parse(context.registries().createSerializationContext(NbtOps.INSTANCE), nameTag).getOrThrow();
+            tooltip.addLine(Component.literal("Unlinked - ").append(freqName));
         }
     }
 
@@ -57,23 +61,16 @@ public final class ManaP2PDataProvider
         serverData.putShort(TAG_P2P_FREQUENCY, part.getFrequency());
 
         if (part.getMainNode().isOnline() && part.getFrequency() != 0) {
-            var group = part.getGroup();
-            serverData.putInt(TAG_P2P_PEERS, group.size());
+            serverData.putInt(TAG_P2P_PEERS, part.getGroup().size());
+        }
 
-            Component name = null;
+        var name = part.getCustomName();
 
-            for (var member : group) {
-                if ((name = member.getCustomName()) != null) {
-                    break;
-                }
-            }
-
-            if (name != null) {
-                serverData.put(TAG_P2P_FREQUENCY_NAME,
-                        ComponentSerialization.CODEC
-                                .encodeStart(player.registryAccess().createSerializationContext(NbtOps.INSTANCE), name)
-                                .getOrThrow());
-            }
+        if (name != null) {
+            serverData.put(TAG_P2P_FREQUENCY_NAME,
+                    ComponentSerialization.CODEC
+                            .encodeStart(player.registryAccess().createSerializationContext(NbtOps.INSTANCE), name)
+                            .getOrThrow());
         }
     }
 }
