@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import vazkii.botania.api.mana.ManaReceiver;
-import vazkii.botania.api.mana.spark.SparkAttachable;
+import vazkii.botania.api.mana.spark.ManaSparkAttachable;
 
 import appeng.api.config.Actionable;
 
@@ -19,7 +19,7 @@ public interface SafeMana {
 
     int extract(int amount, Actionable mode);
 
-    static <R extends ManaReceiver & SparkAttachable> int insertExcess(R be, int amount, Actionable mode) {
+    static <R extends ManaReceiver & ManaSparkAttachable> int insertExcess(R be, int amount, Actionable mode) {
         amount = Math.min(amount, be.getAvailableSpaceForMana());
 
         if (mode == Actionable.MODULATE) {

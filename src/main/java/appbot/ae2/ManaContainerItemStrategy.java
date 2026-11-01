@@ -66,12 +66,12 @@ public class ManaContainerItemStrategy implements ContainerItemStrategy<ManaKey,
 
     @Override
     public void playFillSound(Player player, ManaKey what) {
-        player.playNotifySound(BotaniaSounds.manaPoolCraft, SoundSource.PLAYERS, 1.0f, 1.0f);
+        player.playNotifySound(BotaniaSounds.MANA_POOL_CRAFT, SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 
     @Override
     public void playEmptySound(Player player, ManaKey what) {
-        player.playNotifySound(BotaniaSounds.blackLotus, SoundSource.PLAYERS, 1.0f, 1.0f);
+        player.playNotifySound(BotaniaSounds.BLACK_LOTUS, SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 
     @Override
